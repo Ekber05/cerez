@@ -1,0 +1,1311 @@
+/* ================================
+   PRODUCTS SECTION
+================================ */
+
+.products {
+  padding: 40px 5%;
+  text-align: center;
+  background: #fef6eb;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.section-tag {
+  background: #f6eadf;
+  color: #b56b20;
+  padding: 8px 20px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  font-family: Georgia, serif;
+  color: #222;
+  line-height: 1.3;
+}
+
+.section-title span {
+  color: #d6800f;
+}
+
+.section-subtitle {
+  color: #666;
+  margin-bottom: 40px;
+  font-size: 16px;
+  line-height: 1.5;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===========================================
+   GRID LAYOUT - 6 MƏHSUL ÜÇÜN OPTİMAL
+=========================================== */
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  justify-items: center;
+  margin: 0 auto;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+/* ===========================================
+   MEDIA QUERIES - RESPONSIVE DİZAYN
+=========================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  .products {
+    padding: 35px 4%;
+  }
+  
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 700px;
+  }
+  
+  .section-title {
+    font-size: 28px;
+  }
+}
+
+/* Mobil (767px və aşağı) */
+@media (max-width: 767px) {
+  .products {
+    padding: 30px 20px;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 100%;
+  }
+  
+  .section-title {
+    font-size: 26px;
+  }
+  
+  .section-subtitle {
+    font-size: 15px;
+    margin-bottom: 30px;
+  }
+}
+
+/* Kiçik mobil (480px - 599px) */
+@media (max-width: 599px) {
+  .products {
+    padding: 25px 18px;
+  }
+  
+  .product-grid {
+    gap: 18px;
+  }
+  
+  .section-title {
+    font-size: 24px;
+  }
+}
+
+/* Çox kiçik mobil (360px - 479px) */
+@media (max-width: 479px) {
+  .products {
+    padding: 22px 15px;
+  }
+  
+  .section-tag {
+    font-size: 13px;
+    padding: 6px 15px;
+  }
+  
+  .section-title {
+    font-size: 22px;
+  }
+  
+  .section-subtitle {
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+  
+  .product-grid {
+    gap: 15px;
+  }
+}
+
+/* Çox kiçik mobil (320px - 359px) */
+@media (max-width: 359px) {
+  .products {
+    padding: 22px 12px;
+  }
+  
+  .section-title {
+    font-size: 20px;
+  }
+  
+  .product-grid {
+    gap: 12px;
+  }
+}
+
+/* ===========================================
+   PRODUCT CARD STYLES - DESKTOP
+=========================================== */
+
+.product-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  box-sizing: border-box;
+}
+
+/* Desktop hover effektləri */
+@media (hover: hover) {
+  .product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 32px rgba(214, 128, 15, 0.15);
+    border-color: rgba(214, 128, 15, 0.2);
+  }
+  
+  .product-card:hover .product-img {
+    transform: scale(1.1);
+  }
+  
+  .product-card:hover .card-badge {
+    background: #d6800f;
+    color: white;
+    transform: translateY(-2px);
+  }
+  
+  .product-card:hover .product-name {
+    color: #d6800f;
+  }
+  
+  .product-card:hover .price {
+    transform: scale(1.05);
+  }
+  
+  .product-card:hover .cart-icon {
+    transform: translateY(-2px) scale(1.1);
+  }
+}
+
+/* Kart arxaplan effekti */
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(214, 128, 15, 0.03), rgba(251, 216, 166, 0.06));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 16px;
+  z-index: -1;
+}
+
+.product-card:hover::before {
+  opacity: 1;
+}
+
+/* ===========================================
+   CARD İÇİ ELEMENTLƏR - DESKTOP
+=========================================== */
+
+/* Şəkil wrapper - Desktop */
+.image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  height: 180px;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.6s ease;
+  display: block;
+}
+
+/* Şəkil yoxdursa */
+.product-img[src=""],
+.product-img:not([src]) {
+  background: linear-gradient(45deg, #f5f5f5, #e0e0e0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Badge */
+.card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #fbd8a6;
+  color: #a9651c;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  z-index: 2;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+  white-space: nowrap;
+}
+
+/* Kart məzmunu - Desktop */
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  min-height: 0;
+}
+
+.product-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  transition: color 0.3s ease;
+  color: #222;
+  line-height: 1.3;
+  text-align: center;
+}
+
+/* Təsvir - desktop üçün */
+.product-desc {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  flex: 1;
+  overflow: hidden;
+  text-align: center;
+  display: block;
+  max-height: 58.5px;
+  position: relative;
+}
+
+/* Çox sətirli mətn üçün ellipsis effekti */
+.product-desc::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  height: 1.5em;
+  background: linear-gradient(to right, transparent, #fff 50%);
+}
+
+/* ===========================================
+   MİQDAR SEÇİM HİSSƏSİ
+=========================================== */
+
+.quantity-selection {
+  margin: 15px 0;
+  padding: 12px;
+  background: rgba(214, 128, 15, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(214, 128, 15, 0.1);
+}
+
+.quantity-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.quantity-option {
+  padding: 8px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  background: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  color: #555;
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+}
+
+.quantity-option:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(214, 128, 15, 0.1);
+}
+
+.quantity-option.selected {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(214, 128, 15, 0.2);
+}
+
+.custom-quantity {
+  display: block;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.custom-quantity-input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.custom-quantity-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(214, 128, 15, 0.1);
+}
+
+.custom-quantity-input::placeholder {
+  color: #999;
+  opacity: 0.7;
+}
+
+.selected-quantity-info {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(39, 174, 96, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(39, 174, 96, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.selected-quantity-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #27ae60;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.selected-quantity-text::before {
+  content: '✓';
+  font-size: 14px;
+}
+
+/* ===========================================
+   CARD FOOTER
+=========================================== */
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #f0f0f0;
+  gap: 10px;
+  min-height: 60px;
+  flex-wrap: wrap;
+}
+
+.price {
+  font-weight: bold;
+  color: #d6800f;
+  font-size: 18px;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: baseline;
+  flex-shrink: 0;
+  min-width: 100px;
+}
+
+.price .unit {
+  font-weight: normal;
+  color: #777;
+  font-size: 12px;
+  margin-left: 3px;
+}
+
+/* ===========================================
+   CART ICON STYLES - DÜZƏLDİLMİŞ
+=========================================== */
+
+.cart-icon {
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  margin: 0;
+}
+
+/* ===========================================
+   SƏBƏTƏ AT BUTONU - TAMAMEN DÜZƏLDİLMİŞ
+=========================================== */
+
+.add-btn {
+  background: #f4e7d9;
+  color: #d6800f;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden; /* hidden saxlanılır */
+  z-index: 1;
+  box-shadow: 0 3px 8px rgba(214, 128, 15, 0.15);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  max-width: 160px;
+  height: 40px;
+  box-sizing: border-box;
+  gap: 8px; /* İkon və mətn arasında boşluq */
+}
+
+/* Buton hover effekti */
+@media (hover: hover) {
+  .add-btn:hover {
+    background: #d6800f;
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(214, 128, 15, 0.35);
+  }
+  
+  .add-btn:hover .cart-icon {
+    transform: translateY(-2px) scale(1.1);
+  }
+  
+  /* Dalğa effekti */
+  .add-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    border-radius: 100%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: -1;
+  }
+  
+  .add-btn:hover::after {
+    animation: buttonWave 0.8s ease-out;
+  }
+  
+  /* İşıq hərəkəti */
+  .add-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.7s ease;
+    z-index: -1;
+  }
+  
+  .add-btn:hover::before {
+    left: 100%;
+  }
+}
+
+@keyframes buttonWave {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(35);
+    opacity: 0;
+  }
+}
+
+.add-btn:active {
+  transform: scale(0.95);
+  transition: transform 0.1s;
+}
+
+/* Rus dili üçün xüsusi buton tənzimləmələri - DÜZƏLDİLDİ */
+[lang="ru"] .add-btn {
+  font-size: 11px;
+  padding: 10px 14px;
+  min-width: 140px;
+  max-width: 160px;
+  gap: 6px;
+  letter-spacing: -0.2px;
+}
+
+/* İngilis dili üçün */
+[lang="en"] .add-btn {
+  font-size: 12px;
+  min-width: 120px;
+  max-width: 150px;
+  gap: 7px;
+}
+
+/* Azərbaycan dili üçün */
+[lang="az"] .add-btn {
+  font-size: 13px;
+  min-width: 110px;
+  max-width: 140px;
+  gap: 8px;
+}
+
+/* Rus dili üçün ikon - DÜZƏLDİLDİ */
+[lang="ru"] .cart-icon {
+  width: 14px;
+  height: 14px;
+  min-width: 14px;
+  min-height: 14px;
+}
+
+/* Buton mətni - sıxışdırma */
+.add-btn-text {
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: calc(100% - 30px); /* İkon üçün yer burax */
+}
+
+/* Rus dili üçün buton mətni */
+[lang="ru"] .add-btn-text {
+  font-size: 11px;
+  max-width: calc(100% - 25px);
+}
+
+/* Mobil üçün active state */
+@media (max-width: 767px) {
+  .add-btn:active {
+    background: #d6800f;
+    color: #fff;
+    transform: scale(0.95);
+  }
+}
+
+/* ===========================================
+   SƏBƏT ANİMASİYASI VƏ ƏLAVƏ STİLLƏR
+=========================================== */
+
+/* Səbətə əlavə animasiyası */
+@keyframes cartBounce {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1); 
+    background-color: #27ae60 !important; 
+    color: white !important;
+    box-shadow: 0 6px 25px rgba(39, 174, 96, 0.4) !important;
+  }
+}
+
+.added-to-cart {
+  animation: cartBounce 0.5s ease !important;
+}
+
+/* Səbət ikonu animasiyası */
+@keyframes cartIconBounce {
+  0%, 100% { 
+    transform: translateY(0) scale(1); 
+  }
+  50% { 
+    transform: translateY(-3px) scale(1.2); 
+    fill: white;
+  }
+}
+
+.added-to-cart .cart-icon {
+  animation: cartIconBounce 0.5s ease !important;
+}
+
+/* Bildiriş üçün əlavə stil */
+.cart-notification {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  background: #d6800f;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-weight: 500;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Səbət sayğacı animasiyası (navbar üçün) */
+@keyframes badgePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+.cart-count {
+  animation: badgePulse 0.3s ease;
+}
+
+/* ===========================================
+   MOBİL VERSİYA - SIMMETRİK YANAŞI LAYOUT
+=========================================== */
+
+/* Mobil (767px və aşağı) */
+@media (max-width: 767px) {
+  .product-card {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: auto;
+    height: auto;
+    padding: 15px;
+    max-width: 100%;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  /* SIMMETRİK ŞƏKİL solda - HƏMİŞƏ EYNİ ÖLÇÜDƏ */
+  .image-wrapper {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  /* Şəkili həmişə tam doldurmaq üçün */
+  .product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    min-height: 140px;
+    min-width: 140px;
+  }
+  
+  /* Şəkil yoxdursa mərkəzləşdir */
+  .product-img[src=""],
+  .product-img:not([src]) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #f5f5f5, #e0e0e0);
+  }
+  
+  /* GENİŞ məzmun sağda */
+  .card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    justify-content: space-between;
+    min-height: 140px;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .product-name {
+    font-size: 18px;
+    margin-bottom: 8px;
+    text-align: left;
+    font-weight: 600;
+    line-height: 1.3;
+    min-height: 24px;
+  }
+  
+  /* Təsvir - mobil üçün */
+  .product-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    text-align: left;
+    color: #555;
+    flex: 1;
+    overflow: hidden;
+    display: block;
+    max-height: 63px;
+    min-height: 42px;
+  }
+  
+  /* Mobil üçün ellipsis effekti */
+  .product-desc::after {
+    background: linear-gradient(to right, transparent, #fff 50%);
+  }
+  
+  /* Miqdar seçimi - mobil */
+  .quantity-selection {
+    padding: 10px;
+    margin: 12px 0;
+  }
+  
+  .quantity-options {
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .quantity-option {
+    padding: 6px 10px;
+    font-size: 11px;
+    min-width: 65px;
+    border-width: 1.5px;
+  }
+  
+  .custom-quantity-input {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .selected-quantity-info {
+    padding: 6px 10px;
+  }
+  
+  .selected-quantity-text {
+    font-size: 12px;
+  }
+  
+  /* CARD-FOOTER DÜZƏLİŞİ */
+  .card-footer {
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  
+  .price {
+    font-size: 18px;
+    font-weight: 700;
+    color: #d6800f;
+    line-height: 1;
+    white-space: nowrap;
+    min-width: 90px;
+  }
+  
+  .add-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+    min-width: 120px;
+    max-width: 150px;
+    font-weight: 600;
+    background: #f4e7d9;
+    border-radius: 25px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 6px;
+    overflow: hidden;
+  }
+  
+  /* Mobil rus dili üçün - DÜZƏLDİLDİ */
+  [lang="ru"] .add-btn {
+    font-size: 11px;
+    padding: 10px 12px;
+    min-width: 135px;
+    max-width: 150px;
+    gap: 5px;
+  }
+  
+  /* Mobil rus dili ikonu */
+  [lang="ru"] .cart-icon {
+    width: 13px;
+    height: 13px;
+    min-width: 13px;
+    min-height: 13px;
+  }
+  
+  .card-badge {
+    font-size: 12px;
+    padding: 5px 12px;
+    top: 10px;
+    left: 10px;
+    background: #fbd8a6;
+    color: #a9651c;
+  }
+  
+  .price .unit {
+    font-size: 13px;
+    color: #777;
+  }
+  
+  .cart-icon {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+  }
+  
+  /* Mobil üçün bildiriş */
+  .cart-notification {
+    top: 80px !important;
+    right: 10px !important;
+    left: 10px !important;
+    max-width: calc(100% - 20px) !important;
+    text-align: center !important;
+  }
+}
+
+/* Kiçik mobil (480px - 599px) */
+@media (max-width: 599px) {
+  .product-card {
+    padding: 14px;
+    gap: 18px;
+  }
+  
+  .image-wrapper {
+    width: 130px;
+    height: 130px;
+    min-width: 130px;
+    min-height: 130px;
+  }
+  
+  .product-img {
+    min-height: 130px;
+    min-width: 130px;
+  }
+  
+  .card-body {
+    min-height: 130px;
+    height: auto;
+  }
+  
+  .product-name {
+    font-size: 17px;
+    min-height: 23px;
+  }
+  
+  .product-desc {
+    font-size: 13px;
+    max-height: 58.5px;
+    min-height: 39px;
+  }
+  
+  .card-footer {
+    min-height: 38px;
+  }
+  
+  .price {
+    font-size: 17px;
+    min-width: 85px;
+  }
+  
+  .add-btn {
+    padding: 9px 12px;
+    font-size: 12px;
+    min-width: 115px;
+    max-width: 140px;
+    height: 38px;
+    gap: 5px;
+  }
+  
+  /* Kiçik mobil rus dili üçün */
+  [lang="ru"] .add-btn {
+    font-size: 10px;
+    padding: 9px 11px;
+    min-width: 125px;
+    max-width: 140px;
+    gap: 4px;
+    letter-spacing: -0.1px;
+  }
+  
+  /* Kiçik mobil rus dili ikonu */
+  [lang="ru"] .cart-icon {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+  }
+  
+  .cart-icon {
+    width: 13px;
+    height: 13px;
+    min-width: 13px;
+    min-height: 13px;
+  }
+}
+
+/* Çox kiçik mobil (360px - 479px) */
+@media (max-width: 479px) {
+  .product-card {
+    padding: 12px;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .image-wrapper {
+    width: 120px;
+    height: 120px;
+    min-width: 120px;
+    min-height: 120px;
+  }
+  
+  .product-img {
+    min-height: 120px;
+    min-width: 120px;
+  }
+  
+  .card-body {
+    min-height: 120px;
+    height: auto;
+  }
+  
+  .product-name {
+    font-size: 16px;
+    margin-bottom: 6px;
+    min-height: 22px;
+  }
+  
+  .product-desc {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    max-height: 50.4px;
+    min-height: 34px;
+  }
+  
+  .card-footer {
+    gap: 8px;
+    padding-top: 8px;
+    min-height: 38px;
+    flex-wrap: nowrap;
+  }
+  
+  .price {
+    font-size: 16px;
+    min-width: 80px;
+  }
+  
+  .price .unit {
+    font-size: 12px;
+  }
+  
+  .quantity-option {
+    min-width: 60px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  
+  .custom-quantity-input {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  
+  .add-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+    min-width: 105px;
+    max-width: 130px;
+    height: 36px;
+    gap: 4px;
+  }
+  
+  /* Çox kiçik mobil rus dili üçün */
+  [lang="ru"] .add-btn {
+    font-size: 9px;
+    padding: 8px 10px;
+    min-width: 115px;
+    max-width: 130px;
+    gap: 3px;
+    letter-spacing: 0;
+  }
+  
+  /* Çox kiçik mobil rus dili ikonu */
+  [lang="ru"] .cart-icon {
+    width: 11px;
+    height: 11px;
+    min-width: 11px;
+    min-height: 11px;
+  }
+  
+  .card-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+    top: 8px;
+    left: 8px;
+  }
+  
+  .cart-icon {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+    min-height: 12px;
+  }
+}
+
+/* Çox kiçik ekranlar (320px - 359px) */
+@media (max-width: 359px) {
+  .product-card {
+    padding: 10px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .image-wrapper {
+    width: 100%;
+    height: 150px;
+    min-width: 100%;
+    min-height: 150px;
+    order: 1;
+  }
+  
+  .product-img {
+    min-height: 150px;
+    min-width: 100%;
+  }
+  
+  .card-body {
+    min-height: auto;
+    height: auto;
+    width: 100%;
+    order: 2;
+  }
+  
+  .product-name {
+    font-size: 16px;
+    min-height: auto;
+    text-align: center;
+  }
+  
+  .product-desc {
+    font-size: 12px;
+    max-height: none;
+    min-height: auto;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .product-desc::after {
+    display: none;
+  }
+  
+  .quantity-selection {
+    order: 3;
+    width: 100%;
+  }
+  
+  .quantity-options {
+    justify-content: center;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 12px;
+    min-height: auto;
+    align-items: stretch;
+    order: 4;
+  }
+  
+  .price {
+    font-size: 18px;
+    text-align: center;
+    justify-content: center;
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .add-btn {
+    width: 100%;
+    min-width: auto;
+    max-width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    height: 40px;
+    justify-content: center;
+    gap: 6px;
+  }
+  
+  /* Çox kiçik ekran rus dili üçün */
+  [lang="ru"] .add-btn {
+    font-size: 11px;
+    padding: 10px;
+    width: 100%;
+    gap: 5px;
+  }
+  
+  .cart-icon {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+  }
+}
+
+/* ===========================================
+   BÜTÜN MƏHSULLAR BUTONU - SADƏ ANİMASİYA
+=========================================== */
+
+.view-all {
+  margin-top: 40px;
+  background: #d6800f;
+  color: #fff;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+/* Buton hover effekti - sadə böyümə animasiyası */
+@media (hover: hover) {
+  .view-all:hover {
+    background: #e68a1a;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(214, 128, 15, 0.3);
+    text-decoration: none;
+  }
+  
+  /* Ox işarəsi animasiyası */
+  .view-all::after {
+    content: ' →';
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .view-all:hover::after {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+}
+
+/* Buton aktiv state */
+.view-all:active {
+  transform: scale(0.98);
+  text-decoration: none;
+}
+
+/* Mobil versiya */
+@media (max-width: 767px) {
+  .view-all {
+    padding: 10px 25px;
+    font-size: 14px;
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 479px) {
+  .view-all {
+    padding: 9px 22px;
+    font-size: 13px;
+    margin-top: 30px;
+  }
+}
+
+/* ===========================================
+   SCROLL ANİMASİYASI
+=========================================== */
+
+.animate-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.animate-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-0 { transition-delay: 0s; }
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
+.delay-9 { transition-delay: 0.9s; }
+.delay-10 { transition-delay: 1.0s; }

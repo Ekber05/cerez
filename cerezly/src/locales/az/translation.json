@@ -1,0 +1,243 @@
+{
+  "nav": {
+    "home": "Ana Səhifə",
+    "products": "Məhsullar",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə"
+  },
+  "search": {
+    "placeholder": "Məhsul axtarın..."
+  },
+  "hero": {
+    "badge": "Premium Quru Meyvələr",
+    "title": "Təbii Dadlar, <1>Sağlam</1><br/>Həyat",
+    "description": "Diqqətlə seçilmiş quru meyvələr, çərəzlər, ədviyyatlar və paxlalılar. Sağlamlığınız üçün təbii seçim!",
+    "buttons": {
+      "products": "Məhsulları Gör",
+      "about": "Haqqımızda"
+    },
+    "stats": {
+      "products": "Məhsul Növü",
+      "natural": "Təbii",
+      "customers": "Müştəri"
+    }
+  },
+  "products": {
+    "sectionTag": "Məhsullar",
+    "sectionTitle": "Premium <1>Çərəzlər</1>",
+    "sectionSubtitle": "Ən keyfiyyətli quru meyvələr və çərəzlər",
+    "items": [
+      {
+        "id": 1,
+        "name": "Qoz",
+        "tag": "Favorit",
+        "desc": "Təzə və ləzzətli. Ürək və beyin sağlamlığını dəstəkləyən, yüksək qida dəyərinə malikdir."
+      },
+      {
+        "id": 2,
+        "name": "Badam",
+        "tag": "Premium",
+        "desc": "Premium keyfiyyətli badam, vitamin E mənbəyi"
+      },
+      {
+        "id": 3,
+        "name": "Fındıq",
+        "tag": "Yerli",
+        "desc": "Vitamin və minerallarla zəngin, yüksək qida dəyərinə malik təbii fındıq."
+      },
+      {
+        "id": 4,
+        "name": "Quru Ərik",
+        "tag": "Sağlam",
+        "desc": "Həzm sistemini dəstəkləyən, vitaminlərlə zəngin təbii quru ərik."
+      },
+      {
+        "id": 5,
+        "name": "Sublimə olunmuş qidalar",
+        "tag": "Yeni",
+        "desc": "Aşağı temperaturda qurudularaq dadı və qida dəyəri qorunan sublimə olunmuş meyvələr."
+      },
+      {
+        "id": 6,
+        "name": "Kişmiş",
+        "tag": "Populyar",
+        "desc": "Təbii şirinliyi və enerji verən tərkibi ilə seçilən keyfiyyətli kişmiş."
+      }
+    ],
+    "quantity": {
+      "customPlaceholder": "Özəl miqdar (qr)",
+      "selectedText": "Seçilmiş miqdar:",
+      "minQuantity": "Minimum miqdar 100 qramdır!",
+      "options": [
+        { "label": "250 qr", "value": 250 },
+        { "label": "500 qr (standart)", "value": 500 },
+        { "label": "750 qr", "value": 750 },
+        { "label": "1 kq", "value": 1000 },
+        { "label": "2 kq", "value": 2000 },
+        { "label": "5 kq", "value": 5000 }
+      ]
+    },
+    "buttons": {
+      "addToCart": "Əlavə et",
+      "allProducts": "Bütün Məhsullar"
+    },
+    "notifications": {
+      "addedToCart": "səbətə əlavə edildi!"
+    },
+    "unit": "/1kq"
+  },
+  "cart": {
+    "title": "Səbətiniz",
+    "items": "məhsul",
+    "empty": "Səbətiniz boşdur",
+    "continueShopping": "Alış-verişə davam et",
+    "close": "Bağla",
+    "decrease": "100 qr azalt",
+    "increase": "100 qr artır",
+    "remove": "Sil",
+    "totalWeight": "Ümumi çəki:",
+    "totalAmount": "Ümumi məbləğ:",
+    "orderWhatsApp": "WhatsApp ilə Sifariş Et",
+    "orderNote": "Sifarişi təsdiqlədikdən sonra WhatsApp-dan əlaqə saxlayacağıq."
+  },
+  "about": {
+    "subtitle": "Haqqımızda",
+    "whyChooseUs": "Niyə Bizi Seçməlisiniz?",
+    "description": "10 ildən artıq təcrübə ilə, biz sizə ən keyfiyyətli məhsulları təqdim edirik. Hər məhsul diqqətlə seçilir və paketlənir.",
+    "natural": "100% Təbii",
+    "naturalDesc": "Heç bir kimyəvi əlavə olmadan, təmiz təbiət məhsulları",
+    "health": "Sağlamlıq Üçün",
+    "healthDesc": "Vitamin və minerallarla zəngin, orqanizmə faydalı",
+    "fastDelivery": "Sürətli Çatdırılma",
+    "deliveryDesc": "Bakı və regionlara çatdırılma xidməti",
+    "quality": "Keyfiyyət Zəmanəti",
+    "qualityDesc": "Etibarlı mənbələrdən diqqətlə seçilmiş premium keyfiyyətli məhsullar",
+    "ourStory": "Bizim Hekayəmiz",
+    "storyPart1": "Çərəz mağazası 2014-cü ildə kiçik bir biznes kimi fəaliyyətə başladı. Məqsədimiz sadə idi: insanlara ən təmiz və ən dadlı məhsulları təqdim etmək.",
+    "storyPart2": "Bu gün, Azərbaycanın hər yerində minlərlə aile bizimlə sağlam qidalanmanın dadını çıxarır. Biz isə hər gün eyni həvəslə keyfiyyətə sadiq qalmağa davam edirik.",
+    "storyPart3": "Hər məhsulumuzun arxasında sevgi, qayğı və aile dəyərləri dayanır.",
+    "yearsExperience": "İllik Təcrübə",
+    "products": "Məhsul Növü",
+    "satisfiedCustomers": "Razı Müştəri",
+    "support": "Dəstək"
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "Sizin Suallarınıza Cavab Veririk",
+    "subtitle": "Ən çox verilən sualları burada tapa bilərsiniz. Əlavə sualınız varsa, bizimlə əlaqə saxlayın.",
+    "contactText": "Sualınıza cavab tapa bilmədiniz?",
+    "contactLink": "Bizimlə əlaqə saxlayın →",
+    "deliveryCostQuestion": "Çatdırılma haqqı nə qədərdir?",
+    "deliveryCostAnswer": "Çatdırılma haqqı sifarişin miqdarı və ünvanından asılı olaraq dəyişir.",
+    "howToOrderQuestion": "Sifariş necə verilir?",
+    "howToOrderAnswer": "İstər sayt üzərindən, istər WhatsApp və ya zənglə sifariş qəbul edilir.",
+    "deliveryTimeQuestion": "Sifariş verdikdən sonra nə qədər müddətdə çatdırılır?",
+    "deliveryTimeAnswer": "Sifarişlər adətən 24 saat ərzində çatdırılır. Çatdırılma müddəti ünvan, bölgə və digər şərtlərdən asılı olaraq dəyişə bilər.",
+    "paymentMethodsQuestion": "Ödəniş üsulları hansılardır?",
+    "paymentMethodsAnswer": "Nağd, kartla və ya onlayn ödəniş mümkündür.",
+    "wholesaleQuestion": "Topdan satış var?",
+    "wholesaleAnswer": "Xeyr, topdan satış mövcud deyil.",
+    "returnPolicyQuestion": "Məhsulları qaytarmaq və ya dəyişdirmək olarmı?",
+    "returnPolicyAnswer": "Qida təhlükəsizliyi səbəbindən açılmış məhsulların qaytarılması mümkün deyil. Lakin yanlış və ya zədələnmiş məhsul olduqda, 24 saat ərzində müraciət edildiyi halda dəyişdirmə və ya geri qaytarma həyata keçirilir."
+  },
+  "reviews": {
+    "badge": "RƏYLƏR",
+    "title": "Müştərilərimiz Nə Deyir?",
+    "subtitle": "Minlərlə məmnun müştərimizin rəylərini oxuyun",
+    "review1": {
+      "name": "Anonim Müştəri",
+      "role": "Daimi Müştəri",
+      "text": "Çərəz-dən aldığım quru meyvələr həmişə təzə və keyfiyyətlidir."
+    },
+    "review2": {
+      "name": "Anonim Müştəri",
+      "role": "Restoran Sahibi",
+      "text": "Restoranımız üçün hər həftə buradan sifariş veririk."
+    },
+    "review3": {
+      "name": "Anonim Müştəri",
+      "role": "Sağlam Qidalanma Həvəskarı",
+      "text": "Məhsulların təbii olması və geniş çeşidi məni çox sevindirir."
+    }
+  },
+  "contact": {
+    "badge": "Əlaqə",
+    "title": "Bizimlə <1>Əlaqə</1> Saxlayın",
+    "subtitle": "Sifariş vermək və ya suallarınız üçün bizimlə əlaqə saxlayın",
+    "cards": {
+      "address": {
+        "title": "Ünvan",
+        "line1": "Bakı şəhəri, Nəsimi rayonu",
+        "line2": "28 May küçəsi, 15"
+      },
+      "email": {
+        "title": "Email",
+        "line1": "info@cerez.az",
+        "line2": "support@cerez.az"
+      },
+      "phone": {
+        "title": "Telefon",
+        "line1": "+994 50 854 49 14",
+        "line2": "+994 12 456 78 90"
+      },
+      "hours": {
+        "title": "İş Saatları",
+        "line1": "Bazar ertəsi – Şənbə: 09:00 – 20:00",
+        "line2": "Bazar: 10:00 – 18:00"
+      }
+    },
+    "form": {
+      "title": "Mesaj Göndərin",
+      "name": "Adınız",
+      "namePlaceholder": "Adınızı daxil edin",
+      "phone": "Telefon",
+      "phonePlaceholder": "+994 XX XXX XX XX",
+      "email": "E-poçt",
+      "emailPlaceholder": "email@example.com",
+      "message": "Mesajınız",
+      "messagePlaceholder": "Sifarişiniz və ya sualınız...",
+      "button": "Göndər"
+    },
+    "map": {
+      "title": "Ünvanımız",
+      "address": "📍 Bakı şəhəri, Nəsimi rayonu, 28 May küçəsi, 15",
+      "directions": "İstiqamət göstər"
+    }
+  },
+  "footer": {
+    "description": "Təbii və keyfiyyətli çərəzlərin ünvanı. Hər gün daha təzə, daha dadlı.",
+    "sections": {
+      "products": {
+        "title": "Məhsullar",
+        "driedFruits": "Quru meyvələr",
+        "saltyNuts": "Duzlu çərəzlər",
+        "chocolateNuts": "Şokoladlı çərəzlər",
+        "mixPackages": "Mix paketlər"
+      },
+      "links": {
+        "title": "Keçidlər",
+        "about": "Haqqımızda",
+        "blog": "Blog",
+        "campaigns": "Kampaniyalar",
+        "contact": "Əlaqə",
+        "faq": "Tez-tez verilən suallar"
+      },
+      "contact": {
+        "title": "Əlaqə",
+        "address": "Bakı, Azərbaycan",
+        "phone": "+994 50 854 49 14",
+        "email": "info@cerez.az",
+        "hours": "09:00 – 22:00"
+      }
+    },
+    "bottom": {
+      "copyright": "© 2025 Çərəz. Bütün hüquqlar qorunur.",
+      "madeWithLove": "Sevgi ilə hazırlandı"
+    }
+  },
+  "whatsapp": {
+    "message": "Salam! Çərəz məhsulları ilə bağlı kiçik bir sualım var. Kömək edə bilərsiniz?",
+    "text": "Bizimlə danışın",
+    "ariaLabel": "WhatsApp ilə əlaqə"
+  }
+}

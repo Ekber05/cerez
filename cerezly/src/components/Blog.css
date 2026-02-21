@@ -1,0 +1,642 @@
+/* =============================================== */
+/* BLOG SECTION - ƏSAS STİLLƏR */
+/* =============================================== */
+
+.blog-section {
+  padding: 0 20px;  /* Ümumi padding sıfırlandı, başlıq özü idarə edəcək */
+  background: linear-gradient(135deg, #fdfaf7 0%, #f8f3ec 100%);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+}
+
+.blog-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ===== BAŞLIQ HİSSƏSİ - DÜZƏLDİLDİ ===== */
+.blog-header {
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  padding-top: calc(var(--nav-height) + 30px); /* Navbar hündürlüyü qədər padding */
+}
+
+.blog-header.header-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.blog-badge {
+  display: inline-block;
+  background: #f0d9b4;
+  color: rgb(184, 137, 56);
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(197, 136, 40, 0.3);
+}
+
+.blog-title {
+  font-size: 42px;
+  color: #2d2d2d;
+  margin-bottom: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.title-highlight {
+  color: #c58828;
+  position: relative;
+  display: inline-block;
+}
+
+.title-highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #c58828, #e9b87a);
+  border-radius: 3px;
+}
+
+.blog-subtitle {
+  font-size: 18px;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ===== BLOG GRID ===== */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 50px;
+  padding-top: 20px; /* Əlavə boşluq */
+}
+
+/* ===== BLOG KARTLARI ===== */
+.blog-card {
+  background: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.4s ease;
+}
+
+.blog-card.card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.blog-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(197, 136, 40, 0.15);
+}
+
+/* Kartların gecikməli görünməsi */
+.blog-card:nth-child(1).card-visible { transition-delay: 0.1s; }
+.blog-card:nth-child(2).card-visible { transition-delay: 0.2s; }
+.blog-card:nth-child(3).card-visible { transition-delay: 0.3s; }
+.blog-card:nth-child(4).card-visible { transition-delay: 0.4s; }
+.blog-card:nth-child(5).card-visible { transition-delay: 0.5s; }
+.blog-card:nth-child(6).card-visible { transition-delay: 0.6s; }
+
+/* ===== ŞƏKİL HİSSƏSİ ===== */
+.blog-card-image {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+}
+
+.blog-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.blog-card:hover .blog-card-image img {
+  transform: scale(1.1);
+}
+
+.blog-category {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(197, 136, 40, 0.9);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(5px);
+  z-index: 2;
+}
+
+/* Overlay effekti */
+.blog-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.blog-card:hover .blog-card-overlay {
+  opacity: 1;
+}
+
+.overlay-btn {
+  background: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  color: #2d2d2d;
+}
+
+.overlay-btn:hover {
+  background: #c58828;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.read-more-btn svg,
+.share-btn svg {
+  font-size: 16px;
+}
+
+/* ===== KART MƏZMUNU ===== */
+.blog-card-content {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #888;
+  font-size: 13px;
+}
+
+.blog-date,
+.blog-views {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.meta-icon {
+  color: #c58828;
+  font-size: 14px;
+}
+
+.blog-post-title {
+  font-size: 22px;
+  color: #2d2d2d;
+  margin-bottom: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+.blog-card:hover .blog-post-title {
+  color: #c58828;
+}
+
+.blog-excerpt {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+/* ===== FAYDALI XÜSUSİYYƏTLƏR ===== */
+.blog-benefits {
+  background: #fdf8f2;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(197, 136, 40, 0.1);
+}
+
+.benefits-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  color: #c58828;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.benefits-icon {
+  color: #c58828;
+}
+
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #555;
+}
+
+.benefit-item-icon {
+  color: #c58828;
+  font-size: 12px;
+  min-width: 12px;
+}
+
+/* ===== KART ALT HİSSƏSİ ===== */
+.blog-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+
+.read-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #888;
+}
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.bookmark-btn:hover {
+  color: #c58828;
+  transform: scale(1.1);
+}
+
+/* ===== LOAD MORE DÜYMƏSİ ===== */
+.blog-load-more {
+  text-align: center;
+  margin-top: 40px;
+  padding-bottom: 60px;
+}
+
+.load-more-btn {
+  background: transparent;
+  color: #c58828;
+  border: 2px solid #c58828;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.load-more-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(197, 136, 40, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+}
+
+.load-more-btn:hover {
+  background: #c58828;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(197, 136, 40, 0.3);
+}
+
+.load-more-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* ===== LOAD MORE SPINNER ===== */
+.spinner-icon {
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none !important;
+  background: transparent;
+  color: #c58828;
+  box-shadow: none;
+}
+
+.load-more-btn:disabled:hover {
+  background: transparent;
+  color: #c58828;
+  box-shadow: none;
+}
+
+.load-more-btn:disabled:hover::before {
+  display: none;
+}
+
+/* ===== BÜTÜN MƏQALƏLƏR YÜKLƏNDİKDƏ ===== */
+.blog-all-loaded {
+  text-align: center;
+  margin-top: 30px;
+  padding-bottom: 60px;
+}
+
+.blog-all-loaded p {
+  color: #888;
+  font-size: 14px;
+  position: relative;
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.blog-all-loaded p::before,
+.blog-all-loaded p::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 50px;
+  height: 1px;
+  background: #ddd;
+}
+
+.blog-all-loaded p::before {
+  left: -30px;
+}
+
+.blog-all-loaded p::after {
+  right: -30px;
+}
+
+/* ===== RESPONSIVE ===== */
+
+/* Laptop və kiçik ekranlar */
+@media (max-width: 1200px) {
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .blog-title {
+    font-size: 36px;
+  }
+  
+  .blog-header {
+    padding-top: calc(var(--nav-height) + 25px);
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .blog-section {
+    padding: 0 15px;
+  }
+  
+  .blog-header {
+    padding-top: calc(var(--nav-height) + 20px);
+    margin-bottom: 40px;
+  }
+  
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  
+  .blog-title {
+    font-size: 32px;
+  }
+  
+  .blog-subtitle {
+    font-size: 16px;
+  }
+  
+  .blog-card-image {
+    height: 220px;
+  }
+  
+  .benefits-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .blog-post-title {
+    font-size: 20px;
+  }
+  
+  .overlay-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  
+  .blog-all-loaded p::before,
+  .blog-all-loaded p::after {
+    width: 30px;
+  }
+  
+  .blog-all-loaded p::before {
+    left: -20px;
+  }
+  
+  .blog-all-loaded p::after {
+    right: -20px;
+  }
+}
+
+/* Mobil */
+@media (max-width: 480px) {
+  .blog-section {
+    padding: 0 12px;
+  }
+  
+  .blog-header {
+    padding-top: calc(var(--nav-height) + 15px);
+    margin-bottom: 30px;
+  }
+  
+  .blog-title {
+    font-size: 28px;
+  }
+  
+  .blog-badge {
+    font-size: 12px;
+    padding: 6px 18px;
+  }
+  
+  .blog-card-image {
+    height: 200px;
+  }
+  
+  .blog-card-content {
+    padding: 20px;
+  }
+  
+  .blog-post-title {
+    font-size: 18px;
+  }
+  
+  .blog-excerpt {
+    font-size: 13px;
+  }
+  
+  .blog-meta {
+    font-size: 12px;
+  }
+  
+  .load-more-btn {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+  
+  .blog-card-overlay {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .overlay-btn {
+    width: 140px;
+    justify-content: center;
+  }
+}
+
+/* ===== ANİMASİYALAR ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Hover effektləri */
+.benefit-item:hover {
+  color: #c58828;
+  transform: translateX(5px);
+  transition: all 0.3s ease;
+}
+
+/* iOS üçün əlavə düzəlişlər */
+@supports (-webkit-touch-callout: none) {
+  .blog-card,
+  .overlay-btn,
+  .load-more-btn {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* Touch cihazlar üçün */
+@media (hover: none) and (pointer: coarse) {
+  .blog-card-overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    align-items: flex-end;
+    padding-bottom: 20px;
+  }
+  
+  .overlay-btn {
+    background: #c58828;
+    color: white;
+  }
+  
+  .blog-card:hover {
+    transform: none;
+  }
+  
+  .blog-card:active {
+    transform: scale(0.98);
+  }
+  
+  .load-more-btn:active {
+    transform: scale(0.95);
+    background: #c58828;
+    color: white;
+  }
+}

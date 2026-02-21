@@ -1,0 +1,243 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "search": {
+    "placeholder": "Search products..."
+  },
+  "hero": {
+    "badge": "Premium Dried Fruits",
+    "title": "Natural Flavors, <1>Healthy</1><br/>Life",
+    "description": "Carefully selected dried fruits, nuts, spices & legumes. A natural choice for your health!",
+    "buttons": {
+      "products": "View Products",
+      "about": "About Us"
+    },
+    "stats": {
+      "products": "Product Types",
+      "natural": "Natural",
+      "customers": "Customers"
+    }
+  },
+  "products": {
+    "sectionTag": "Products",
+    "sectionTitle": "Premium <1>Snacks</1>",
+    "sectionSubtitle": "Highest quality dried fruits and nuts",
+    "items": [
+      {
+        "id": 1,
+        "name": "Walnut",
+        "tag": "Favorite",
+        "desc": "Fresh and delicious. Supports heart and brain health with high nutritional value."
+      },
+      {
+        "id": 2,
+        "name": "Almond",
+        "tag": "Premium",
+        "desc": "Premium quality almonds, source of vitamin E"
+      },
+      {
+        "id": 3,
+        "name": "Hazelnut",
+        "tag": "Local",
+        "desc": "Rich in vitamins and minerals, high nutritional value natural hazelnuts."
+      },
+      {
+        "id": 4,
+        "name": "Dried Apricot",
+        "tag": "Healthy",
+        "desc": "Natural dried apricots rich in vitamins that support the digestive system."
+      },
+      {
+        "id": 5,
+        "name": "Freeze-dried foods",
+        "tag": "New",
+        "desc": "Freeze-dried fruits that preserve taste and nutritional value at low temperatures."
+      },
+      {
+        "id": 6,
+        "name": "Raisin",
+        "tag": "Popular",
+        "desc": "Quality raisins selected for their natural sweetness and energy-giving composition."
+      }
+    ],
+    "quantity": {
+      "customPlaceholder": "Custom quantity (gr)",
+      "selectedText": "Selected quantity:",
+      "minQuantity": "Minimum quantity is 100 grams!",
+      "options": [
+        { "label": "250 gr", "value": 250 },
+        { "label": "500 gr (standard)", "value": 500 },
+        { "label": "750 gr", "value": 750 },
+        { "label": "1 kg", "value": 1000 },
+        { "label": "2 kg", "value": 2000 },
+        { "label": "5 kg", "value": 5000 }
+      ]
+    },
+    "buttons": {
+      "addToCart": "Add to Cart",
+      "allProducts": "All Products"
+    },
+    "notifications": {
+      "addedToCart": "added to cart!"
+    },
+    "unit": "/1kg"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "items": "items",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "close": "Close",
+    "decrease": "Decrease 100gr",
+    "increase": "Increase 100gr",
+    "remove": "Remove",
+    "totalWeight": "Total weight:",
+    "totalAmount": "Total amount:",
+    "orderWhatsApp": "Order via WhatsApp",
+    "orderNote": "We will contact you via WhatsApp after confirming the order."
+  },
+  "about": {
+    "subtitle": "About Us",
+    "whyChooseUs": "Why Choose Us?",
+    "description": "With over 10 years of experience, we offer you the highest quality products. Each product is carefully selected and packaged.",
+    "natural": "100% Natural",
+    "naturalDesc": "Pure natural products without any chemical additives",
+    "health": "For Health",
+    "healthDesc": "Rich in vitamins and minerals, beneficial for the body",
+    "fastDelivery": "Fast Delivery",
+    "deliveryDesc": "Delivery service to Baku and regions",
+    "quality": "Quality Guarantee",
+    "qualityDesc": "Premium quality products carefully selected from reliable sources",
+    "ourStory": "Our Story",
+    "storyPart1": "Çərəz store started as a small business in 2014. Our goal was simple: to offer people the purest and tastiest products.",
+    "storyPart2": "Today, thousands of families across Azerbaijan enjoy healthy eating with us. And we continue to remain committed to quality with the same passion every day.",
+    "storyPart3": "Behind every product of ours lies love, care and family values.",
+    "yearsExperience": "Years of Experience",
+    "products": "Product Types",
+    "satisfiedCustomers": "Satisfied Customers",
+    "support": "Support"
+  },
+  "faq": {
+    "badge": "FAQ",
+    "title": "We Answer Your Questions",
+    "subtitle": "Find the most frequently asked questions here. If you have additional questions, contact us.",
+    "contactText": "Couldn't find the answer to your question?",
+    "contactLink": "Contact us →",
+    "deliveryCostQuestion": "How much is the delivery cost?",
+    "deliveryCostAnswer": "Delivery cost varies depending on the order quantity and address.",
+    "howToOrderQuestion": "How do I place an order?",
+    "howToOrderAnswer": "Orders are accepted either through the website, WhatsApp, or by phone call.",
+    "deliveryTimeQuestion": "How long does it take to deliver after placing an order?",
+    "deliveryTimeAnswer": "Orders are usually delivered within 24 hours. Delivery time may vary depending on the address, region, and other conditions.",
+    "paymentMethodsQuestion": "What are the payment methods?",
+    "paymentMethodsAnswer": "Cash, card, or online payment is possible.",
+    "wholesaleQuestion": "Is there wholesale?",
+    "wholesaleAnswer": "No, wholesale is not available.",
+    "returnPolicyQuestion": "Can products be returned or exchanged?",
+    "returnPolicyAnswer": "Due to food safety, opened products cannot be returned. However, in case of wrong or damaged products, replacement or refund is carried out if contacted within 24 hours."
+  },
+  "reviews": {
+    "badge": "REVIEWS",
+    "title": "What Our Customers Say?",
+    "subtitle": "Read reviews from thousands of satisfied customers",
+    "review1": {
+      "name": "Anonymous Customer",
+      "role": "Regular Customer",
+      "text": "The dried fruits I buy from Çərəz are always fresh and of high quality."
+    },
+    "review2": {
+      "name": "Anonymous Customer",
+      "role": "Restaurant Owner",
+      "text": "We order from here every week for our restaurant."
+    },
+    "review3": {
+      "name": "Anonymous Customer",
+      "role": "Healthy Eating Enthusiast",
+      "text": "I am very pleased that the products are natural and have a wide variety."
+    }
+  },
+  "contact": {
+    "badge": "Contact",
+    "title": "Get In <1>Touch</1> With Us",
+    "subtitle": "Contact us to place an order or for any questions you may have",
+    "cards": {
+      "address": {
+        "title": "Address",
+        "line1": "Baku city, Nasimi district",
+        "line2": "28 May Street, 15"
+      },
+      "email": {
+        "title": "Email",
+        "line1": "info@cerez.az",
+        "line2": "support@cerez.az"
+      },
+      "phone": {
+        "title": "Phone",
+        "line1": "+994 50 854 49 14",
+        "line2": "+994 12 456 78 90"
+      },
+      "hours": {
+        "title": "Working Hours",
+        "line1": "Monday – Saturday: 09:00 – 20:00",
+        "line2": "Sunday: 10:00 – 18:00"
+      }
+    },
+    "form": {
+      "title": "Send Message",
+      "name": "Your Name",
+      "namePlaceholder": "Enter your name",
+      "phone": "Phone",
+      "phonePlaceholder": "+994 XX XXX XX XX",
+      "email": "Email",
+      "emailPlaceholder": "email@example.com",
+      "message": "Your Message",
+      "messagePlaceholder": "Your order or question...",
+      "button": "Send"
+    },
+    "map": {
+      "title": "Our Address",
+      "address": "📍 Baku city, Nasimi district, 28 May Street, 15",
+      "directions": "Get Directions"
+    }
+  },
+  "footer": {
+    "description": "The address for natural and quality snacks. Fresher, tastier every day.",
+    "sections": {
+      "products": {
+        "title": "Products",
+        "driedFruits": "Dried fruits",
+        "saltyNuts": "Salty snacks",
+        "chocolateNuts": "Chocolate nuts",
+        "mixPackages": "Mix packages"
+      },
+      "links": {
+        "title": "Links",
+        "about": "About Us",
+        "blog": "Blog",
+        "campaigns": "Campaigns",
+        "contact": "Contact",
+        "faq": "Frequently Asked Questions"
+      },
+      "contact": {
+        "title": "Contact",
+        "address": "Baku, Azerbaijan",
+        "phone": "+994 50 854 49 14",
+        "email": "info@cerez.az",
+        "hours": "09:00 – 22:00"
+      }
+    },
+    "bottom": {
+      "copyright": "© 2025 Çərəz. All rights reserved.",
+      "madeWithLove": "Made with love"
+    }
+  },
+  "whatsapp": {
+    "message": "Hello! I have a small question about Çərəz products. Can you help?",
+    "text": "Chat with us",
+    "ariaLabel": "Contact via WhatsApp"
+  }
+}
