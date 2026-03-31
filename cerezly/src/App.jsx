@@ -1,140 +1,48 @@
-// App.jsx - GERİ QAYIDARKƏN SCROLL-U YADA SAXLAYAN (BLOG FOOTER-DA)
-import React, { useEffect, useState, useRef } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+// App.jsx - KAMPANİYA VƏ BLOG ƏLAVƏ EDİLMİŞ VERSİYA
+
+import React, { useEffect, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
+
+import ScrollRestoration from "./components/ScrollRestoration";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Products from "./components/Products";
 import AllProducts from "./components/AllProducts";
+import CategoryPage from "./components/CategoryPage";
 import About from "./components/About";
 import Faq from "./components/Faq";
 import Reviews from "./components/Reviews";
 import Contact from "./components/Contact";
-import Blog from "./components/Blog"; // ✅ BURADA BLOG IMPORT EDİLMƏLİDİR!
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 
-// Dil sinxronizasiyası üçün komponent
+// ⭐ KAMPANİYA KOMPONENTLƏRİ ⭐
+import CampaignsList from "./components/CampaignsList";
+import CampaignDetail from "./components/CampaignDetail";
+
+// ⭐ BLOG KOMPONENTLƏRİ ⭐
+import BlogList from "./components/BlogList";
+import BlogDetail from "./components/BlogDetail";
+
 const LanguageSync = ({ children }) => {
   const { language } = useLanguage();
-  
+
   useEffect(() => {
     i18n.changeLanguage(language);
     document.documentElement.lang = language;
   }, [language]);
-  
+
   return <>{children}</>;
 };
 
 function App() {
   const [navHeight, setNavHeight] = useState(0);
-  const location = useLocation();
-  const scrollPositions = useRef({});
-  const isBackNavigation = useRef(false);
-  const previousPath = useRef(location.pathname);
 
-  // ✅ 1. REFRESH zamanı SCROLL FIX
-  useEffect(() => {
-    // Browser scroll restoration-u biz idarə edəcəyik
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-    
-    // Refresh olub olmadığını yoxla
-    const isRefresh = performance.navigation?.type === 1;
-    
-    if (isRefresh) {
-      console.log('Refresh detected - resetting scroll');
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'instant'
-      });
-    }
-    
-    // Hər halda səhifənin yuxarısına get
-    window.scrollTo(0, 0);
-  }, []);
-
-  // ✅ 2. SƏHİFƏ DƏYİŞƏNDƏ - SCROLL YADA SAXLA
-  useEffect(() => {
-    // Əvvəlki səhifənin scroll pozisiyasını yadda saxla
-    scrollPositions.current[previousPath.current] = window.scrollY;
-    
-    // Yeni səhifəyə keçid? → scroll-u sıfırla
-    // Geri qayıdış? → əvvəlki scroll-u bərpa et
-    if (isBackNavigation.current) {
-      // Geri qayıdış: əvvəlki scroll-u bərpa et
-      const savedScroll = scrollPositions.current[location.pathname];
-      if (savedScroll !== undefined) {
-        setTimeout(() => {
-          window.scrollTo({
-            top: savedScroll,
-            left: 0,
-            behavior: 'instant'
-          });
-        }, 0);
-      }
-      isBackNavigation.current = false;
-    } else {
-      // Yeni səhifə: scroll-u sıfırla
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'instant'
-      });
-    }
-    
-    // Cari path-i yenilə
-    previousPath.current = location.pathname;
-  }, [location.pathname]);
-
-  // ✅ 3. BROWSER BACK/FORWARD düymələri üçün
-  useEffect(() => {
-    const handlePopState = () => {
-      isBackNavigation.current = true;
-    };
-    
-    window.addEventListener('popstate', handlePopState);
-    
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, []);
-
-  // ✅ 4. HASH SCROLL (ana səhifə daxilində)
-  useEffect(() => {
-    // Refresh deyil, normal keçid olduqda hash scroll et
-    const isRefresh = performance.navigation?.type === 1;
-    
-    if (!isRefresh && location.hash && location.pathname === "/") {
-      const elementId = location.hash.substring(1);
-      
-      const timer = setTimeout(() => {
-        const element = document.getElementById(elementId);
-        if (element) {
-          // Əvvəlcə yuxarı scroll et
-          window.scrollTo(0, 0);
-          
-          // Sonra hədəfə scroll et
-          setTimeout(() => {
-            element.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }, 50);
-        }
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [location]);
-
-  // ✅ 5. Navbar hündürlüyü
   useEffect(() => {
     const nav = document.getElementById("navbar");
     if (nav) {
@@ -147,6 +55,8 @@ function App() {
       <LanguageProvider>
         <CartProvider>
           <LanguageSync>
+            <ScrollRestoration />
+
             <div className="App">
               <Navbar />
 
@@ -177,6 +87,96 @@ function App() {
                     }
                   />
 
+                  {/* KATEQORİYALAR */}
+                  <Route
+                    path="/meyve-qurulari"
+                    element={
+                      <>
+                        <CategoryPage key="meyve-qurulari" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/duzlu-cerezler"
+                    element={
+                      <>
+                        <CategoryPage key="duzlu-cerezler" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/sokokladli-cerezler"
+                    element={
+                      <>
+                        <CategoryPage key="sokokladli-cerezler" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/edviyyatlar"
+                    element={
+                      <>
+                        <CategoryPage key="edviyyatlar" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/paxlalilar-ve-taxillar"
+                    element={
+                      <>
+                        <CategoryPage key="paxlalilar-ve-taxillar" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/bitki-yaglari"
+                    element={
+                      <>
+                        <CategoryPage key="bitki-yaglari" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/qurudulmus-otlar-ve-caylar"
+                    element={
+                      <>
+                        <CategoryPage key="qurudulmus-otlar-ve-caylar" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/hediyye-paketleri"
+                    element={
+                      <>
+                        <CategoryPage key="hediyye-paketleri" />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  {/* KÖHNƏ URL → YENİ URL */}
+                  <Route path="/dried-fruits" element={<Navigate to="/meyve-qurulari" replace />} />
+                  <Route path="/spices" element={<Navigate to="/edviyyatlar" replace />} />
+                  <Route path="/legumes-and-grains" element={<Navigate to="/paxlalilar-ve-taxillar" replace />} />
+                  <Route path="/vegetable-oils" element={<Navigate to="/bitki-yaglari" replace />} />
+                  <Route path="/dried-herbs-and-teas" element={<Navigate to="/qurudulmus-otlar-ve-caylar" replace />} />
+                  <Route path="/sokokladli" element={<Navigate to="/sokokladli-cerezler" replace />} />
+
+                  {/* DİGƏR SƏHİFƏLƏR */}
                   <Route
                     path="/faq"
                     element={
@@ -207,12 +207,43 @@ function App() {
                     }
                   />
 
-                  {/* ✅ BLOG SƏHİFƏSİ ÜÇÜN ROUTE */}
+                  {/* ⭐ BLOG ROUTELARI ⭐ */}
                   <Route
                     path="/blog"
                     element={
                       <>
-                        <Blog />
+                        <BlogList />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/blog/:id"
+                    element={
+                      <>
+                        <BlogDetail />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  {/* ⭐ KAMPANİYA ROUTELARI ⭐ */}
+                  <Route
+                    path="/kampaniyalar"
+                    element={
+                      <>
+                        <CampaignsList />
+                        <Footer />
+                      </>
+                    }
+                  />
+
+                  <Route
+                    path="/kampaniya/:id"
+                    element={
+                      <>
+                        <CampaignDetail />
                         <Footer />
                       </>
                     }

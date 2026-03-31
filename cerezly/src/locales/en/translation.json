@@ -97,8 +97,8 @@
     "remove": "Remove",
     "totalWeight": "Total weight:",
     "totalAmount": "Total amount:",
-    "orderWhatsApp": "Order via WhatsApp",
-    "orderNote": "We will contact you via WhatsApp after confirming the order."
+    "orderNow": "Place Order",
+    "orderNote": "We will contact you once your order has been received"
   },
   "about": {
     "subtitle": "About Us",
@@ -188,12 +188,14 @@
     },
     "form": {
       "title": "Send Message",
-      "name": "Your Name",
-      "namePlaceholder": "Enter your name",
+      "name": "Your Name and Surname",
+      "namePlaceholder": "Enter your First and Last Name",
       "phone": "Phone",
       "phonePlaceholder": "+994 XX XXX XX XX",
       "email": "Email",
       "emailPlaceholder": "email@example.com",
+      "optional": "optional",
+      "emailHint": "⚠️ If you do not provide an email address, you will receive our response only by phone.",
       "message": "Your Message",
       "messagePlaceholder": "Your order or question...",
       "button": "Send"
@@ -208,11 +210,15 @@
     "description": "The address for natural and quality snacks. Fresher, tastier every day.",
     "sections": {
       "products": {
-        "title": "Products",
+        "title": "Categories",
         "driedFruits": "Dried fruits",
         "saltyNuts": "Salty snacks",
         "chocolateNuts": "Chocolate nuts",
-        "mixPackages": "Mix packages"
+        "spices": "Spices",
+        "legumesAndGrains": "Legumes & Grains",
+        "vegetableOils": "Vegetable Oils",
+        "driedHerbsAndTeas": "Dried Herbs & Teas",
+        "giftPackages": "Gift Packages"
       },
       "links": {
         "title": "Links",

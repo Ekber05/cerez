@@ -95,10 +95,12 @@
     "decrease": "100 qr azalt",
     "increase": "100 qr artır",
     "remove": "Sil",
+    "selectedWeight": "Seçilmiş çəki",
+    "totalItems": "Ümumi məhsul sayı",
     "totalWeight": "Ümumi çəki:",
     "totalAmount": "Ümumi məbləğ:",
-    "orderWhatsApp": "WhatsApp ilə Sifariş Et",
-    "orderNote": "Sifarişi təsdiqlədikdən sonra WhatsApp-dan əlaqə saxlayacağıq."
+    "orderNow": "Sifariş et",
+    "orderNote": "Sifarişiniz qəbul edildikdən sonra sizinlə əlaqə saxlayacağıq"
   },
   "about": {
     "subtitle": "Haqqımızda",
@@ -188,12 +190,14 @@
     },
     "form": {
       "title": "Mesaj Göndərin",
-      "name": "Adınız",
-      "namePlaceholder": "Adınızı daxil edin",
+      "name": "Adınız və Soyadınız",
+      "namePlaceholder": "Adınızı və Soyadınızı daxil edin",
       "phone": "Telefon",
       "phonePlaceholder": "+994 XX XXX XX XX",
       "email": "E-poçt",
       "emailPlaceholder": "email@example.com",
+      "optional": "istəyə bağlı",
+      "emailHint": "⚠️ E-poçt daxil etməsəniz, cavabımızı yalnız telefonla alacaqsınız.",
       "message": "Mesajınız",
       "messagePlaceholder": "Sifarişiniz və ya sualınız...",
       "button": "Göndər"
@@ -208,11 +212,15 @@
     "description": "Təbii və keyfiyyətli çərəzlərin ünvanı. Hər gün daha təzə, daha dadlı.",
     "sections": {
       "products": {
-        "title": "Məhsullar",
-        "driedFruits": "Quru meyvələr",
+        "title": "Kateqoriyalar",
+        "driedFruits": "Meyvə quruları",
         "saltyNuts": "Duzlu çərəzlər",
         "chocolateNuts": "Şokoladlı çərəzlər",
-        "mixPackages": "Mix paketlər"
+        "spices": "Ədviyyatlar",
+        "legumesAndGrains": "Paxlalılar və Taxıllar",
+        "vegetableOils": "Bitki Yağları",
+        "driedHerbsAndTeas": "Qurudulmuş Otlar və Çaylar",
+        "giftPackages": "Hədiyyə paketləri"
       },
       "links": {
         "title": "Keçidlər",

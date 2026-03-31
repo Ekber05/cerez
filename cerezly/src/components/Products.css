@@ -277,6 +277,27 @@
   white-space: nowrap;
 }
 
+/* Stokda olmayan məhsul nişanı (TEST ÜÇÜN) */
+.out-of-stock-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #dc3545;
+  color: white;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 600;
+  z-index: 10;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0.7; }
+}
+
 /* Kart məzmunu - Desktop */
 .card-body {
   flex: 1;
@@ -462,7 +483,7 @@
 }
 
 /* ===========================================
-   CART ICON STYLES - DÜZƏLDİLMİŞ
+   CART ICON STYLES
 =========================================== */
 
 .cart-icon {
@@ -478,7 +499,7 @@
 }
 
 /* ===========================================
-   SƏBƏTƏ AT BUTONU - TAMAMEN DÜZƏLDİLMİŞ
+   SƏBƏTƏ AT BUTONU
 =========================================== */
 
 .add-btn {
@@ -494,7 +515,7 @@
   white-space: nowrap;
   flex-shrink: 0;
   position: relative;
-  overflow: hidden; /* hidden saxlanılır */
+  overflow: hidden;
   z-index: 1;
   box-shadow: 0 3px 8px rgba(214, 128, 15, 0.15);
   display: inline-flex;
@@ -504,7 +525,7 @@
   max-width: 160px;
   height: 40px;
   box-sizing: border-box;
-  gap: 8px; /* İkon və mətn arasında boşluq */
+  gap: 8px;
 }
 
 /* Buton hover effekti */
@@ -520,7 +541,6 @@
     transform: translateY(-2px) scale(1.1);
   }
   
-  /* Dalğa effekti */
   .add-btn::after {
     content: '';
     position: absolute;
@@ -539,7 +559,6 @@
     animation: buttonWave 0.8s ease-out;
   }
   
-  /* İşıq hərəkəti */
   .add-btn::before {
     content: '';
     position: absolute;
@@ -578,7 +597,7 @@
   transition: transform 0.1s;
 }
 
-/* Rus dili üçün xüsusi buton tənzimləmələri - DÜZƏLDİLDİ */
+/* Rus dili üçün xüsusi buton tənzimləmələri */
 [lang="ru"] .add-btn {
   font-size: 11px;
   padding: 10px 14px;
@@ -604,27 +623,12 @@
   gap: 8px;
 }
 
-/* Rus dili üçün ikon - DÜZƏLDİLDİ */
+/* Rus dili üçün ikon */
 [lang="ru"] .cart-icon {
   width: 14px;
   height: 14px;
   min-width: 14px;
   min-height: 14px;
-}
-
-/* Buton mətni - sıxışdırma */
-.add-btn-text {
-  flex-shrink: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: calc(100% - 30px); /* İkon üçün yer burax */
-}
-
-/* Rus dili üçün buton mətni */
-[lang="ru"] .add-btn-text {
-  font-size: 11px;
-  max-width: calc(100% - 25px);
 }
 
 /* Mobil üçün active state */
@@ -672,22 +676,59 @@
   animation: cartIconBounce 0.5s ease !important;
 }
 
-/* Bildiriş üçün əlavə stil */
-.cart-notification {
+/* ===========================================
+   BİLDİRİŞ - AllProducts ilə eyni dizayn
+=========================================== */
+
+.global-fixed-notification {
   position: fixed;
-  top: 100px;
+  top: 120px;
   right: 20px;
-  background: #d6800f;
+  background-color: #8B4513;
   color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  z-index: 9999;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-weight: 500;
-  animation: slideInRight 0.3s ease;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  z-index: 999999;
+  max-width: 350px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 5px solid #4CAF50;
+  animation: notificationSlideIn 0.3s ease forwards, notificationFadeOut 0.3s ease 2.7s forwards;
 }
 
-@keyframes slideInRight {
+.global-fixed-notification.error {
+  background-color: #dc3545 !important;
+  border-left: 5px solid #ffc107 !important;
+}
+
+.global-fixed-notification.error .global-fixed-notification-icon {
+  background-color: #ffc107 !important;
+  color: #dc3545 !important;
+}
+
+.global-fixed-notification-icon {
+  background-color: #4CAF50;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.global-fixed-notification-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+@keyframes notificationSlideIn {
   from {
     transform: translateX(100%);
     opacity: 0;
@@ -698,27 +739,110 @@
   }
 }
 
-@keyframes slideOutRight {
+@keyframes notificationFadeOut {
   from {
-    transform: translateX(0);
     opacity: 1;
+    transform: translateX(0);
   }
   to {
-    transform: translateX(100%);
     opacity: 0;
+    transform: translateX(100%);
   }
 }
 
-/* Səbət sayğacı animasiyası (navbar üçün) */
-@keyframes badgePulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.3); }
-  100% { transform: scale(1); }
+/* ===========================================
+   BÜTÜN MƏHSULLAR BUTONU
+=========================================== */
+
+.view-all {
+  margin-top: 40px;
+  background: #d6800f;
+  color: #fff;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
 }
 
-.cart-count {
-  animation: badgePulse 0.3s ease;
+/* Buton hover effekti */
+@media (hover: hover) {
+  .view-all:hover {
+    background: #e68a1a;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(214, 128, 15, 0.3);
+    text-decoration: none;
+  }
+  
+  .view-all::after {
+    content: ' →';
+    opacity: 0;
+    transform: translateX(-5px);
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .view-all:hover::after {
+    opacity: 1;
+    transform: translateX(3px);
+  }
 }
+
+/* Buton aktiv state */
+.view-all:active {
+  transform: scale(0.98);
+  text-decoration: none;
+}
+
+/* Mobil versiya */
+@media (max-width: 767px) {
+  .view-all {
+    padding: 10px 25px;
+    font-size: 14px;
+    margin-top: 35px;
+  }
+}
+
+@media (max-width: 479px) {
+  .view-all {
+    padding: 9px 22px;
+    font-size: 13px;
+    margin-top: 30px;
+  }
+}
+
+/* ===========================================
+   SCROLL ANİMASİYASI
+=========================================== */
+
+.animate-card {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.animate-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.delay-0 { transition-delay: 0s; }
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+.delay-6 { transition-delay: 0.6s; }
+.delay-7 { transition-delay: 0.7s; }
+.delay-8 { transition-delay: 0.8s; }
+.delay-9 { transition-delay: 0.9s; }
+.delay-10 { transition-delay: 1.0s; }
 
 /* ===========================================
    MOBİL VERSİYA - SIMMETRİK YANAŞI LAYOUT
@@ -737,7 +861,6 @@
     width: 100%;
   }
   
-  /* SIMMETRİK ŞƏKİL solda - HƏMİŞƏ EYNİ ÖLÇÜDƏ */
   .image-wrapper {
     width: 140px;
     height: 140px;
@@ -750,7 +873,6 @@
     overflow: hidden;
   }
   
-  /* Şəkili həmişə tam doldurmaq üçün */
   .product-img {
     width: 100%;
     height: 100%;
@@ -761,7 +883,6 @@
     min-width: 140px;
   }
   
-  /* Şəkil yoxdursa mərkəzləşdir */
   .product-img[src=""],
   .product-img:not([src]) {
     display: flex;
@@ -770,7 +891,6 @@
     background: linear-gradient(45deg, #f5f5f5, #e0e0e0);
   }
   
-  /* GENİŞ məzmun sağda */
   .card-body {
     flex: 1;
     display: flex;
@@ -791,7 +911,6 @@
     min-height: 24px;
   }
   
-  /* Təsvir - mobil üçün */
   .product-desc {
     font-size: 14px;
     line-height: 1.5;
@@ -805,12 +924,10 @@
     min-height: 42px;
   }
   
-  /* Mobil üçün ellipsis effekti */
   .product-desc::after {
     background: linear-gradient(to right, transparent, #fff 50%);
   }
   
-  /* Miqdar seçimi - mobil */
   .quantity-selection {
     padding: 10px;
     margin: 12px 0;
@@ -841,7 +958,6 @@
     font-size: 12px;
   }
   
-  /* CARD-FOOTER DÜZƏLİŞİ */
   .card-footer {
     margin-top: auto;
     padding-top: 10px;
@@ -881,7 +997,6 @@
     overflow: hidden;
   }
   
-  /* Mobil rus dili üçün - DÜZƏLDİLDİ */
   [lang="ru"] .add-btn {
     font-size: 11px;
     padding: 10px 12px;
@@ -890,7 +1005,6 @@
     gap: 5px;
   }
   
-  /* Mobil rus dili ikonu */
   [lang="ru"] .cart-icon {
     width: 13px;
     height: 13px;
@@ -919,13 +1033,13 @@
     min-height: 14px;
   }
   
-  /* Mobil üçün bildiriş */
-  .cart-notification {
-    top: 80px !important;
-    right: 10px !important;
-    left: 10px !important;
-    max-width: calc(100% - 20px) !important;
-    text-align: center !important;
+  /* Bildiriş responsive */
+  .global-fixed-notification {
+    top: 100px;
+    right: 10px;
+    max-width: calc(100% - 20px);
+    padding: 10px 14px;
+    font-size: 14px;
   }
 }
 
@@ -982,7 +1096,6 @@
     gap: 5px;
   }
   
-  /* Kiçik mobil rus dili üçün */
   [lang="ru"] .add-btn {
     font-size: 10px;
     padding: 9px 11px;
@@ -992,7 +1105,6 @@
     letter-spacing: -0.1px;
   }
   
-  /* Kiçik mobil rus dili ikonu */
   [lang="ru"] .cart-icon {
     width: 12px;
     height: 12px;
@@ -1005,6 +1117,12 @@
     height: 13px;
     min-width: 13px;
     min-height: 13px;
+  }
+  
+  .global-fixed-notification {
+    top: 90px;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 }
 
@@ -1083,7 +1201,6 @@
     gap: 4px;
   }
   
-  /* Çox kiçik mobil rus dili üçün */
   [lang="ru"] .add-btn {
     font-size: 9px;
     padding: 8px 10px;
@@ -1093,7 +1210,6 @@
     letter-spacing: 0;
   }
   
-  /* Çox kiçik mobil rus dili ikonu */
   [lang="ru"] .cart-icon {
     width: 11px;
     height: 11px;
@@ -1113,6 +1229,19 @@
     height: 12px;
     min-width: 12px;
     min-height: 12px;
+  }
+  
+  .global-fixed-notification {
+    top: 85px;
+    right: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  .global-fixed-notification-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
   }
 }
 
@@ -1199,7 +1328,6 @@
     gap: 6px;
   }
   
-  /* Çox kiçik ekran rus dili üçün */
   [lang="ru"] .add-btn {
     font-size: 11px;
     padding: 10px;
@@ -1213,99 +1341,95 @@
     min-width: 14px;
     min-height: 14px;
   }
-}
-
-/* ===========================================
-   BÜTÜN MƏHSULLAR BUTONU - SADƏ ANİMASİYA
-=========================================== */
-
-.view-all {
-  margin-top: 40px;
-  background: #d6800f;
-  color: #fff;
-  padding: 12px 30px;
-  border: none;
-  border-radius: 25px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 15px;
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-  text-decoration: none;
-}
-
-/* Buton hover effekti - sadə böyümə animasiyası */
-@media (hover: hover) {
-  .view-all:hover {
-    background: #e68a1a;
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(214, 128, 15, 0.3);
-    text-decoration: none;
+  
+  .global-fixed-notification {
+    top: 80px;
+    right: 10px;
+    left: 10px;
+    padding: 8px 12px;
+    font-size: 11px;
+    max-width: calc(100% - 20px);
   }
   
-  /* Ox işarəsi animasiyası */
-  .view-all::after {
-    content: ' →';
-    opacity: 0;
-    transform: translateX(-5px);
-    transition: all 0.3s ease;
-    display: inline-block;
+  .global-fixed-notification-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+}
+
+/* Touch cihazlar üçün */
+@media (hover: none) and (pointer: coarse) {
+  .product-card:hover {
+    transform: none;
   }
   
-  .view-all:hover::after {
+  .product-card:hover .product-img {
+    transform: none;
+  }
+  
+  .image-zoom-icon {
     opacity: 1;
-    transform: translateX(3px);
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+  
+  .add-btn:hover {
+    background-color: #8B4513;
+  }
+  
+  .quantity-option:hover {
+    background-color: transparent;
+  }
+  
+  .clear-search-button:active {
+    transform: scale(0.97);
   }
 }
 
-/* Buton aktiv state */
-.view-all:active {
-  transform: scale(0.98);
-  text-decoration: none;
-}
-
-/* Mobil versiya */
-@media (max-width: 767px) {
-  .view-all {
-    padding: 10px 25px;
-    font-size: 14px;
-    margin-top: 35px;
+/* Animasiyaları azaldılmasını istəyənlər üçün */
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .product-img,
+  .card-badge,
+  .price,
+  .cart-icon,
+  .add-btn,
+  .view-all,
+  .animate-card,
+  .global-fixed-notification {
+    animation: none;
+    transition: none;
+  }
+  
+  .animate-card {
+    opacity: 1;
+    transform: none;
+  }
+  
+  .out-of-stock-badge {
+    animation: none;
   }
 }
 
-@media (max-width: 479px) {
-  .view-all {
-    padding: 9px 22px;
-    font-size: 13px;
-    margin-top: 30px;
+@media print {
+  .products {
+    background-color: white;
+    padding: 20px;
+  }
+  
+  .add-btn,
+  .cart-icon,
+  .quantity-selection,
+  .view-all,
+  .global-fixed-notification,
+  .out-of-stock-badge {
+    display: none;
+  }
+  
+  .product-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
   }
 }
-
-/* ===========================================
-   SCROLL ANİMASİYASI
-=========================================== */
-
-.animate-card {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease;
-}
-
-.animate-card.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.delay-0 { transition-delay: 0s; }
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-.delay-4 { transition-delay: 0.4s; }
-.delay-5 { transition-delay: 0.5s; }
-.delay-6 { transition-delay: 0.6s; }
-.delay-7 { transition-delay: 0.7s; }
-.delay-8 { transition-delay: 0.8s; }
-.delay-9 { transition-delay: 0.9s; }
-.delay-10 { transition-delay: 1.0s; }

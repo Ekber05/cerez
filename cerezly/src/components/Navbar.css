@@ -45,6 +45,7 @@
   gap: 1px;
   cursor: pointer;
   transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 .nav-left:hover {
@@ -120,10 +121,21 @@
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
-/* Desktop axtarış - YENİLƏNİB */
+/* Language Switcher - mobil üçün kiçildildi */
+.nav-right .language-switcher {
+  margin: 0;
+}
+
+.nav-right .language-switcher button {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* Desktop axtarış */
 .search-box {
   display: flex;
   align-items: center;
@@ -173,7 +185,6 @@
   margin-right: 8px;
 }
 
-/* Hover effekti - icon böyüsün, aşağı düşməsin */
 .search-box:hover .search-icon {
   color: var(--accent);
   transform: translate(-50%, -50%) scale(1.15);
@@ -190,7 +201,7 @@
   outline: none;
   width: 0;
   opacity: 0;
-  transition: all 0.2s ease; /* DÜZƏLDİ - 0.4s-dən 0.2s-ə endirildi */
+  transition: all 0.2s ease;
   color: var(--text-dark);
   outline: none !important;
   box-shadow: none !important;
@@ -220,10 +231,13 @@
 .cart-icon-wrapper {
   position: relative;
   cursor: pointer;
-  padding: 10px;
+  padding: 8px;
   border-radius: 50%;
   background: rgba(214, 128, 15, 0.05);
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cart-icon-wrapper:hover {
@@ -249,10 +263,10 @@
   right: -2px;
   background: var(--accent);
   color: white;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -278,19 +292,20 @@
   transform: scale(1.2);
 }
 
-/* HAMBURGER - 360 DƏRƏCƏ FIRLANMA */
+/* HAMBURGER */
 .hamburger {
   display: none;
   background: transparent;
   border: none;
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
-  padding: 10px;
+  padding: 8px;
   color: var(--text-light);
   border-radius: 8px;
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .hamburger::before {
@@ -334,11 +349,6 @@
   align-items: flex-start;
   justify-content: center;
   padding-top: 20px;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 /* MOBILE MENU */
@@ -504,10 +514,10 @@
   opacity: 0.7 !important;
 }
 
-/* RESPONSIVE */
+/* ========== MOBİL RESPONSIVE OPTİMİZASİYA ========== */
 @media (max-width: 900px) {
   .navbar {
-    padding: 0 20px;
+    padding: 0 16px;
   }
   
   .nav-links {
@@ -519,29 +529,202 @@
   }
   
   .hamburger {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-right {
+    gap: 8px;
+  }
+  
+  /* Login butonu mobil üçün kiçildildi */
+  .auth-login-btn {
+    padding: 6px 12px;
+    min-width: 36px;
+    height: 36px;
+  }
+  
+  .auth-login-icon {
+    font-size: 16px;
+  }
+  
+  /* Language Switcher mobil üçün kiçildildi */
+  .nav-right .language-switcher button {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+  
+  /* Səbət ikonu kiçildildi */
+  .cart-icon-wrapper {
+    padding: 6px;
+  }
+  
+  .cart-icon {
+    font-size: 18px;
+  }
+  
+  .cart-count {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+    top: -3px;
+    right: -3px;
+  }
+  
+  /* User avatar kiçildildi */
+  .auth-user-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .auth-avatar-initial {
+    font-size: 14px;
   }
 }
 
-@media (min-width: 901px) {
-  .mobile-menu-overlay {
-    display: none;
-  }
-}
-
+/* Kiçik mobil cihazlar üçün (480px altı) */
 @media (max-width: 480px) {
   .navbar {
-    padding: 0 16px;
-    background: rgba(255, 255, 255, 0.9);
+    padding: 0 12px;
   }
   
-  .mobile-menu {
-    width: 85%;
-    padding: 25px 20px;
+  .nav-left .logo-icon {
+    width: 50px;
+    height: 50px;
   }
   
-  .logo-text {
+  .nav-left .logo-text {
+    font-size: 18px;
+  }
+  
+  .nav-right {
+    gap: 6px;
+  }
+  
+  /* Login butonu daha da kiçildildi */
+  .auth-login-btn {
+    padding: 4px 10px;
+    min-width: 32px;
+    height: 32px;
+  }
+  
+  .auth-login-icon {
+    font-size: 14px;
+  }
+  
+  /* Language Switcher */
+  .nav-right .language-switcher button {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  
+  /* Səbət */
+  .cart-icon-wrapper {
+    padding: 5px;
+  }
+  
+  .cart-icon {
+    font-size: 16px;
+  }
+  
+  .cart-count {
+    width: 14px;
+    height: 14px;
+    font-size: 8px;
+    top: -4px;
+    right: -4px;
+  }
+  
+  /* User avatar */
+  .auth-user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .auth-avatar-initial {
+    font-size: 12px;
+  }
+  
+  /* Hamburger */
+  .hamburger {
     font-size: 20px;
+    padding: 6px;
+  }
+  
+  /* Mobile menu */
+  .mobile-menu {
+    width: 95%;
+    padding: 20px 16px;
+  }
+  
+  .mobile-links a {
+    padding: 12px 16px;
+    font-size: 16px;
+  }
+  
+  .mobile-search-box {
+    padding: 10px 14px;
+  }
+  
+  .mobile-search-icon {
+    font-size: 18px;
+  }
+  
+  .mobile-search-input {
+    font-size: 14px;
+  }
+}
+
+/* Çox kiçik cihazlar üçün (380px altı) */
+@media (max-width: 380px) {
+  .navbar {
+    padding: 0 10px;
+  }
+  
+  .nav-left .logo-icon {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .nav-left .logo-text {
+    font-size: 16px;
+  }
+  
+  .nav-right {
+    gap: 4px;
+  }
+  
+  .auth-login-btn {
+    padding: 3px 8px;
+    min-width: 28px;
+    height: 28px;
+  }
+  
+  .auth-login-icon {
+    font-size: 12px;
+  }
+  
+  .cart-icon-wrapper {
+    padding: 4px;
+  }
+  
+  .cart-icon {
+    font-size: 14px;
+  }
+  
+  .auth-user-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .auth-avatar-initial {
+    font-size: 11px;
+  }
+  
+  .hamburger {
+    font-size: 18px;
+    padding: 4px;
   }
 }
 
@@ -552,4 +735,39 @@ select:focus,
 button:focus {
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* Dropdown menu mobil üçün optimizasiya */
+@media (max-width: 768px) {
+  .auth-dropdown {
+    width: 260px;
+    right: -10px;
+  }
+  
+  .auth-dropdown-header {
+    padding: 10px 14px;
+  }
+  
+  .auth-dropdown-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .auth-dropdown-name {
+    font-size: 13px;
+  }
+  
+  .auth-dropdown-email {
+    font-size: 11px;
+  }
+  
+  .auth-dropdown-item {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .auth-dropdown-icon {
+    font-size: 16px;
+  }
 }

@@ -1,10 +1,11 @@
-// Navbar.js - ANDROID CONTACT FIX
+// Navbar.js - ANDROID CONTACT FIX WITH LOGIN BUTTON
 import React, { useState, useRef, useEffect } from "react";
 import { FiMenu, FiX, FiSearch, FiShoppingCart } from "react-icons/fi";
 import { useCart } from "../contexts/CartContext";
 import CartModal from "./CartModal";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
+import LoginButton from "./LoginButton";
 import "./Navbar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -15,6 +16,7 @@ export default function Navbar() {
   const [mobileSearchValue, setMobileSearchValue] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const mobileSearchRef = useRef(null);
+  const loginButtonRef = useRef(null); // Login butonuna referans
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,6 +32,20 @@ export default function Navbar() {
       return () => clearTimeout(timer);
     }
   }, [mobileOpen]);
+
+  // Login modalını açmaq üçün funksiya
+  const openLoginModal = () => {
+    // LoginButton componentindeki openModal funksiyasını çağır
+    if (loginButtonRef.current && loginButtonRef.current.openModal) {
+      loginButtonRef.current.openModal();
+    } else {
+      // Alternativ: Login butonunu tap və tıklama eventi göndər
+      const loginBtn = document.querySelector('.auth-login-btn, .login-button');
+      if (loginBtn) {
+        loginBtn.click();
+      }
+    }
+  };
 
   // ✅ YENİ: Android üçün xüsusi scroll funksiyası
   const scrollToSection = (sectionId, e) => {
@@ -141,6 +157,9 @@ export default function Navbar() {
         <div className="nav-right">
           <LanguageSwitcher />
 
+          {/* ✅ LOGIN BUTTON - ref əlavə edildi */}
+          <LoginButton ref={loginButtonRef} />
+
           <div className={`search-box ${searchActive ? "active" : ""}`}>
             <FiSearch
               className="search-icon"
@@ -227,7 +246,12 @@ export default function Navbar() {
         </div>
       )}
 
-      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      {/* ✅ CartModal-a onOpenLoginModal prop-u əlavə edildi */}
+      <CartModal 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)}
+        onOpenLoginModal={openLoginModal}
+      />
     </>
   );
 }

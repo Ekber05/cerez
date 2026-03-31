@@ -97,8 +97,8 @@
     "remove": "Удалить",
     "totalWeight": "Общий вес:",
     "totalAmount": "Общая сумма:",
-    "orderWhatsApp": "Заказать через WhatsApp",
-    "orderNote": "Мы свяжемся с вами через WhatsApp после подтверждения заказа."
+    "orderNow": "Заказать",
+    "orderNote": "Мы свяжемся с вами, как только получим ваш заказ"
   },
   "about": {
     "subtitle": "О нас",
@@ -188,12 +188,14 @@
     },
     "form": {
       "title": "Отправить сообщение",
-      "name": "Ваше Имя",
-      "namePlaceholder": "Введите ваше имя",
+      "name": "Ваше имя и фамилия",
+      "namePlaceholder": "Введите ваше имя и фамилию",
       "phone": "Телефон",
       "phonePlaceholder": "+994 XX XXX XX XX",
       "email": "E-mail",
       "emailPlaceholder": "email@example.com",
+      "optional": "необязательный",
+      "emailHint": "⚠️ Если вы не укажете электронную почту, вы получите наш ответ только по телефону.",
       "message": "Ваше Сообщение",
       "messagePlaceholder": "Ваш заказ или вопрос...",
       "button": "Отправить"
@@ -208,11 +210,15 @@
     "description": "Адрес натуральных и качественных снеков. Свежее, вкуснее каждый день.",
     "sections": {
       "products": {
-        "title": "Продукты",
+        "title": "Категории",
         "driedFruits": "Сухофрукты",
         "saltyNuts": "Соленые снеки",
         "chocolateNuts": "Орехи в шоколаде",
-        "mixPackages": "Микс-пакеты"
+        "spices": "Специи",
+        "legumesAndGrains": "Бобовые и Злаки",
+        "vegetableOils": "Растительные Масла",
+        "driedHerbsAndTeas": "Сушеные Травы и Чаи",
+        "giftPackages": "Подарочные наборы"
       },
       "links": {
         "title": "Ссылки",

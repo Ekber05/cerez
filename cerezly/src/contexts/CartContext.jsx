@@ -1,169 +1,247 @@
-// contexts/CartContext.jsx
+// contexts/CartContext.jsx - ƏLAVƏ GÜCLƏNDİRMƏ İLƏ
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useTranslation } from 'react-i18next'; // Yeni əlavə
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { t, i18n } = useTranslation(); // Yeni: i18n hook'u
   const [cart, setCart] = useState(() => {
     if (typeof window !== 'undefined') {
-      const savedCart = localStorage.getItem('cerezly_cart');
       try {
-        return savedCart ? JSON.parse(savedCart) : [];
+        // Əvvəlcə sessionStorage-dan oxu (daha yenidir)
+        const sessionBackup = sessionStorage.getItem('cerezly_cart_backup');
+        if (sessionBackup) {
+          const parsed = JSON.parse(sessionBackup);
+          if (parsed.length > 0) {
+            console.log('📱 Loading cart from sessionStorage:', parsed.length);
+            return parsed;
+          }
+        }
+        
+        // Yoxdursa localStorage-dan oxu
+        const savedCart = localStorage.getItem('cerezly_cart');
+        if (savedCart) {
+          const parsed = JSON.parse(savedCart);
+          console.log('💾 Loading cart from localStorage:', parsed.length);
+          return parsed;
+        }
+        
+        return [];
       } catch (error) {
-        console.error('Error parsing cart from localStorage:', error);
+        console.error('Error parsing cart from storage:', error);
         return [];
       }
     }
     return [];
   });
 
-  // Dil dəyişdikdə cart'dakı məhsulları yenilə
-  useEffect(() => {
-    if (cart.length > 0) {
-      updateCartTranslations();
-    }
-  }, [i18n.language]); // Dil dəyişdikdə işlə
-
-  // Cart'ı localStorage'da saxla
-  useEffect(() => {
+  // ✅ Hər dəyişiklikdə hər iki storage-a yaz
+  const saveToStorage = (cartData) => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('cerezly_cart', JSON.stringify(cart));
+      try {
+        const cartJson = JSON.stringify(cartData);
+        localStorage.setItem('cerezly_cart', cartJson);
+        sessionStorage.setItem('cerezly_cart_backup', cartJson);
+        console.log('💾 Cart saved:', cartData.length, 'items');
+      } catch (error) {
+        console.error('Save error:', error);
+      }
     }
+  };
+
+  useEffect(() => {
+    saveToStorage(cart);
   }, [cart]);
 
-  // Məhsul adını cari dilə görə yenilə
-  const updateCartTranslations = () => {
-    setCart(prevCart => {
-      return prevCart.map(item => ({
-        ...item,
-        name: getTranslatedProductName(item.id, item.name),
-        description: getTranslatedProductDescription(item.id, item.description)
-      }));
-    });
-  };
-
-  // Məhsul adını dilə görə al
-  const getTranslatedProductName = (productId, fallbackName) => {
-    try {
-      const products = t('products.items', { returnObjects: true });
-      if (Array.isArray(products)) {
-        const product = products.find(p => p.id === productId);
-        return product ? product.name : fallbackName;
+  // ✅ iOS Safari bfcache üçün pageshow event
+  useEffect(() => {
+    const handlePageShow = (event) => {
+      // Əgər səhifə bfcache-dan gəlibsə
+      if (event.persisted) {
+        console.log('📱 Page restored from bfcache, reloading cart...');
+        try {
+          const sessionBackup = sessionStorage.getItem('cerezly_cart_backup');
+          if (sessionBackup) {
+            const restoredCart = JSON.parse(sessionBackup);
+            if (restoredCart.length !== cart.length) {
+              console.log('🔄 Restoring cart from backup:', restoredCart.length);
+              setCart(restoredCart);
+            }
+          }
+        } catch (e) {
+          console.error('bfcache restore error:', e);
+        }
       }
-    } catch (error) {
-      console.error('Error getting translated product name:', error);
-    }
-    return fallbackName;
-  };
+    };
+    
+    window.addEventListener('pageshow', handlePageShow);
+    return () => window.removeEventListener('pageshow', handlePageShow);
+  }, [cart]);
 
-  // Məhsul təsvirini dilə görə al
-  const getTranslatedProductDescription = (productId, fallbackDesc) => {
-    try {
-      const products = t('products.items', { returnObjects: true });
-      if (Array.isArray(products)) {
-        const product = products.find(p => p.id === productId);
-        return product ? product.desc : fallbackDesc;
+  // ✅ pageshow ilə birlikdə visibility change
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.log('📱 Page became visible, checking cart...');
+        try {
+          const sessionBackup = sessionStorage.getItem('cerezly_cart_backup');
+          if (sessionBackup) {
+            const savedCart = JSON.parse(sessionBackup);
+            if (JSON.stringify(savedCart) !== JSON.stringify(cart)) {
+              console.log('🔄 Syncing cart from visibility change');
+              setCart(savedCart);
+            }
+          }
+        } catch (e) {
+          console.error('Visibility change error:', e);
+        }
       }
-    } catch (error) {
-      console.error('Error getting translated product description:', error);
-    }
-    return fallbackDesc;
-  };
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [cart]);
 
-  const addToCart = (product, quantity = 500) => {
-    console.log('Adding to cart:', product, 'Quantity (grams):', quantity);
+  // ... qalan funksiyalar (addToCart, removeFromCart, etc.) eyni qalır
+  
+  const addToCart = (product, weightGrams, selectedPrice) => {
+    const productId = String(product.id);
     
     setCart(prevCart => {
-      const existingItemIndex = prevCart.findIndex(item => item.id === product.id);
+      const existingItemIndex = prevCart.findIndex(
+        item => item.productId === productId && item.selectedWeightGrams === weightGrams
+      );
       
+      const productPricePerKg = product.pricePerKg || product.price || 0;
+      
+      const snapshotItem = {
+        productId: productId,
+        nameSnapshot: product.name,
+        pricePerKgSnapshot: productPricePerKg,
+        imgSnapshot: product.img || product.image || null,
+        category: product.category,
+        selectedWeightGrams: weightGrams,
+        priceAtPurchase: selectedPrice,
+        quantity: 1,
+        totalPrice: selectedPrice
+      };
+      
+      let newCart;
       if (existingItemIndex > -1) {
         const updatedCart = [...prevCart];
+        const existingItem = updatedCart[existingItemIndex];
+        const newQuantity = existingItem.quantity + 1;
+        
         updatedCart[existingItemIndex] = {
-          ...updatedCart[existingItemIndex],
-          quantityInGrams: updatedCart[existingItemIndex].quantityInGrams + quantity
+          ...existingItem,
+          quantity: newQuantity,
+          totalPrice: existingItem.priceAtPurchase * newQuantity
         };
-        return updatedCart;
+        newCart = updatedCart;
       } else {
-        const newCart = [...prevCart, { 
-          ...product, 
-          quantityInGrams: quantity,
-          image: product.img,
-          img: product.img,
-          // Orijinal məlumatları da saxla
-          originalName: product.name,
-          originalDesc: product.desc
-        }];
-        return newCart;
+        newCart = [...prevCart, snapshotItem];
       }
+      
+      saveToStorage(newCart);
+      return newCart;
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCart(prevCart => prevCart.filter(item => item.id !== productId));
+  const removeFromCart = (productId, weightGrams) => {
+    setCart(prevCart => {
+      const newCart = prevCart.filter(item => !(item.productId === productId && item.selectedWeightGrams === weightGrams));
+      saveToStorage(newCart);
+      return newCart;
+    });
   };
 
-  const updateQuantity = (productId, newQuantityInGrams) => {
-    if (newQuantityInGrams < 100) {
-      removeFromCart(productId);
+  const updateQuantity = (productId, weightGrams, newQuantity) => {
+    if (newQuantity < 0.01) {
+      removeFromCart(productId, weightGrams);
       return;
     }
-
-    setCart(prevCart => 
-      prevCart.map(item => 
-        item.id === productId 
-          ? { ...item, quantityInGrams: newQuantityInGrams }
-          : item
-      )
-    );
-  };
-
-  const incrementQuantity = (productId, increment = 100) => {
-    setCart(prevCart => 
-      prevCart.map(item => {
-        if (item.id === productId) {
-          const newQuantity = item.quantityInGrams + increment;
-          return newQuantity < 100 
-            ? { ...item, quantityInGrams: 100 }
-            : { ...item, quantityInGrams: newQuantity };
+    
+    setCart(prevCart => {
+      const newCart = prevCart.map(item => {
+        if (item.productId === productId && item.selectedWeightGrams === weightGrams) {
+          return {
+            ...item,
+            quantity: newQuantity,
+            totalPrice: item.priceAtPurchase * newQuantity
+          };
         }
         return item;
-      })
-    );
+      });
+      saveToStorage(newCart);
+      return newCart;
+    });
   };
 
-  const decrementQuantity = (productId, decrement = 100) => {
-    setCart(prevCart => 
-      prevCart.map(item => {
-        if (item.id === productId) {
-          const newQuantity = item.quantityInGrams - decrement;
-          return newQuantity < 100 
-            ? { ...item, quantityInGrams: 100 }
-            : { ...item, quantityInGrams: newQuantity };
+  const incrementQuantity = (productId, weightGrams) => {
+    setCart(prevCart => {
+      const newCart = prevCart.map(item => {
+        if (item.productId === productId && item.selectedWeightGrams === weightGrams) {
+          const currentTotalGrams = item.quantity * item.selectedWeightGrams;
+          const newTotalGrams = currentTotalGrams + 100;
+          const newQuantity = newTotalGrams / item.selectedWeightGrams;
+          
+          return {
+            ...item,
+            quantity: newQuantity,
+            totalPrice: item.priceAtPurchase * newQuantity
+          };
         }
         return item;
-      })
-    );
+      });
+      saveToStorage(newCart);
+      return newCart;
+    });
+  };
+
+  const decrementQuantity = (productId, weightGrams) => {
+    setCart(prevCart => {
+      const newCart = prevCart.map(item => {
+        if (item.productId === productId && item.selectedWeightGrams === weightGrams) {
+          const currentTotalGrams = item.quantity * item.selectedWeightGrams;
+          const newTotalGrams = currentTotalGrams - 100;
+          
+          if (newTotalGrams < 100) {
+            return null;
+          }
+          
+          const newQuantity = newTotalGrams / item.selectedWeightGrams;
+          
+          return {
+            ...item,
+            quantity: newQuantity,
+            totalPrice: item.priceAtPurchase * newQuantity
+          };
+        }
+        return item;
+      }).filter(Boolean);
+      saveToStorage(newCart);
+      return newCart;
+    });
   };
 
   const clearCart = () => {
     setCart([]);
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cerezly_cart');
+      sessionStorage.removeItem('cerezly_cart_backup');
+    }
   };
 
-  const getTotalItems = () => {
-    return cart.length;
-  };
-
-  const getTotalQuantityInGrams = () => {
-    return cart.reduce((total, item) => total + item.quantityInGrams, 0);
-  };
-
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => {
-      const pricePerGram = item.price / 1000;
-      return total + (pricePerGram * item.quantityInGrams);
-    }, 0);
+  const getTotalItems = () => cart.length;
+  const getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
+  const getTotalPrice = () => cart.reduce((total, item) => total + item.totalPrice, 0);
+  const getTotalQuantityInGrams = () => cart.reduce((total, item) => total + (item.selectedWeightGrams * item.quantity), 0);
+  const getItemTotalPrice = (item) => item.totalPrice;
+  const getItemPricePerKg = (item) => item.pricePerKgSnapshot;
+  const getItemWeightInfo = (item) => {
+    const grams = item.selectedWeightGrams;
+    if (grams >= 1000) return `${grams / 1000} kq`;
+    return `${grams} qr`;
   };
 
   return (
@@ -176,9 +254,12 @@ export const CartProvider = ({ children }) => {
       decrementQuantity,
       clearCart,
       getTotalItems,
-      getTotalQuantityInGrams,
+      getTotalQuantity,
       getTotalPrice,
-      getTranslatedProductName // Yeni: komponentlər üçün export
+      getTotalQuantityInGrams,
+      getItemTotalPrice,
+      getItemPricePerKg,
+      getItemWeightInfo
     }}>
       {children}
     </CartContext.Provider>

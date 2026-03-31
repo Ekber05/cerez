@@ -23,14 +23,12 @@ export default function Footer() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Section animations
             sectionsRef.current.forEach((section, index) => {
               if (section && entry.target === section) {
                 section.classList.add('section-visible');
               }
             });
             
-            // Bottom section animation
             if (entry.target === bottomRef.current) {
               setTimeout(() => {
                 entry.target.classList.add('bottom-visible');
@@ -45,7 +43,6 @@ export default function Footer() {
       }
     );
 
-    // Observe all sections
     sectionsRef.current.forEach(section => section && observer.observe(section));
     if (bottomRef.current) observer.observe(bottomRef.current);
 
@@ -62,7 +59,7 @@ export default function Footer() {
         >
           <h2 className="footer-logo logo-hidden">Çərəz</h2>
           <p className="footer-text text-hidden">
-            {t('footer.description')} {/* "Təbii və keyfiyyətli çərəzlərin ünvanı. Hər gün daha təzə, daha dadlı." */}
+            {t('footer.description')}
           </p>
 
           <div className="footer-icons">
@@ -138,27 +135,39 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* ========= 2. MƏHSULLAR ========= */}
+        {/* ========= 2. KATEQORİYALAR ========= */}
         <div 
           ref={el => sectionsRef.current[1] = el}
           className="footer-section section-hidden"
         >
           <h3 className="footer-title title-hidden">
-            {t('footer.sections.products.title')} {/* "Məhsullar" */}
+            {t('footer.sections.products.title')}
           </h3>
 
           <div className="footer-links-container">
-            <a className="footer-link link-hidden" href="/quru-meyveler">
-              {t('footer.sections.products.driedFruits')} {/* "Quru meyvələr" */}
+            <a className="footer-link link-hidden" href="/meyve-qurulari">
+              {t('footer.sections.products.driedFruits')}
             </a>
             <a className="footer-link link-hidden" href="/duzlu-cerezler">
-              {t('footer.sections.products.saltyNuts')} {/* "Duzlu çərəzlər" */}
+              {t('footer.sections.products.saltyNuts')}
             </a>
-            <a className="footer-link link-hidden" href="/sokokladli">
-              {t('footer.sections.products.chocolateNuts')} {/* "Şokoladlı çərəzlər" */}
+            <a className="footer-link link-hidden" href="/sokokladli-cerezler">
+              {t('footer.sections.products.chocolateNuts')}
             </a>
-            <a className="footer-link link-hidden" href="/mix">
-              {t('footer.sections.products.mixPackages')} {/* "Mix paketlər" */}
+            <a className="footer-link link-hidden" href="/edviyyatlar">
+              {t('footer.sections.products.spices')}
+            </a>
+            <a className="footer-link link-hidden" href="/paxlalilar-ve-taxillar">
+              {t('footer.sections.products.legumesAndGrains')}
+            </a>
+            <a className="footer-link link-hidden" href="/bitki-yaglari">
+              {t('footer.sections.products.vegetableOils')}
+            </a>
+            <a className="footer-link link-hidden" href="/qurudulmus-otlar-ve-caylar">
+              {t('footer.sections.products.driedHerbsAndTeas')}
+            </a>
+            <a className="footer-link link-hidden" href="/hediyye-paketleri">
+              {t('footer.sections.products.giftPackages')}
             </a>
           </div>
         </div>
@@ -169,24 +178,24 @@ export default function Footer() {
           className="footer-section section-hidden"
         >
           <h3 className="footer-title title-hidden">
-            {t('footer.sections.links.title')} {/* "Keçidlər" */}
+            {t('footer.sections.links.title')}
           </h3>
 
           <div className="footer-links-container">
             <a className="footer-link link-hidden" href="/about">
-              {t('footer.sections.links.about')} {/* "Haqqımızda" */}
+              {t('footer.sections.links.about')}
             </a>
             <a className="footer-link link-hidden" href="/blog">
-              {t('footer.sections.links.blog')} {/* "Blog" */}
+              {t('footer.sections.links.blog')}
             </a>
             <a className="footer-link link-hidden" href="/kampaniyalar">
-              {t('footer.sections.links.campaigns')} {/* "Kampaniyalar" */}
+              {t('footer.sections.links.campaigns')}
             </a>
             <a className="footer-link link-hidden" href="/contact">
-              {t('footer.sections.links.contact')} {/* "Əlaqə" */}
+              {t('footer.sections.links.contact')}
             </a>
             <a className="footer-link link-hidden" href="/faq">
-              {t('footer.sections.links.faq')} {/* "Tez-tez verilən suallar" */}
+              {t('footer.sections.links.faq')}
             </a>
           </div>
         </div>
@@ -197,28 +206,28 @@ export default function Footer() {
           className="footer-section section-hidden"
         >
           <h3 className="footer-title title-hidden">
-            {t('footer.sections.contact.title')} {/* "Əlaqə" */}
+            {t('footer.sections.contact.title')}
           </h3>
 
           <div className="footer-contact-container">
             <div className="footer-row row-hidden">
               <FiMapPin className="footer-icon" /> 
-              {t('footer.sections.contact.address')} {/* "Bakı, Azərbaycan" */}
+              {t('footer.sections.contact.address')}
             </div>
 
             <div className="footer-row row-hidden">
               <FiPhone className="footer-icon" /> 
-              {t('footer.sections.contact.phone')} {/* "+994 50 854 49 14" */}
+              {t('footer.sections.contact.phone')}
             </div>
 
             <div className="footer-row row-hidden">
               <FiMail className="footer-icon" /> 
-              {t('footer.sections.contact.email')} {/* "info@cerez.az" */}
+              {t('footer.sections.contact.email')}
             </div>
 
             <div className="footer-row row-hidden">
               <FiClock className="footer-icon" /> 
-              {t('footer.sections.contact.hours')} {/* "09:00 – 22:00" */}
+              {t('footer.sections.contact.hours')}
             </div>
           </div>
         </div>
@@ -230,13 +239,13 @@ export default function Footer() {
         className="footer-bottom bottom-hidden"
       >
         <p className="copyright-hidden">
-          {t('footer.bottom.copyright')} {/* "© 2025 Çərəz. Bütün hüquqlar qorunur." */}
+          {t('footer.bottom.copyright')}
         </p>
 
         <div className="footer-bottom-message">
           <FiHeart className="heart-icon" />
           <span className="made-with-love">
-            {t('footer.bottom.madeWithLove')} {/* "Sevgi ilə hazırlandı" */}
+            {t('footer.bottom.madeWithLove')}
           </span>
         </div>
       </div>

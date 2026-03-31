@@ -1,7 +1,7 @@
 // LanguageSwitcher.jsx
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useLanguage } from "../contexts/LanguageContext"; // Yeni əlavə
+import { useLanguage } from "../contexts/LanguageContext";
 import ReactCountryFlag from "react-country-flag";
 import "./LanguageSwitcher.css";
 
@@ -13,24 +13,70 @@ const languages = [
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
-  const { language: contextLanguage, changeLanguage } = useLanguage(); // Yeni
+  const { language: contextLanguage, changeLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
+  const switcherRef = useRef(null);
 
   const currentLang =
     languages.find(l => l.code === i18n.language) || languages[0];
 
   const changeLang = (code) => {
-    // Hər iki sistemi yenilə
     i18n.changeLanguage(code);
-    changeLanguage(code); // LanguageContext-i yenilə
+    changeLanguage(code);
     setOpen(false);
     
-    // LocalStorage-a saxla
     localStorage.setItem('preferredLanguage', code);
+    
+    // Butona animasiya əlavə etmək üçün
+    const btn = document.querySelector('.lang-btn');
+    if (btn) {
+      btn.classList.add('lang-changing');
+      setTimeout(() => {
+        btn.classList.remove('lang-changing');
+      }, 400);
+    }
   };
 
+  // Ekrana kliklədikdə dropdown-ı bağlamaq üçün
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (switcherRef.current && !switcherRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    // Dropdown açıq olduqda event listener əlavə et
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [open]);
+
+  // Escape düyməsinə basıldıqda bağlamaq üçün (opsiyonel)
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && open) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [open]);
+
   return (
-    <div className="lang-switcher">
+    <div className="lang-switcher" ref={switcherRef}>
       {/* BUTTON */}
       <button
         className={`lang-btn ${open ? "open" : ""}`}
