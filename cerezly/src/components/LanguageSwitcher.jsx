@@ -1,4 +1,3 @@
-// LanguageSwitcher.jsx
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -20,11 +19,8 @@ export default function LanguageSwitcher() {
   const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
   const changeLang = (code) => {
-    i18n.changeLanguage(code);
-    changeLanguage(code);
+    changeLanguage(code); // Context-dəki funksiya artıq localStorage və i18n-i yeniləyir
     setOpen(false);
-    
-    localStorage.setItem('preferredLanguage', code);
     
     // Butona animasiya əlavə etmək üçün
     const btn = document.querySelector('.lang-btn');

@@ -1,10 +1,10 @@
-// App.jsx - BLOG VƏ KAMPANİYA SƏHİFƏLƏRİ ÜÇÜN SKELETON ANİMASİYA (FİKS EDİLDİ)
-
+// App.jsx - TAM KOD
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { LanguageProvider, useLanguage } from "./contexts/LanguageContext";
 import { I18nextProvider } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import i18n from "./i18n";
 
 import ScrollRestoration from "./components/ScrollRestoration";
@@ -22,13 +22,79 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
 
-// ⭐ KAMPANİYA KOMPONENTLƏRİ ⭐
+// KAMPANİYA KOMPONENTLƏRİ
 import CampaignsList from "./components/CampaignsList";
 import CampaignDetail from "./components/CampaignDetail";
 
-// ⭐ BLOG KOMPONENTLƏRİ ⭐
+// BLOG KOMPONENTLƏRİ
 import BlogList from "./components/BlogList";
 import BlogDetail from "./components/BlogDetail";
+
+// RedirectWithLanguage komponenti (Navigate əvəzinə)
+const RedirectWithLanguage = ({ to }) => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    navigate(to, { replace: true });
+  }, [navigate, to]);
+  
+  return null;
+};
+
+// LanguageAwareRoutes komponenti (hər səhifə dəyişdikdə dili yeniləyir)
+const LanguageAwareRoutes = () => {
+  const { i18n } = useTranslation();
+  const location = useLocation();
+  
+  useEffect(() => {
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang && savedLang !== i18n.language) {
+      i18n.changeLanguage(savedLang);
+      document.documentElement.lang = savedLang;
+    }
+  }, [location.pathname, i18n]);
+  
+  return (
+    <Routes>
+      {/* Ana səhifə - FULL ANİMASİYA */}
+      <Route path="/" element={<HomePage />} />
+
+      {/* All Products - ANİMASİYASIZ */}
+      <Route path="/allproducts" element={<><AllProducts /><Footer /></>} />
+
+      {/* KATEQORİYALAR - ANİMASİYASIZ */}
+      <Route path="/meyve-qurulari" element={<><CategoryPage key="meyve-qurulari" /><Footer /></>} />
+      <Route path="/duzlu-cerezler" element={<><CategoryPage key="duzlu-cerezler" /><Footer /></>} />
+      <Route path="/sokokladli-cerezler" element={<><CategoryPage key="sokokladli-cerezler" /><Footer /></>} />
+      <Route path="/edviyyatlar" element={<><CategoryPage key="edviyyatlar" /><Footer /></>} />
+      <Route path="/paxlalilar-ve-taxillar" element={<><CategoryPage key="paxlalilar-ve-taxillar" /><Footer /></>} />
+      <Route path="/bitki-yaglari" element={<><CategoryPage key="bitki-yaglari" /><Footer /></>} />
+      <Route path="/qurudulmus-otlar-ve-caylar" element={<><CategoryPage key="qurudulmus-otlar-ve-caylar" /><Footer /></>} />
+      <Route path="/hediyye-paketleri" element={<><CategoryPage key="hediyye-paketleri" /><Footer /></>} />
+
+      {/* KÖHNƏ URL → YENİ URL (YENİ RedirectWithLanguage ilə) */}
+      <Route path="/dried-fruits" element={<RedirectWithLanguage to="/meyve-qurulari" />} />
+      <Route path="/spices" element={<RedirectWithLanguage to="/edviyyatlar" />} />
+      <Route path="/legumes-and-grains" element={<RedirectWithLanguage to="/paxlalilar-ve-taxillar" />} />
+      <Route path="/vegetable-oils" element={<RedirectWithLanguage to="/bitki-yaglari" />} />
+      <Route path="/dried-herbs-and-teas" element={<RedirectWithLanguage to="/qurudulmus-otlar-ve-caylar" />} />
+      <Route path="/sokokladli" element={<RedirectWithLanguage to="/sokokladli-cerezler" />} />
+
+      {/* DİGƏR SƏHİFƏLƏR - ANİMASİYASIZ */}
+      <Route path="/faq" element={<><Faq /><Footer /></>} />
+      <Route path="/about" element={<><About isPage={true} /><Footer /></>} />
+      <Route path="/contact" element={<><Contact /><Footer /></>} />
+
+      {/* BLOG ROUTELARI - SKELETON ANİMASİYA + FOOTER */}
+      <Route path="/blog" element={<BlogListPage />} />
+      <Route path="/blog/:id" element={<BlogDetailPage />} />
+
+      {/* KAMPANİYA ROUTELARI - SKELETON ANİMASİYA + FOOTER */}
+      <Route path="/kampaniyalar" element={<CampaignsListPage />} />
+      <Route path="/kampaniya/:id" element={<CampaignDetailPage />} />
+    </Routes>
+  );
+};
 
 const LanguageSync = ({ children }) => {
   const { language } = useLanguage();
@@ -322,44 +388,7 @@ function App() {
               <Navbar />
 
               <div style={{ paddingTop: navHeight }}>
-                <Routes>
-                  {/* Ana səhifə - FULL ANİMASİYA */}
-                  <Route path="/" element={<HomePage />} />
-
-                  {/* All Products - ANİMASİYASIZ */}
-                  <Route path="/allproducts" element={<><AllProducts /><Footer /></>} />
-
-                  {/* KATEQORİYALAR - ANİMASİYASIZ */}
-                  <Route path="/meyve-qurulari" element={<><CategoryPage key="meyve-qurulari" /><Footer /></>} />
-                  <Route path="/duzlu-cerezler" element={<><CategoryPage key="duzlu-cerezler" /><Footer /></>} />
-                  <Route path="/sokokladli-cerezler" element={<><CategoryPage key="sokokladli-cerezler" /><Footer /></>} />
-                  <Route path="/edviyyatlar" element={<><CategoryPage key="edviyyatlar" /><Footer /></>} />
-                  <Route path="/paxlalilar-ve-taxillar" element={<><CategoryPage key="paxlalilar-ve-taxillar" /><Footer /></>} />
-                  <Route path="/bitki-yaglari" element={<><CategoryPage key="bitki-yaglari" /><Footer /></>} />
-                  <Route path="/qurudulmus-otlar-ve-caylar" element={<><CategoryPage key="qurudulmus-otlar-ve-caylar" /><Footer /></>} />
-                  <Route path="/hediyye-paketleri" element={<><CategoryPage key="hediyye-paketleri" /><Footer /></>} />
-
-                  {/* KÖHNƏ URL → YENİ URL */}
-                  <Route path="/dried-fruits" element={<Navigate to="/meyve-qurulari" replace />} />
-                  <Route path="/spices" element={<Navigate to="/edviyyatlar" replace />} />
-                  <Route path="/legumes-and-grains" element={<Navigate to="/paxlalilar-ve-taxillar" replace />} />
-                  <Route path="/vegetable-oils" element={<Navigate to="/bitki-yaglari" replace />} />
-                  <Route path="/dried-herbs-and-teas" element={<Navigate to="/qurudulmus-otlar-ve-caylar" replace />} />
-                  <Route path="/sokokladli" element={<Navigate to="/sokokladli-cerezler" replace />} />
-
-                  {/* DİGƏR SƏHİFƏLƏR - ANİMASİYASIZ */}
-                  <Route path="/faq" element={<><Faq /><Footer /></>} />
-                  <Route path="/about" element={<><About isPage={true} /><Footer /></>} />
-                  <Route path="/contact" element={<><Contact /><Footer /></>} />
-
-                  {/* ⭐ BLOG ROUTELARI - SKELETON ANİMASİYA + FOOTER ⭐ */}
-                  <Route path="/blog" element={<BlogListPage />} />
-                  <Route path="/blog/:id" element={<BlogDetailPage />} />
-
-                  {/* ⭐ KAMPANİYA ROUTELARI - SKELETON ANİMASİYA + FOOTER ⭐ */}
-                  <Route path="/kampaniyalar" element={<CampaignsListPage />} />
-                  <Route path="/kampaniya/:id" element={<CampaignDetailPage />} />
-                </Routes>
+                <LanguageAwareRoutes />
               </div>
 
               <WhatsAppButton />

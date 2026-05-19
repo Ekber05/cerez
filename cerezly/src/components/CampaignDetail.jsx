@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; // Dil dəstəyi üçün
 import { campaignsData } from '../data/campaignsData';
 import {
   FiFacebook,
@@ -13,6 +14,7 @@ import { SiX } from 'react-icons/si';
 import './CampaignDetail.css';
 
 const CampaignDetail = () => {
+  const { t } = useTranslation(); // Dil hook-u
   const { id } = useParams();
   const navigate = useNavigate();
   const campaign = campaignsData.find(c => c.id === parseInt(id));
@@ -58,18 +60,18 @@ const CampaignDetail = () => {
 
   // Kampaniyanın aktiv olub olmadığını yoxla
   const isCampaignActive = () => {
-    if (!campaign.startDate || !campaign.endDate) return true;
+    if (!campaign?.startDate || !campaign?.endDate) return true;
     const today = new Date();
     const start = new Date(campaign.startDate);
     const end = new Date(campaign.endDate);
     return today >= start && today <= end;
   };
 
-  // Sosial media paylaşım funksiyaları
+  // Sosial media paylaşım funksiyaları - DİL DƏSTƏKLİ
   const shareOnSocial = (platform) => {
     const url = encodeURIComponent(window.location.href);
     const title = encodeURIComponent(campaign.title);
-    const description = encodeURIComponent(campaign.description.substring(0, 100));
+    const description = encodeURIComponent(campaign.description?.substring(0, 100) || '');
     
     let shareUrl = '';
     
@@ -79,11 +81,11 @@ const CampaignDetail = () => {
         break;
       case 'instagram':
         navigator.clipboard.writeText(`${campaign.title}\n${window.location.href}`);
-        alert('Link kopyalandı! Instagram-da paylaşa bilərsiniz.');
+        alert(t('campaigns.linkCopied')); // "Link kopyalandı! Instagram-da paylaşa bilərsiniz."
         return;
       case 'tiktok':
         navigator.clipboard.writeText(`${campaign.title}\n${window.location.href}`);
-        alert('Link kopyalandı! TikTok-da paylaşa bilərsiniz.');
+        alert(t('campaigns.linkCopiedTikTok')); // "Link kopyalandı! TikTok-da paylaşa bilərsiniz."
         return;
       case 'x':
         shareUrl = `https://twitter.com/intent/tweet?text=${title}&url=${url}`;
@@ -107,10 +109,10 @@ const CampaignDetail = () => {
     return (
       <div className="campaign-detail-not-found">
         <div className="campaign-detail-not-found-content">
-          <h2>Kampaniya tapılmadı</h2>
-          <p>Axtardığınız kampaniya mövcud deyil və ya silinmişdir.</p>
+          <h2>{t('campaigns.notFound')}</h2> {/* "Kampaniya tapılmadı" */}
+          <p>{t('campaigns.notFoundDesc')}</p> {/* "Axtardığınız kampaniya mövcud deyil və ya silinmişdir." */}
           <button onClick={() => navigate('/kampaniyalar')} className="campaign-detail-back-btn">
-            Bütün kampaniyalar
+            {t('campaigns.allCampaigns')} {/* "Bütün kampaniyalar" */}
           </button>
         </div>
       </div>
@@ -123,7 +125,7 @@ const CampaignDetail = () => {
     <div className="campaign-detail-container" ref={containerRef}>
       <div className="campaign-detail-back">
         <button onClick={() => navigate('/kampaniyalar')} className="campaign-detail-back-button">
-          ← Bütün kampaniyalar
+          ← {t('campaigns.allCampaigns')} {/* "Bütün kampaniyalar" */}
         </button>
       </div>
 
@@ -136,7 +138,7 @@ const CampaignDetail = () => {
             <span className="campaign-detail-badge">{campaign.badge}</span>
           )}
           {!isActive && (
-            <span className="campaign-expired-badge">Bitmiş</span>
+            <span className="campaign-expired-badge">{t('campaigns.expired')}</span> /* "Bitmiş" */
           )}
         </div>
 
@@ -150,7 +152,7 @@ const CampaignDetail = () => {
                 <FiCalendar />
               </div>
               <div className="date-info">
-                <span className="date-label">Başlama tarixi:</span>
+                <span className="date-label">{t('campaigns.startDate')}:</span> {/* "Başlama tarixi:" */}
                 <span className="date-value">{formatDate(campaign.startDate)}</span>
               </div>
             </div>
@@ -159,7 +161,7 @@ const CampaignDetail = () => {
                 <FiCalendar />
               </div>
               <div className="date-info">
-                <span className="date-label">Bitmə tarixi:</span>
+                <span className="date-label">{t('campaigns.endDate')}:</span> {/* "Bitmə tarixi:" */}
                 <span className="date-value">{formatDate(campaign.endDate)}</span>
               </div>
             </div>
@@ -167,12 +169,12 @@ const CampaignDetail = () => {
               {isActive ? (
                 <>
                   <i className="status-icon">●</i>
-                  Aktiv kampaniya
+                  {t('campaigns.active')} {/* "Aktiv kampaniya" */}
                 </>
               ) : (
                 <>
                   <i className="status-icon">●</i>
-                  Kampaniya bitib
+                  {t('campaigns.expiredStatus')} {/* "Kampaniya bitib" */}
                 </>
               )}
             </div>
@@ -181,7 +183,7 @@ const CampaignDetail = () => {
 
         {/* SOSİAL MEDİDA PAYLAŞ BÖLMƏSİ */}
         <div className="campaign-detail-social">
-          <h3 className="social-share-title">Bu kampaniyanı paylaş</h3>
+          <h3 className="social-share-title">{t('campaigns.shareTitle')}</h3> {/* "Bu kampaniyanı paylaş" */}
           <div className="social-share-icons">
             <button 
               className="social-share-btn instagram-share" 
@@ -239,7 +241,7 @@ const CampaignDetail = () => {
           </div>
           <p className="social-share-note">
             <FiShare2 className="share-note-icon" />
-            Kampaniyanı dostlarınızla paylaşın, endirimlərdən onlar da yararlansın!
+            {t('campaigns.shareNote')} {/* "Kampaniyanı dostlarınızla paylaşın, endirimlərdən onlar da yararlansın!" */}
           </p>
         </div>
       </div>
