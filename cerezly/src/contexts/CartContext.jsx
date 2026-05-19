@@ -1,10 +1,13 @@
-// contexts/CartContext.jsx - ƏLAVƏ GÜCLƏNDİRMƏ İLƏ
+// contexts/CartContext.jsx - DİL DƏSTƏYİ İLƏ TAM VERSİYA
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const { t } = useTranslation(); // Dil dəstəyi üçün
+  
   const [cart, setCart] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -102,8 +105,48 @@ export const CartProvider = ({ children }) => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [cart]);
 
-  // ... qalan funksiyalar (addToCart, removeFromCart, etc.) eyni qalır
-  
+  // ✅ Login olduqdan sonra səbəti birləşdirmək üçün funksiya
+  const mergeCart = (guestCart) => {
+    if (!guestCart || guestCart.length === 0) return;
+    
+    setCart(prevCart => {
+      const mergedCart = [...prevCart];
+      
+      guestCart.forEach(guestItem => {
+        const existingIndex = mergedCart.findIndex(
+          item => item.productId === guestItem.productId && 
+                  item.selectedWeightGrams === guestItem.selectedWeightGrams
+        );
+        
+        if (existingIndex > -1) {
+          // Mövcud item - miqdarı birləşdir
+          const existingItem = mergedCart[existingIndex];
+          const newQuantity = existingItem.quantity + guestItem.quantity;
+          mergedCart[existingIndex] = {
+            ...existingItem,
+            quantity: newQuantity,
+            totalPrice: existingItem.priceAtPurchase * newQuantity
+          };
+        } else {
+          // Yeni item - əlavə et
+          mergedCart.push(guestItem);
+        }
+      });
+      
+      saveToStorage(mergedCart);
+      console.log('🛒 Cart merged after login:', mergedCart.length, 'items');
+      return mergedCart;
+    });
+  };
+
+  // ✅ Login olduqdan sonra qonaq səbətini təmizləmək
+  const clearGuestCart = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('cerezly_cart_guest');
+      localStorage.removeItem('cerezly_cart_guest');
+    }
+  };
+
   const addToCart = (product, weightGrams, selectedPrice) => {
     const productId = String(product.id);
     
@@ -123,7 +166,8 @@ export const CartProvider = ({ children }) => {
         selectedWeightGrams: weightGrams,
         priceAtPurchase: selectedPrice,
         quantity: 1,
-        totalPrice: selectedPrice
+        totalPrice: selectedPrice,
+        addedAt: new Date().toISOString() // Əlavə vaxtı
       };
       
       let newCart;
@@ -229,6 +273,7 @@ export const CartProvider = ({ children }) => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('cerezly_cart');
       sessionStorage.removeItem('cerezly_cart_backup');
+      sessionStorage.removeItem('cerezly_cart_guest');
     }
   };
 
@@ -240,9 +285,17 @@ export const CartProvider = ({ children }) => {
   const getItemPricePerKg = (item) => item.pricePerKgSnapshot;
   const getItemWeightInfo = (item) => {
     const grams = item.selectedWeightGrams;
-    if (grams >= 1000) return `${grams / 1000} kq`;
-    return `${grams} qr`;
+    if (grams >= 1000) return `${grams / 1000} ${t('cart.kg') || 'kq'}`;
+    return `${grams} ${t('cart.gr') || 'qr'}`;
   };
+
+  // Səbətdəki məhsul sayını almaq (badge üçün)
+  const getCartItemCount = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // Səbətin boş olub olmadığını yoxlamaq
+  const isCartEmpty = () => cart.length === 0;
 
   return (
     <CartContext.Provider value={{
@@ -259,7 +312,11 @@ export const CartProvider = ({ children }) => {
       getTotalQuantityInGrams,
       getItemTotalPrice,
       getItemPricePerKg,
-      getItemWeightInfo
+      getItemWeightInfo,
+      getCartItemCount,
+      isCartEmpty,
+      mergeCart,
+      clearGuestCart
     }}>
       {children}
     </CartContext.Provider>

@@ -1,10 +1,11 @@
-/* LanguageSwitcher.css - Animasiyalı versiya */
+/* LanguageSwitcher.css - Tam animasiyalı versiya */
 
 .lang-switcher {
   position: relative;
   font-family: system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol", sans-serif;
+  animation: floatIn 0.5s ease;
 }
 
 /* === BUTTON - GLASS EFFECT === */
@@ -15,12 +16,12 @@
   padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(74, 43, 5, 0.3); /* Aktiv görünüş */
+  background: rgba(74, 43, 5, 0.3);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   cursor: pointer;
   font-weight: 600;
-  color: white; /* Aktiv görünüş */
+  color: white;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 20px rgba(74, 43, 5, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
   transform: translateY(0);
@@ -64,11 +65,23 @@
   font-size: 13px;
   letter-spacing: 0.5px;
   transition: letter-spacing 0.3s ease;
+  font-weight: 600;
 }
 
 /* Label hover genişlənməsi */
 .lang-item:hover .label {
   letter-spacing: 1px;
+}
+
+/* Dil adı (tam ad) */
+.lang-name {
+  font-size: 12px;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.lang-item.active .lang-name {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 /* === ARROW === */
@@ -84,7 +97,7 @@
   position: absolute;
   top: 120%;
   right: 0;
-  min-width: 160px;
+  min-width: 200px;
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -126,7 +139,7 @@
 @keyframes itemAppear {
   from {
     opacity: 0;
-    transform: translateX(-10px);
+    transform: translateX(-15px);
   }
   to {
     opacity: 1;
@@ -135,9 +148,9 @@
 }
 
 /* Hər item-ə fərqli gecikmə vermək */
-.lang-item:nth-child(1) { animation-delay: 0.1s; }
-.lang-item:nth-child(2) { animation-delay: 0.15s; }
-.lang-item:nth-child(3) { animation-delay: 0.2s; }
+.lang-item:nth-child(1) { animation-delay: 0.05s; }
+.lang-item:nth-child(2) { animation-delay: 0.1s; }
+.lang-item:nth-child(3) { animation-delay: 0.15s; }
 
 .lang-item:hover {
   background: rgba(255, 255, 255, 0.4);
@@ -150,12 +163,12 @@
 
 /* Aktiv dil item-i */
 .lang-item.active {
-  background: rgba(74, 43, 5, 0.4);
+  background: rgba(74, 43, 5, 0.5);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   color: white;
   font-weight: 600;
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
   box-shadow: 0 5px 15px rgba(74, 43, 5, 0.3);
   position: relative;
   overflow: hidden;
@@ -169,8 +182,8 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  animation: shine 2s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  animation: shine 3s infinite;
 }
 
 @keyframes shine {
@@ -184,6 +197,7 @@
   margin-left: auto;
   font-size: 14px;
   font-weight: bold;
+  color: #10b981;
   animation: checkPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -192,7 +206,7 @@
     opacity: 0;
     transform: scale(0) rotate(-90deg);
   }
-  70% {
+  50% {
     transform: scale(1.2) rotate(10deg);
   }
   100% {
@@ -202,7 +216,6 @@
 }
 
 /* === DİL DƏYİŞƏNDƏ BUTON ANİMASİYASI === */
-/* JSX-də dil dəyişəndə butona müvəqqəti class əlavə edə bilərik */
 .lang-btn.lang-changing {
   animation: buttonChange 0.4s ease;
 }
@@ -235,11 +248,39 @@
   }
   
   .lang-dropdown {
-    min-width: 140px;
+    min-width: 170px;
   }
   
   .lang-item {
     padding: 8px 12px;
+    gap: 8px;
+  }
+  
+  .lang-name {
+    display: none;
+  }
+  
+  .lang-item .label {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lang-btn {
+    padding: 5px 10px;
+  }
+  
+  .lang-btn .label {
+    display: none;
+  }
+  
+  .lang-btn .arrow {
+    display: none;
+  }
+  
+  .lang-dropdown {
+    min-width: 150px;
+    right: -10px;
   }
 }
 
@@ -255,6 +296,42 @@
   }
 }
 
-.lang-switcher {
-  animation: floatIn 0.5s ease;
+/* === DARK MODE DƏSTƏYİ === */
+@media (prefers-color-scheme: dark) {
+  .lang-dropdown {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+  }
+  
+  .lang-item {
+    color: #e5e7eb;
+  }
+  
+  .lang-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  .lang-name {
+    color: #9ca3af;
+  }
+  
+  .lang-item.active .lang-name {
+    color: #d1d5db;
+  }
+}
+
+/* === TOUCH CİHAZLAR ÜÇÜN === */
+@media (hover: none) and (pointer: coarse) {
+  .lang-btn:hover {
+    transform: none;
+  }
+  
+  .lang-item:hover {
+    transform: none;
+  }
+  
+  .lang-item:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.3);
+  }
 }

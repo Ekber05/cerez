@@ -6,9 +6,9 @@ import ReactCountryFlag from "react-country-flag";
 import "./LanguageSwitcher.css";
 
 const languages = [
-  { code: "az", label: "AZ", country: "AZ" },
-  { code: "en", label: "EN", country: "GB" },
-  { code: "ru", label: "RU", country: "RU" }
+  { code: "az", label: "AZ", country: "AZ", name: "Azərbaycan" },
+  { code: "en", label: "EN", country: "GB", name: "English" },
+  { code: "ru", label: "RU", country: "RU", name: "Русский" }
 ];
 
 export default function LanguageSwitcher() {
@@ -17,8 +17,7 @@ export default function LanguageSwitcher() {
   const [open, setOpen] = useState(false);
   const switcherRef = useRef(null);
 
-  const currentLang =
-    languages.find(l => l.code === i18n.language) || languages[0];
+  const currentLang = languages.find(l => l.code === i18n.language) || languages[0];
 
   const changeLang = (code) => {
     i18n.changeLanguage(code);
@@ -45,20 +44,18 @@ export default function LanguageSwitcher() {
       }
     };
 
-    // Dropdown açıq olduqda event listener əlavə et
     if (open) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
     }
 
-    // Cleanup
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };
   }, [open]);
 
-  // Escape düyməsinə basıldıqda bağlamaq üçün (opsiyonel)
+  // Escape düyməsinə basıldıqda bağlamaq üçün
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === 'Escape' && open) {
@@ -82,11 +79,13 @@ export default function LanguageSwitcher() {
         className={`lang-btn ${open ? "open" : ""}`}
         onClick={() => setOpen(!open)}
         type="button"
+        aria-label="Dil seç"
       >
         <ReactCountryFlag
           svg
           countryCode={currentLang.country}
           className="flag-svg"
+          aria-label={currentLang.name}
         />
         <span className="label">{currentLang.label}</span>
         <span className="arrow">▾</span>
@@ -102,13 +101,22 @@ export default function LanguageSwitcher() {
                 i18n.language === lang.code ? "active" : ""
               }`}
               onClick={() => changeLang(lang.code)}
+              role="button"
+              tabIndex={0}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  changeLang(lang.code);
+                }
+              }}
             >
               <ReactCountryFlag
                 svg
                 countryCode={lang.country}
                 className="flag-svg"
+                aria-label={lang.name}
               />
               <span className="label">{lang.label}</span>
+              <span className="lang-name">{lang.name}</span>
               {i18n.language === lang.code && (
                 <span className="check">✓</span>
               )}

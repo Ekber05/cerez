@@ -1,11 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { blogData } from '../data/blogData';
 import Pagination from './Pagination';
+import LoadingSpinner from './LoadingSpinner';
 import './BlogList.css';
 
 const BlogList = () => {
+  const { t, i18n } = useTranslation();
   const location = useLocation();
+  
+  // Yüklənmə state-ləri
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   
   // Pagination state-ləri
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,11 +24,106 @@ const BlogList = () => {
   const cardsRef = useRef([]);
   
   // Kateqoriya state-ləri
-  const [filteredBlogs, setFilteredBlogs] = useState(blogData);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [activeCategory, setActiveCategory] = useState('all');
 
   // Kateqoriyaları al
   const categories = ['all', ...new Set(blogData.map(blog => blog.category))];
+
+  // Kateqoriya adlarını dilə görə tərcümə et
+  const getCategoryTranslation = (category) => {
+    if (category === 'all') return t('blog.categories.all');
+    const categoryKey = category.toLowerCase().replace(/\s+/g, '');
+    const translated = t(`blog.categories.${categoryKey}`, category);
+    return translated;
+  };
+
+  // Tarixi formatla - DİLƏ UYĞUN
+  const formatDate = (dateString) => {
+    const currentLang = i18n.language;
+    
+    const months = {
+      az: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'],
+      en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      ru: ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря']
+    };
+    
+    if (dateString && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const [year, month, day] = dateString.split('-');
+      const monthIndex = parseInt(month, 10) - 1;
+      const monthName = months[currentLang][monthIndex];
+      
+      if (currentLang === 'az') {
+        return `${parseInt(day)} ${monthName} ${year}`;
+      } else if (currentLang === 'en') {
+        return `${monthName} ${parseInt(day)}, ${year}`;
+      } else {
+        return `${parseInt(day)} ${monthName} ${year}`;
+      }
+    }
+    
+    return dateString || '';
+  };
+
+  // readTime göstərilməsi üçün köməkçi funksiya
+  const getReadTimeDisplay = (blog) => {
+    let minutes = 5;
+    
+    if (blog?.readTime && typeof blog.readTime === 'number') {
+      minutes = blog.readTime;
+    } else if (blog?.readTimeString && typeof blog.readTimeString === 'string') {
+      const numberMatch = blog.readTimeString.match(/\d+/);
+      if (numberMatch) {
+        minutes = parseInt(numberMatch[0], 10);
+      }
+    }
+    
+    return t('blog.minRead', { count: minutes });
+  };
+
+  // description göstərilməsi üçün köməkçi funksiya
+  const getDescription = (blog) => {
+    return blog?.description || blog?.excerpt || t('blog.defaultDescription');
+  };
+
+  // Yüklənmə simulyasiyası
+  useEffect(() => {
+    let currentProgress = 0;
+    let isMounted = true;
+    let timeoutId = null;
+    let intervalId = null;
+
+    setFilteredBlogs(blogData);
+    
+    intervalId = setInterval(() => {
+      if (!isMounted) return;
+      currentProgress += Math.random() * 15;
+      if (currentProgress >= 100) {
+        currentProgress = 100;
+        clearInterval(intervalId);
+        timeoutId = setTimeout(() => {
+          if (isMounted) setIsLoading(false);
+        }, 200);
+      }
+      const safeProgress = isNaN(currentProgress) ? 0 : Math.min(100, Math.floor(currentProgress));
+      setLoadingProgress(safeProgress);
+    }, 120);
+
+    timeoutId = setTimeout(() => {
+      if (!isMounted) return;
+      clearInterval(intervalId);
+      setLoadingProgress(100);
+      setTimeout(() => {
+        if (isMounted) setIsLoading(false);
+      }, 200);
+    }, 1000);
+
+    return () => {
+      isMounted = false;
+      if (intervalId) clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Səhifəyə hər gəlişdə scroll mövqeyini sıfırla
   useEffect(() => {
@@ -32,13 +134,15 @@ const BlogList = () => {
 
   // Kateqoriyaya görə filtrləmə
   useEffect(() => {
-    if (activeCategory === 'all') {
-      setFilteredBlogs(blogData);
-    } else {
-      setFilteredBlogs(blogData.filter(blog => blog.category === activeCategory));
+    if (!isLoading && blogData.length > 0) {
+      if (activeCategory === 'all') {
+        setFilteredBlogs(blogData);
+      } else {
+        setFilteredBlogs(blogData.filter(blog => blog.category === activeCategory));
+      }
+      setCurrentPage(1);
     }
-    setCurrentPage(1);
-  }, [activeCategory]);
+  }, [activeCategory, isLoading]);
 
   // Pagination üçün cari səhifədə göstəriləcək bloglar
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -54,6 +158,8 @@ const BlogList = () => {
 
   // Scroll animasiyası üçün observer
   useEffect(() => {
+    if (isLoading) return;
+    
     cardsRef.current.forEach(card => {
       if (card) {
         card.classList.remove('card-visible');
@@ -91,32 +197,7 @@ const BlogList = () => {
     });
 
     return () => observer.disconnect();
-  }, [currentBlogs, currentPage]);
-
-  // Tarixi formatla - DD.MM.YYYY
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-  };
-
-  // readTime göstərilməsi üçün köməkçi funksiya
-  const getReadTimeDisplay = (blog) => {
-    if (blog.readTimeString) {
-      return blog.readTimeString;
-    }
-    if (blog.readTime) {
-      return `${blog.readTime} dəq`;
-    }
-    return "5 dəq"; // default
-  };
-
-  // description göstərilməsi üçün köməkçi funksiya
-  const getDescription = (blog) => {
-    return blog.description || blog.excerpt || "Məqalə haqqında məlumat";
-  };
+  }, [currentBlogs, currentPage, isLoading]);
 
   // Kateqoriyaya görə sayı hesabla
   const getCategoryCount = (category) => {
@@ -126,18 +207,23 @@ const BlogList = () => {
     return blogData.filter(blog => blog.category === category).length;
   };
 
+  // Yüklənmə zamanı göstər
+  if (isLoading) {
+    return <LoadingSpinner type="skeleton" progress={loadingProgress} />;
+  }
+
   return (
     <div className="blog-list-container">
       <div className="blog-list-wrapper">
         <div className="blog-list-header">
           <div ref={badgeRef} className="blog-list-badge badge-hidden">
-            Bloq
+            {t('blog.badge')}
           </div>
           <h1 ref={titleRef} className="blog-list-title title-hidden">
-            Bloq<span>lar</span>
+            {t('blog.title')}<span>{t('blog.titleSuffix')}</span>
           </h1>
           <p ref={subtitleRef} className="blog-list-subtitle subtitle-hidden">
-            Quru meyvələr və paxlalılar haqqında faydalı məlumatlar
+            {t('blog.subtitle')}
           </p>
         </div>
 
@@ -149,7 +235,7 @@ const BlogList = () => {
               className={`category-btn ${activeCategory === category ? 'active' : ''}`}
               onClick={() => setActiveCategory(category)}
             >
-              {category === 'all' ? 'Hamısı' : category}
+              {getCategoryTranslation(category)}
               <span className="category-count">
                 {getCategoryCount(category)}
               </span>
@@ -167,7 +253,7 @@ const BlogList = () => {
             >
               <div className="blog-list-card-image">
                 <img src={blog.image} alt={blog.title} />
-                <span className="blog-category-badge">{blog.category}</span>
+                <span className="blog-category-badge">{getCategoryTranslation(blog.category)}</span>
               </div>
               <div className="blog-list-card-content">
                 <div className="blog-meta">
@@ -185,10 +271,10 @@ const BlogList = () => {
                 <div className="blog-card-footer">
                   <span className="blog-views">
                     <i className="fas fa-eye"></i>
-                    {blog.views || 0} baxış
+                    {blog.views || 0} {t('blog.views')}
                   </span>
                   <span className="blog-list-card-link">
-                    Ətraflı <i className="fas fa-arrow-right"></i>
+                    {t('blog.readMore')} <i className="fas fa-arrow-right"></i>
                   </span>
                 </div>
               </div>
@@ -199,8 +285,8 @@ const BlogList = () => {
         {filteredBlogs.length === 0 && (
           <div className="no-blogs-message">
             <i className="fas fa-folder-open"></i>
-            <h3>Bu kateqoriyada məqalə tapılmadı</h3>
-            <p>Başqa kateqoriya seçin</p>
+            <h3>{t('blog.noArticles')}</h3>
+            <p>{t('blog.selectOtherCategory')}</p>
           </div>
         )}
 

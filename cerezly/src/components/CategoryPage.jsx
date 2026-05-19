@@ -1,19 +1,23 @@
-// components/CategoryPage.jsx
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../contexts/CartContext';
 import { useProducts } from '../hooks/useProducts';
 import ImageModal from './İmageModal';
 import SearchBar from './SearchBar';
 import Pagination from './Pagination';
 import FilterComponent from './FilterComponent';
+import LoadingSpinner from './LoadingSpinner';
 import './AllProducts.css';
 
 const CategoryPage = () => {
+  const { t } = useTranslation();
   const { categoryId } = useParams();
   const { addToCart } = useCart();
   const { products, loading, error } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   
   const [notification, setNotification] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -25,34 +29,69 @@ const CategoryPage = () => {
   const [isFilterActive, setIsFilterActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isPageTransitioning, setIsPageTransitioning] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(16);
   
   const containerRef = useRef(null);
-  const isUpdatingFromUrl = useRef(false);
-  const isInternalUpdate = useRef(false);
+  const isFilterOrSearchUpdate = useRef(false);
+  const isInitialMount = useRef(true);
 
-  // Kateqoriya məlumatları
+  // Kateqoriya məlumatları - DİL DƏSTƏKLİ
   const categoryInfo = {
-    'meyve-qurulari': { title: 'Meyvə Quruları', filterKey: 'driedFruits' },
-    'duzlu-cerezler': { title: 'Duzlu çərəzlər', filterKey: 'saltyNuts' },
-    'sokokladli-cerezler': { title: 'Şokoladlı çərəzlər', filterKey: 'chocolateNuts' },
-    'edviyyatlar': { title: 'Ədviyyatlar', filterKey: 'spices' },
-    'paxlalilar-ve-taxillar': { title: 'Paxlalılar və Taxıllar', filterKey: 'legumesAndGrains' },
-    'bitki-yaglari': { title: 'Bitki Yağları', filterKey: 'vegetableOils' },
-    'qurudulmus-otlar-ve-caylar': { title: 'Qurudulmuş Otlar və Çaylar', filterKey: 'driedHerbsAndTeas' },
-    'hediyye-paketleri': { title: 'Hədiyyə paketləri', filterKey: 'giftPackages' }
+    'meyve-qurulari': { 
+      title: t('footer.sections.products.driedFruits'),
+      filterKey: 'driedFruits', 
+      path: '/meyve-qurulari' 
+    },
+    'duzlu-cerezler': { 
+      title: t('footer.sections.products.saltyNuts'),
+      filterKey: 'saltyNuts', 
+      path: '/duzlu-cerezler' 
+    },
+    'sokokladli-cerezler': { 
+      title: t('footer.sections.products.chocolateNuts'),
+      filterKey: 'chocolateNuts', 
+      path: '/sokokladli-cerezler' 
+    },
+    'edviyyatlar': { 
+      title: t('footer.sections.products.spices'),
+      filterKey: 'spices', 
+      path: '/edviyyatlar' 
+    },
+    'paxlalilar-ve-taxillar': { 
+      title: t('footer.sections.products.legumesAndGrains'),
+      filterKey: 'legumesAndGrains', 
+      path: '/paxlalilar-ve-taxillar' 
+    },
+    'bitki-yaglari': { 
+      title: t('footer.sections.products.vegetableOils'),
+      filterKey: 'vegetableOils', 
+      path: '/bitki-yaglari' 
+    },
+    'qurudulmus-otlar-ve-caylar': { 
+      title: t('footer.sections.products.driedHerbsAndTeas'),
+      filterKey: 'driedHerbsAndTeas', 
+      path: '/qurudulmus-otlar-ve-caylar' 
+    },
+    'hediyye-paketleri': { 
+      title: t('footer.sections.products.giftPackages'),
+      filterKey: 'giftPackages', 
+      path: '/hediyye-paketleri' 
+    }
   };
   
-  const currentCategory = categoryInfo[categoryId] || { title: 'Məhsullar', filterKey: null };
+  const currentCategory = categoryInfo[categoryId] || { 
+    title: t('products.allProductsTitle'),
+    filterKey: null, 
+    path: '/' 
+  };
   
   // Kateqoriyaya görə filtrlənmiş məhsullar
   const categoryProducts = currentCategory.filterKey
     ? products.filter(p => p.category === currentCategory.filterKey)
     : products;
 
-  // Güclü scroll funksiyası
+  // Scroll to top funksiyası
   const forceScrollToTop = useCallback((behavior = 'smooth') => {
     window.scrollTo({ top: 0, left: 0, behavior });
     document.documentElement.scrollTop = 0;
@@ -93,163 +132,151 @@ const CategoryPage = () => {
     forceScrollToTop('instant');
   }, [categoryId, forceScrollToTop]);
 
-  // URL-dən page parametrini oxu
+  // Kateqoriya dəyişdikdə filterləri təmizlə və səhifəni 1-ə çevir
   useEffect(() => {
-    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-    if (!isNaN(pageFromUrl) && pageFromUrl !== currentPage && !isUpdatingFromUrl.current) {
-      isUpdatingFromUrl.current = true;
-      setIsPageTransitioning(true);
-      setCurrentPage(pageFromUrl);
-      forceScrollToTop('instant');
-      setTimeout(() => {
-        isUpdatingFromUrl.current = false;
-        setIsPageTransitioning(false);
-      }, 300);
+    if (!isInitialMount.current) {
+      setFilteredProducts([]);
+      setFilteredProductsByFilter([]);
+      setIsSearching(false);
+      setIsFilterActive(false);
+      setSearchTerm('');
+      setCurrentPage(1);
+      
+      const newParams = new URLSearchParams(searchParams);
+      newParams.delete('page');
+      const newUrl = `${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+      window.history.replaceState(null, '', newUrl);
     }
-  }, [searchParams, currentPage, forceScrollToTop]);
+    isInitialMount.current = false;
+  }, [categoryId]);
 
-  // currentPage dəyişdikdə URL-i yenilə və animasiya et
+  // Məhsulları göstər
+  const getDisplayProducts = useCallback(() => {
+    if (isSearching && searchTerm.trim() !== '' && filteredProducts.length > 0) return filteredProducts;
+    if (isFilterActive && filteredProductsByFilter.length > 0) return filteredProductsByFilter;
+    if (isSearching || isFilterActive) return [];
+    return categoryProducts;
+  }, [isSearching, searchTerm, filteredProducts, isFilterActive, filteredProductsByFilter, categoryProducts]);
+
+  const allDisplayProducts = getDisplayProducts();
+  const totalPages = Math.ceil(allDisplayProducts.length / itemsPerPage);
+  const currentProducts = allDisplayProducts.slice(
+    (currentPage - 1) * itemsPerPage, 
+    currentPage * itemsPerPage
+  );
+  const isAnyFilterActive = (isSearching && searchTerm.trim() !== '') || isFilterActive;
+
+  // Səhifə dəyişmə handleri
   const handlePageChange = useCallback((page) => {
-    if (page === currentPage) return;
-    if (isUpdatingFromUrl.current) return;
+    if (page === currentPage || page < 1 || page > totalPages) return;
     
-    isInternalUpdate.current = true;
-    setIsPageTransitioning(true);
     setCurrentPage(page);
-    setSearchParams({ page: page.toString() }, { replace: false });
     forceScrollToTop('smooth');
-    
-    setTimeout(() => {
-      setIsPageTransitioning(false);
-    }, 300);
-  }, [currentPage, setSearchParams, forceScrollToTop]);
+  }, [currentPage, totalPages, forceScrollToTop]);
 
-  // Brauzerin geri/irəli düymələrini dinlə
-  useEffect(() => {
-    const handlePopState = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const pageFromUrl = parseInt(urlParams.get('page') || '1', 10);
-      if (!isNaN(pageFromUrl) && pageFromUrl !== currentPage) {
-        isUpdatingFromUrl.current = true;
-        setIsPageTransitioning(true);
-        setCurrentPage(pageFromUrl);
-        forceScrollToTop('instant');
-        setTimeout(() => {
-          isUpdatingFromUrl.current = false;
-          setIsPageTransitioning(false);
-        }, 300);
-      }
-    };
-    
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [currentPage, forceScrollToTop]);
-
-  // Kateqoriya dəyişdikdə filterləri təmizlə
-  useEffect(() => {
-    setFilteredProducts([]);
-    setFilteredProductsByFilter([]);
-    setIsSearching(false);
-    setIsFilterActive(false);
-    setSearchTerm('');
-    setCurrentPage(1);
-    setSearchParams({ page: '1' }, { replace: true });
-  }, [categoryId, setSearchParams]);
-
-  const handleSearchResults = (results, term) => {
+  // Axtarış handleri
+  const handleSearchResults = useCallback((results, term) => {
+    isFilterOrSearchUpdate.current = true;
     setFilteredProducts(results);
     setSearchTerm(term || '');
     setIsSearching(!!(term && term.trim() !== ''));
     setIsFilterActive(false);
     setFilteredProductsByFilter([]);
-    if (currentPage !== 1) {
-      handlePageChange(1);
-    } else {
-      forceScrollToTop('smooth');
-    }
-  };
+    setCurrentPage(1);
+    forceScrollToTop('smooth');
+    
+    setTimeout(() => {
+      isFilterOrSearchUpdate.current = false;
+    }, 100);
+  }, [forceScrollToTop]);
 
-  const handleFilterChange = (filteredProducts) => {
+  // Filter handleri
+  const handleFilterChange = useCallback((filteredProducts) => {
+    isFilterOrSearchUpdate.current = true;
     setFilteredProductsByFilter(filteredProducts);
     setIsFilterActive(true);
     setIsSearching(false);
     setFilteredProducts([]);
     setSearchTerm('');
-    if (currentPage !== 1) {
-      handlePageChange(1);
-    } else {
-      forceScrollToTop('smooth');
-    }
-  };
+    setCurrentPage(1);
+    forceScrollToTop('smooth');
+    
+    setTimeout(() => {
+      isFilterOrSearchUpdate.current = false;
+    }, 100);
+  }, [forceScrollToTop]);
 
-  const handleShowAllProducts = () => {
+  // Bütün məhsulları göstər
+  const handleShowAllProducts = useCallback(() => {
+    isFilterOrSearchUpdate.current = true;
     setIsTransitioning(true);
     setFilteredProducts([]);
     setFilteredProductsByFilter([]);
     setIsSearching(false);
     setIsFilterActive(false);
     setSearchTerm('');
-    if (currentPage !== 1) {
-      handlePageChange(1);
-    } else {
-      setCurrentPage(1);
-      forceScrollToTop('smooth');
-    }
+    setCurrentPage(1);
     
     const searchInput = document.querySelector('.search-input');
     if (searchInput) searchInput.value = '';
+    forceScrollToTop('smooth');
     
     setTimeout(() => setIsTransitioning(false), 500);
-  };
-
-  const getDisplayProducts = () => {
-    if (isSearching && searchTerm.trim() !== '' && filteredProducts.length > 0) return filteredProducts;
-    if (isFilterActive && filteredProductsByFilter.length > 0) return filteredProductsByFilter;
-    if (isSearching || isFilterActive) return [];
-    return categoryProducts;
-  };
-
-  const allDisplayProducts = getDisplayProducts();
-  const indexOfLastProduct = currentPage * itemsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
-  const currentProducts = allDisplayProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(allDisplayProducts.length / itemsPerPage);
-  const isAnyFilterActive = (isSearching && searchTerm.trim() !== '') || isFilterActive;
+    setTimeout(() => {
+      isFilterOrSearchUpdate.current = false;
+    }, 100);
+  }, [forceScrollToTop]);
 
   const handleWeightSelect = (productId, weight) => {
     setSelectedWeights(prev => ({ ...prev, [productId]: weight }));
   };
 
+  // Bildiriş göstər - DİL DƏSTƏKLİ
+  const showNotification = (messageKey, type = 'success', productName = '', quantityText = '', price = '') => {
+    let message;
+    if (messageKey === 'addedToCart') {
+      message = t('products.notifications.addedToCartFormat', { 
+        name: productName, 
+        quantity: quantityText, 
+        price: price 
+      });
+    } else if (messageKey === 'outOfStock') {
+      message = t('products.notifications.outOfStock', { name: productName });
+    } else if (messageKey === 'selectWeight') {
+      message = t('products.notifications.selectWeight', { name: productName });
+    } else {
+      message = t(messageKey);
+    }
+    
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleAddToCart = (product) => {
     if (product.inStock === false) {
-      showNotification(`${product.name} hazırda stokda yoxdur! Zəhmət olmasa daha sonra təkrar yoxlayın.`, 'error');
+      showNotification('outOfStock', 'error', product.name);
       return;
     }
     
     const selectedWeight = selectedWeights[product.id];
     if (!selectedWeight) {
-      showNotification(`${product.name} üçün çəki seçin!`);
+      showNotification('selectWeight', 'error', product.name);
       return;
     }
     
     addToCart(product, selectedWeight.grams, selectedWeight.price);
     
     const quantityText = selectedWeight.grams >= 1000 
-      ? `${(selectedWeight.grams / 1000).toFixed(2)} kq` 
-      : `${selectedWeight.grams} qr`;
+      ? `${(selectedWeight.grams / 1000).toFixed(2)} ${t('cart.kg')}` 
+      : `${selectedWeight.grams} ${t('cart.gr')}`;
       
-    showNotification(`${product.name} - ${quantityText} (${selectedWeight.price.toFixed(2)} AZN) səbətə əlavə edildi!`, 'success');
+    showNotification('addedToCart', 'success', product.name, quantityText, selectedWeight.price.toFixed(2));
     
     const button = document.querySelector(`[data-id="${product.id}"]`);
     if (button) {
       button.style.transform = 'scale(0.98)';
       setTimeout(() => button.style.transform = '', 150);
     }
-  };
-
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
   };
 
   const openLightbox = (index) => {
@@ -264,17 +291,9 @@ const CategoryPage = () => {
   const allImages = categoryProducts.map(product => product.img);
   const allImageTitles = categoryProducts.map(product => product.name);
 
+  // ✅ YENİ - LoadingSpinner ilə əvəz edildi
   if (loading) {
-    return (
-      <div className="all-products-page-wrapper">
-        <div className="all-products-container">
-          <div className="loading-spinner-container">
-            <div className="loading-spinner"></div>
-            <p>Məhsullar yüklənir...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner type="skeleton" />;
   }
 
   if (error) {
@@ -289,7 +308,7 @@ const CategoryPage = () => {
             </svg>
             <h3>{error}</h3>
             <button onClick={() => window.location.reload()} className="retry-button">
-              Yenilə
+              {t('products.retry')}
             </button>
           </div>
         </div>
@@ -321,12 +340,13 @@ const CategoryPage = () => {
       <div className="all-products-page-wrapper">
         <div className="all-products-container" ref={containerRef}>
           <h2 className="all-products-title">{currentCategory.title}</h2>
+          <p className="all-products-subtitle">{t('products.allProductsSubtitle')}</p>
           
           <div className="products-header-controls">
             <SearchBar 
               products={categoryProducts}
               onSearchResults={handleSearchResults}
-              placeholder="Məhsul adı ilə axtar..."
+              placeholder={t('products.searchPlaceholder')}
             />
             <FilterComponent 
               products={categoryProducts}
@@ -342,11 +362,15 @@ const CategoryPage = () => {
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 <path d="M11 8v3M11 14h.01" strokeWidth="2"/>
               </svg>
-              <h3>Məhsul tapılmadı</h3>
-              <p>{isSearching ? `"${searchTerm}" axtarışına uyğun` : 'Seçilmiş filtrlərə uyğun'} heç bir məhsul tapılmadı.</p>
-              <p className="search-suggestion-text">Fərqli sözlərlə axtarış edin və ya filtrləri dəyişdirin.</p>
+              <h3>{t('products.noResultsTitle')}</h3>
+              <p>
+                {isSearching 
+                  ? t('products.noResultsForSearch', { term: searchTerm })
+                  : t('products.noResultsForFilter')}
+              </p>
+              <p className="search-suggestion-text">{t('products.searchSuggestion')}</p>
               <button className="clear-search-button" onClick={handleShowAllProducts}>
-                Bütün məhsulları göstər
+                {t('products.showAll')}
               </button>
             </div>
           )}
@@ -354,7 +378,7 @@ const CategoryPage = () => {
           <div>
             {allDisplayProducts.length > 0 && (
               <>
-                <div className={`all-products-grid ${isPageTransitioning ? 'page-transition-out' : 'page-transition-in'}`}>
+                <div className="all-products-grid">
                   {currentProducts.map((product, index) => {
                     const originalIndex = categoryProducts.findIndex(p => p.id === product.id);
                     const selectedWeight = selectedWeights[product.id];
@@ -363,8 +387,7 @@ const CategoryPage = () => {
                     return (
                       <div 
                         key={`${product.id}-${currentPage}-${index}`}
-                        className={`all-product-card ${isPageTransitioning ? 'card-fade-out' : 'card-fade-in'}`}
-                        style={{ animationDelay: !isPageTransitioning ? `${index * 0.05}s` : '0s' }}
+                        className="all-product-card"
                       >
                         <div 
                           className="all-product-image" 
@@ -380,12 +403,12 @@ const CategoryPage = () => {
                                 e.target.onerror = null;
                                 e.target.style.display = 'none';
                                 if (e.target.parentElement) {
-                                  e.target.parentElement.innerHTML = '<div className="all-no-image">Şəkil yoxdur</div>';
+                                  e.target.parentElement.innerHTML = `<div class="all-no-image">${t('products.noImage')}</div>`;
                                 }
                               }} 
                             />
                           ) : (
-                            <div className="all-no-image">Şəkil yoxdur</div>
+                            <div className="all-no-image">{t('products.noImage')}</div>
                           )}
                           <div className="image-zoom-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -397,7 +420,7 @@ const CategoryPage = () => {
                           </div>
                           
                           {product.inStock === false && (
-                            <span className="out-of-stock-badge">Stokda yoxdur</span>
+                            <span className="out-of-stock-badge">{t('products.outOfStockBadge')}</span>
                           )}
                         </div>
                         
@@ -419,13 +442,13 @@ const CategoryPage = () => {
                         
                         <div className="all-product-price">
                           {displayPrice?.toFixed(2)} <span className="all-currency">AZN</span>
-                          <span className="all-price-per-unit">/ 1 kq</span>
+                          <span className="all-price-per-unit">{t('products.perKg')}</span>
                         </div>
                         
                         {selectedWeight && (
                           <div className="selected-weight-info">
                             <span className="selected-weight-text">
-                              Seçilmiş: {selectedWeight.label} - {selectedWeight.price.toFixed(2)} AZN
+                              {t('products.selectedWeight')}: {selectedWeight.label} - {selectedWeight.price.toFixed(2)} AZN
                             </span>
                           </div>
                         )}
@@ -435,7 +458,7 @@ const CategoryPage = () => {
                           data-id={product.id} 
                           onClick={() => handleAddToCart(product)}
                         >
-                          Səbətə əlavə et
+                          {t('products.addToCart')}
                         </button>
                       </div>
                     );
@@ -446,7 +469,9 @@ const CategoryPage = () => {
                   <Pagination 
                     currentPage={currentPage} 
                     totalPages={totalPages} 
-                    onPageChange={handlePageChange} 
+                    onPageChange={handlePageChange}
+                    pageParamName="page"
+                    scrollToTop={true}
                   />
                 )}
               </>

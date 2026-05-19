@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { blogData } from '../data/blogData';
 import { 
   FiShare2, 
@@ -13,6 +14,7 @@ import {
 import './BlogDetail.css';
 
 const BlogDetail = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
   const blog = blogData.find(b => b.id === parseInt(id));
@@ -30,25 +32,68 @@ const BlogDetail = () => {
     }
   }, [id]);
 
-  // readTime göstərilməsi üçün köməkçi funksiya
+  // Kateqoriya adını dilə uyğun tərcümə et
+  const getCategoryTranslation = (category) => {
+    const categoryKey = category.toLowerCase().replace(/\s+/g, '');
+    const translated = t(`blog.categories.${categoryKey}`, category);
+    return translated;
+  };
+
+  // readTime göstərilməsi üçün köməkçi funksiya - DİL DƏSTƏKLİ
   const getReadTimeDisplay = () => {
-    if (blog?.readTimeString) {
-      return blog.readTimeString;
+    let minutes = 5;
+    
+    if (blog?.readTime && typeof blog.readTime === 'number') {
+      minutes = blog.readTime;
+    } else if (blog?.readTimeString && typeof blog.readTimeString === 'string') {
+      const numberMatch = blog.readTimeString.match(/\d+/);
+      if (numberMatch) {
+        minutes = parseInt(numberMatch[0], 10);
+      }
     }
-    if (blog?.readTime) {
-      return `${blog.readTime} dəq oxuma`;
+    
+    return t('blog.minRead', { count: minutes });
+  };
+
+  // Tarixi formatla - DİLƏ UYĞUN (ISO formatı üçün)
+  const formatDate = (dateString) => {
+    const currentLang = i18n.language;
+    
+    // Ay adlarının tərcümələri
+    const months = {
+      az: ['Yanvar', 'Fevral', 'Mart', 'Aprel', 'May', 'İyun', 'İyul', 'Avqust', 'Sentyabr', 'Oktyabr', 'Noyabr', 'Dekabr'],
+      en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      ru: ['Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня', 'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря']
+    };
+    
+    // Tarix ISO formatındadırsa (YYYY-MM-DD)
+    if (dateString && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      const [year, month, day] = dateString.split('-');
+      const monthIndex = parseInt(month, 10) - 1;
+      const monthName = months[currentLang][monthIndex];
+      
+      if (currentLang === 'az') {
+        return `${parseInt(day)} ${monthName} ${year}`;
+      } else if (currentLang === 'en') {
+        return `${monthName} ${parseInt(day)}, ${year}`;
+      } else {
+        return `${parseInt(day)} ${monthName} ${year}`;
+      }
     }
-    return "5 dəq oxuma";
+    
+    // Əgər tarix artıq formatlanıbsa, olduğu kimi qaytar
+    return dateString || '';
   };
 
   // description göstərilməsi üçün köməkçi funksiya
   const getDescription = () => {
-    return blog?.description || blog?.excerpt || "Məqalə haqqında məlumat";
+    return blog?.description || blog?.excerpt || t('blog.defaultDescription');
   };
 
   // Toast mesajı göstərmək üçün
-  const showToast = (message, isError = false) => {
-    // Əvvəlki toast varsa sil
+  const showToast = (messageKey, isError = false) => {
+    const message = t(messageKey);
+    
     const existingToast = document.querySelector('.custom-toast');
     if (existingToast) existingToast.remove();
     
@@ -80,13 +125,12 @@ const BlogDetail = () => {
     }, 2500);
   };
 
-  // Paylaş funksiyası - TAM İŞLƏYƏN VERSİYA
+  // Paylaş funksiyası
   const handleShare = async () => {
     const shareUrl = window.location.href;
-    const shareTitle = blog?.title || 'Məqalə';
+    const shareTitle = blog?.title || t('blog.shareTitle');
     const shareText = getDescription();
     
-    // 1. Əvvəlcə mobil native share API-i yoxla
     if (navigator.share) {
       try {
         await navigator.share({
@@ -96,27 +140,22 @@ const BlogDetail = () => {
         });
         return;
       } catch (err) {
-        // İstifadəçi paylaşımı ləğv etdisə heç nə etmə
         if (err.name === 'AbortError') {
           return;
         }
-        // Xəta olarsa fallback-ə keç
         console.log('Share API xətası:', err);
         showFallbackShareModal(shareUrl);
       }
     } else {
-      // Share API dəstəklənmirsə modal aç
       showFallbackShareModal(shareUrl);
     }
   };
 
-  // Fallback paylaşım modalı - LINK KOPYALAMA
+  // Fallback paylaşım modalı
   const showFallbackShareModal = (url) => {
-    // Əvvəlki modal varsa sil
     const existingModal = document.querySelector('.share-modal-overlay');
     if (existingModal) existingModal.remove();
     
-    // Modal overlay yarat
     const overlay = document.createElement('div');
     overlay.className = 'share-modal-overlay';
     overlay.style.cssText = `
@@ -160,8 +199,8 @@ const BlogDetail = () => {
             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
           </svg>
         </div>
-        <h3 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 600; color: #1a202c;">Linki paylaş</h3>
-        <p style="margin: 0 0 20px 0; color: #718096; font-size: 14px; line-height: 1.5;">Məqalə linkini kopyalayıb istədiyiniz yerdə paylaşa bilərsiniz</p>
+        <h3 style="margin: 0 0 8px 0; font-size: 22px; font-weight: 600; color: #1a202c;">${t('blog.shareLinkTitle')}</h3>
+        <p style="margin: 0 0 20px 0; color: #718096; font-size: 14px; line-height: 1.5;">${t('blog.shareLinkDesc')}</p>
         <div style="
           background: #f7fafc;
           border-radius: 16px;
@@ -191,7 +230,7 @@ const BlogDetail = () => {
                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                 <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
               </svg>
-              Linki kopyala
+              ${t('blog.copyLink')}
             </span>
           </button>
           <button id="closeModalBtn" style="
@@ -205,14 +244,13 @@ const BlogDetail = () => {
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
-          ">Bağla</button>
+          ">${t('blog.close')}</button>
         </div>
       </div>
     `;
     
     document.body.appendChild(overlay);
     
-    // Animasiya stillərini əlavə et
     const style = document.createElement('style');
     style.textContent = `
       @keyframes modalFadeIn {
@@ -256,14 +294,13 @@ const BlogDetail = () => {
     copyBtn.onclick = async () => {
       try {
         await navigator.clipboard.writeText(url);
-        copyBtn.innerHTML = '<span style="display: flex; align-items: center; justify-content: center; gap: 8px;">✓ Kopyalandı!</span>';
+        copyBtn.innerHTML = `<span style="display: flex; align-items: center; justify-content: center; gap: 8px;">✓ ${t('blog.copied')}</span>`;
         copyBtn.style.background = '#2e7d32';
         setTimeout(() => {
           overlay.remove();
           style.remove();
         }, 1200);
       } catch (err) {
-        // Clipboard işləməzsə alternativ üsul
         const textarea = document.createElement('textarea');
         textarea.value = url;
         document.body.appendChild(textarea);
@@ -272,14 +309,14 @@ const BlogDetail = () => {
         document.body.removeChild(textarea);
         
         if (success) {
-          copyBtn.innerHTML = '<span style="display: flex; align-items: center; justify-content: center; gap: 8px;">✓ Kopyalandı!</span>';
+          copyBtn.innerHTML = `<span style="display: flex; align-items: center; justify-content: center; gap: 8px;">✓ ${t('blog.copied')}</span>`;
           copyBtn.style.background = '#2e7d32';
           setTimeout(() => {
             overlay.remove();
             style.remove();
           }, 1200);
         } else {
-          showToast('Link kopyalana bilmədi', true);
+          showToast('blog.copyError', true);
         }
       }
     };
@@ -289,7 +326,6 @@ const BlogDetail = () => {
       style.remove();
     };
     
-    // Overlay xaricə kliklə bağlama
     overlay.onclick = (e) => {
       if (e.target === overlay) {
         overlay.remove();
@@ -300,13 +336,13 @@ const BlogDetail = () => {
 
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
-    showToast(isBookmarked ? 'Yaddaşdan çıxarıldı' : 'Yadda saxlandı');
+    showToast(isBookmarked ? 'blog.removedFromBookmarks' : 'blog.addedToBookmarks');
   };
 
   const handleLike = () => {
     setIsLiked(!isLiked);
     if (!isLiked) {
-      showToast('Bəyəndiniz! ❤️');
+      showToast('blog.liked');
     }
   };
 
@@ -317,32 +353,25 @@ const BlogDetail = () => {
           <div className="not-found-icon">
             <i className="fas fa-search"></i>
           </div>
-          <h2>Məqalə tapılmadı</h2>
-          <p>Axtardığınız məqalə mövcud deyil və ya silinmişdir.</p>
+          <h2>{t('blog.notFound')}</h2>
+          <p>{t('blog.notFoundDesc')}</p>
           <button onClick={() => navigate('/blog')} className="blog-detail-back-btn">
-            <FiArrowLeft /> Bütün məqalələr
+            <FiArrowLeft /> {t('blog.allArticles')}
           </button>
         </div>
       </div>
     );
   }
 
-  const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('az-AZ', options);
-  };
-
   // Məzmunu paraqraflara ayırmaq üçün funksiya
   const renderContent = () => {
     if (!blog.content) {
-      return <p>Məqalə məzmunu əlavə edilməyib.</p>;
+      return <p>{t('blog.noContent')}</p>;
     }
     
-    // Məzmunu paraqraflara ayır (boş sətirlərə görə)
     const paragraphs = blog.content.split('\n\n');
     
     return paragraphs.map((paragraph, index) => {
-      // Başlıqları yoxla (h2 formatında)
       if (paragraph.startsWith('# ')) {
         return <h1 key={index}>{paragraph.substring(2)}</h1>;
       }
@@ -352,7 +381,6 @@ const BlogDetail = () => {
       if (paragraph.startsWith('### ')) {
         return <h3 key={index}>{paragraph.substring(4)}</h3>;
       }
-      // Adi paraqraf
       return <p key={index}>{paragraph}</p>;
     });
   };
@@ -363,7 +391,7 @@ const BlogDetail = () => {
         {/* Geri düyməsi */}
         <div className="blog-detail-back">
           <button onClick={() => navigate('/blog')} className="blog-detail-back-button">
-            <FiArrowLeft /> Bütün məqalələr
+            <FiArrowLeft /> {t('blog.allArticles')}
           </button>
         </div>
 
@@ -372,7 +400,7 @@ const BlogDetail = () => {
           {/* Şəkil və kateqoriya */}
           <div className="blog-detail-image">
             <img src={blog.image} alt={blog.title} />
-            <span className="blog-detail-category">{blog.category}</span>
+            <span className="blog-detail-category">{getCategoryTranslation(blog.category)}</span>
           </div>
 
           {/* Məzmun */}
@@ -387,28 +415,28 @@ const BlogDetail = () => {
                   <FiClock /> {getReadTimeDisplay()}
                 </span>
                 <span className="blog-detail-views">
-                  <FiEye /> {blog.views || 0} baxış
+                  <FiEye /> {blog.views || 0} {t('blog.views')}
                 </span>
               </div>
               <div className="meta-right">
                 <button 
                   className={`meta-btn bookmark-btn ${isBookmarked ? 'active' : ''}`}
                   onClick={handleBookmark}
-                  title={isBookmarked ? 'Yaddaşdan çıxar' : 'Yadda saxla'}
+                  title={isBookmarked ? t('blog.removeFromBookmarks') : t('blog.addToBookmarks')}
                 >
                   <FiBookmark />
                 </button>
                 <button 
                   className={`meta-btn like-btn ${isLiked ? 'active' : ''}`}
                   onClick={handleLike}
-                  title={isLiked ? 'Bəyənməyi geri al' : 'Bəyən'}
+                  title={t('blog.like')}
                 >
                   <FiHeart />
                 </button>
                 <button 
                   className="meta-btn share-btn"
                   onClick={handleShare}
-                  title="Paylaş"
+                  title={t('blog.share')}
                 >
                   <FiShare2 />
                 </button>
@@ -418,12 +446,12 @@ const BlogDetail = () => {
             {/* Başlıq */}
             <h1 className="blog-detail-title">{blog.title}</h1>
 
-            {/* Xülasə - description istifadə edir */}
+            {/* Xülasə */}
             <div className="blog-detail-excerpt">
               <p>{getDescription()}</p>
             </div>
 
-            {/* Tam məzmun - REAL CONTENT */}
+            {/* Tam məzmun */}
             <div className="blog-detail-full-content">
               {renderContent()}
             </div>
@@ -431,12 +459,12 @@ const BlogDetail = () => {
             {/* Paylaşım və interaksiya */}
             <div className="blog-detail-footer">
               <div className="footer-tags">
-                <span className="tag-label">Kateqoriya:</span>
-                <span className="tag">{blog.category}</span>
+                <span className="tag-label">{t('blog.category')}:</span>
+                <span className="tag">{getCategoryTranslation(blog.category)}</span>
               </div>
               <div className="footer-share">
                 <button className="share-button" onClick={handleShare}>
-                  <FiShare2 /> Paylaş
+                  <FiShare2 /> {t('blog.share')}
                 </button>
               </div>
             </div>

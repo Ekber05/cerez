@@ -217,7 +217,7 @@
 }
 
 /* ============================================ */
-/* STOKDA OLMAYAN MƏHSUL NİŞANI (TEST ÜÇÜN) */
+/* STOKDA OLMAYAN MƏHSUL NİŞANI */
 /* ============================================ */
 
 .out-of-stock-badge {
@@ -539,135 +539,6 @@
 }
 
 /* ============================================ */
-/* PAGINATION */
-/* ============================================ */
-
-.pagination-container {
-  margin-top: 50px;
-  margin-bottom: 30px;
-  padding: 25px 0 15px 0;
-  border-top: 2px solid #e8e0d8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.pagination-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.pagination-controls {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: white;
-  padding: 8px 20px;
-  border-radius: 60px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f0e0d0;
-  transition: all 0.3s ease;
-}
-
-.pagination-controls:hover {
-  box-shadow: 0 6px 20px rgba(139, 69, 19, 0.12);
-  border-color: #e0d0c0;
-}
-
-.pagination-nav-btn {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  color: #8B4513;
-  position: relative;
-  overflow: hidden;
-}
-
-.pagination-nav-btn:hover:not(.disabled) {
-  background: #8B4513;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
-}
-
-.pagination-nav-btn.disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.page-numbers {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.page-number {
-  min-width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  font-size: 15px;
-  font-weight: 600;
-  color: #5D4037;
-  position: relative;
-  overflow: hidden;
-}
-
-.page-number:hover:not(.active):not(.dots) {
-  background: #fff5e8;
-  color: #8B4513;
-  transform: translateY(-2px);
-}
-
-.page-number.active {
-  background: #8B4513;
-  color: white;
-  cursor: default;
-  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.35);
-  transform: scale(1.05);
-}
-
-.page-number.dots {
-  cursor: default;
-  background: transparent;
-  color: #b0a088;
-  font-weight: 500;
-  letter-spacing: 2px;
-  transform: none;
-  min-width: 30px;
-}
-
-.pagination-info {
-  display: flex;
-  align-items: center;
-}
-
-.pagination-page-info {
-  font-size: 14px;
-  color: #5D4037;
-  background: #fff5e8;
-  padding: 8px 16px;
-  border-radius: 30px;
-  font-weight: 500;
-  border: 1px solid #f0e0d0;
-}
-
-/* ============================================ */
 /* LOADING & ERROR STATES */
 /* ============================================ */
 
@@ -755,6 +626,13 @@
 /* RESPONSIVE */
 /* ============================================ */
 
+@media (max-width: 1200px) {
+  .all-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
 @media (max-width: 992px) {
   .all-products-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -767,22 +645,6 @@
   
   .all-product-price {
     font-size: 22px;
-  }
-  
-  .pagination-controls {
-    padding: 6px 16px;
-    gap: 10px;
-  }
-  
-  .pagination-nav-btn {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .page-number {
-    min-width: 40px;
-    height: 40px;
-    font-size: 14px;
   }
 }
 
@@ -825,22 +687,6 @@
     max-width: calc(100% - 20px);
     padding: 10px 14px;
     font-size: 14px;
-  }
-  
-  .pagination-controls {
-    padding: 5px 14px;
-    gap: 8px;
-  }
-  
-  .pagination-nav-btn {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .page-number {
-    min-width: 36px;
-    height: 36px;
-    font-size: 13px;
   }
   
   .out-of-stock-badge {
@@ -941,22 +787,6 @@
     font-size: 12px;
   }
   
-  .pagination-controls {
-    padding: 4px 12px;
-    gap: 6px;
-  }
-  
-  .pagination-nav-btn {
-    width: 32px;
-    height: 32px;
-  }
-  
-  .page-number {
-    min-width: 32px;
-    height: 32px;
-    font-size: 12px;
-  }
-  
   .out-of-stock-badge {
     font-size: 8px;
     padding: 2px 5px;
@@ -1001,22 +831,6 @@
     font-size: 10px;
   }
   
-  .pagination-controls {
-    padding: 3px 8px;
-    gap: 4px;
-  }
-  
-  .pagination-nav-btn {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .page-number {
-    min-width: 28px;
-    height: 28px;
-    font-size: 10px;
-  }
-  
   .out-of-stock-badge {
     font-size: 7px;
     padding: 1px 4px;
@@ -1050,8 +864,6 @@
   .all-products-grid,
   .all-product-card,
   .clear-search-button,
-  .pagination-nav-btn,
-  .page-number,
   .out-of-stock-badge {
     animation: none;
     transition: none;
@@ -1080,7 +892,6 @@
   .search-bar-container,
   .filter-component,
   .no-results-message,
-  .pagination-container,
   .out-of-stock-badge {
     display: none;
   }

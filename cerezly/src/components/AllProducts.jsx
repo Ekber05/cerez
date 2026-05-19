@@ -1,15 +1,17 @@
-// components/AllProducts.jsx - TAM DÜZƏLDİLMİŞ (Stok nişanı əlavə edildi - TEST ÜÇÜN)
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useCart } from '../contexts/CartContext';
 import { useProducts } from '../hooks/useProducts';
 import ImageModal from './İmageModal';
 import SearchBar from './SearchBar';
 import Pagination from './Pagination';
 import FilterComponent from './FilterComponent';
+import LoadingSpinner from './LoadingSpinner';
 import './AllProducts.css';
 
 const AllProducts = () => {
+  const { t } = useTranslation();
   const { addToCart } = useCart();
   const { products, loading, error } = useProducts();
   const location = useLocation();
@@ -27,31 +29,151 @@ const AllProducts = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(16);
+  const [totalPages, setTotalPages] = useState(1);
   
   const containerRef = useRef(null);
-  const isInternalUpdate = useRef(false);
+  const isFilterOrSearchUpdate = useRef(false);
 
-  const forceScrollToTop = useCallback((behavior = 'smooth') => {
-    window.scrollTo({ top: 0, left: 0, behavior });
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 50);
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 150);
-    setTimeout(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }, 300);
+  // Məhsulları göstər (filter/search ilə)
+  const getDisplayProducts = useCallback(() => {
+    if (isSearching && searchTerm.trim() !== '' && filteredProducts.length > 0) return filteredProducts;
+    if (isFilterActive && filteredProductsByFilter.length > 0) return filteredProductsByFilter;
+    if (isSearching || isFilterActive) return [];
+    return products;
+  }, [isSearching, searchTerm, filteredProducts, isFilterActive, filteredProductsByFilter, products]);
+
+  const allDisplayProducts = getDisplayProducts();
+  
+  // Total pages hesabla
+  useEffect(() => {
+    const newTotalPages = Math.ceil(allDisplayProducts.length / itemsPerPage);
+    setTotalPages(newTotalPages);
+    
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(newTotalPages);
+    }
+  }, [allDisplayProducts, itemsPerPage, currentPage]);
+
+  const currentProducts = allDisplayProducts.slice(
+    (currentPage - 1) * itemsPerPage, 
+    currentPage * itemsPerPage
+  );
+
+  const isAnyFilterActive = (isSearching && searchTerm.trim() !== '') || isFilterActive;
+
+  // URL-dən səhifəni oxu
+  useEffect(() => {
+    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
+    if (!isNaN(pageFromUrl) && pageFromUrl >= 1) {
+      setCurrentPage(pageFromUrl);
+    }
   }, []);
 
+  // Səhifə dəyişdikdə URL-i yenilə
+  useEffect(() => {
+    if (isFilterOrSearchUpdate.current) {
+      isFilterOrSearchUpdate.current = false;
+      return;
+    }
+    
+    const newParams = new URLSearchParams(searchParams);
+    if (currentPage === 1) {
+      newParams.delete('page');
+    } else {
+      newParams.set('page', currentPage.toString());
+    }
+    
+    const newUrl = `${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+    window.history.replaceState(null, '', newUrl);
+  }, [currentPage, location.pathname]);
+
+  // Brauzer irəli/geri düymələrini izlə
+  useEffect(() => {
+    const handlePopState = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageFromUrl = parseInt(urlParams.get('page') || '1', 10);
+      if (!isNaN(pageFromUrl) && pageFromUrl !== currentPage) {
+        setCurrentPage(pageFromUrl);
+      }
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [currentPage]);
+
+  // Scroll to top funksiyası
+  const forceScrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, []);
+
+  // Səhifə dəyişmə handleri
+  const handlePageChange = useCallback((page) => {
+    if (page === currentPage || page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+    forceScrollToTop();
+  }, [currentPage, totalPages, forceScrollToTop]);
+
+  // Axtarış handleri
+  const handleSearchResults = useCallback((results, term) => {
+    isFilterOrSearchUpdate.current = true;
+    setFilteredProducts(results);
+    setSearchTerm(term || '');
+    setIsSearching(!!(term && term.trim() !== ''));
+    setIsFilterActive(false);
+    setFilteredProductsByFilter([]);
+    setCurrentPage(1);
+    
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('page');
+    const newUrl = `${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+    window.history.replaceState(null, '', newUrl);
+    
+    forceScrollToTop();
+  }, [searchParams, location.pathname, forceScrollToTop]);
+
+  // Filter handleri
+  const handleFilterChange = useCallback((filteredProducts) => {
+    isFilterOrSearchUpdate.current = true;
+    setFilteredProductsByFilter(filteredProducts);
+    setIsFilterActive(true);
+    setIsSearching(false);
+    setFilteredProducts([]);
+    setSearchTerm('');
+    setCurrentPage(1);
+    
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('page');
+    const newUrl = `${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+    window.history.replaceState(null, '', newUrl);
+    
+    forceScrollToTop();
+  }, [searchParams, location.pathname, forceScrollToTop]);
+
+  // Bütün məhsulları göstər
+  const handleShowAllProducts = useCallback(() => {
+    isFilterOrSearchUpdate.current = true;
+    setIsTransitioning(true);
+    setFilteredProducts([]);
+    setFilteredProductsByFilter([]);
+    setIsSearching(false);
+    setIsFilterActive(false);
+    setSearchTerm('');
+    setCurrentPage(1);
+    
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('page');
+    const newUrl = `${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`;
+    window.history.replaceState(null, '', newUrl);
+    
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) searchInput.value = '';
+    forceScrollToTop();
+    setTimeout(() => setIsTransitioning(false), 500);
+  }, [searchParams, location.pathname, forceScrollToTop]);
+
+  // Çəki seçimi
   useEffect(() => {
     if (products.length > 0) {
       const defaultWeights = {};
@@ -65,124 +187,50 @@ const AllProducts = () => {
     }
   }, [products]);
 
-  useEffect(() => {
-    forceScrollToTop('instant');
-  }, [location.pathname, forceScrollToTop]);
-
-  useEffect(() => {
-    if (isInternalUpdate.current) {
-      isInternalUpdate.current = false;
-      return;
-    }
-    const pageFromUrl = parseInt(searchParams.get('page') || '1', 10);
-    if (!isNaN(pageFromUrl) && pageFromUrl !== currentPage) {
-      setCurrentPage(pageFromUrl);
-      forceScrollToTop('instant');
-    }
-  }, [searchParams, currentPage, forceScrollToTop]);
-
-  const handlePageChange = useCallback((page) => {
-    if (page === currentPage) return;
-    isInternalUpdate.current = true;
-    setCurrentPage(page);
-    setSearchParams({ page: page.toString() }, { replace: false });
-    forceScrollToTop('smooth');
-  }, [currentPage, setSearchParams, forceScrollToTop]);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const pageFromUrl = parseInt(urlParams.get('page') || '1', 10);
-      if (!isNaN(pageFromUrl) && pageFromUrl !== currentPage) {
-        setCurrentPage(pageFromUrl);
-        forceScrollToTop('instant');
-      }
-    };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [currentPage, forceScrollToTop]);
-
-  const handleSearchResults = (results, term) => {
-    setFilteredProducts(results);
-    setSearchTerm(term || '');
-    setIsSearching(!!(term && term.trim() !== ''));
-    setIsFilterActive(false);
-    setFilteredProductsByFilter([]);
-    if (currentPage !== 1) {
-      handlePageChange(1);
-    } else {
-      forceScrollToTop('smooth');
-    }
-  };
-
-  const handleFilterChange = (filteredProducts) => {
-    setFilteredProductsByFilter(filteredProducts);
-    setIsFilterActive(true);
-    setIsSearching(false);
-    setFilteredProducts([]);
-    setSearchTerm('');
-    if (currentPage !== 1) {
-      handlePageChange(1);
-    } else {
-      forceScrollToTop('smooth');
-    }
-  };
-
-  const handleShowAllProducts = () => {
-    setIsTransitioning(true);
-    setFilteredProducts([]);
-    setFilteredProductsByFilter([]);
-    setIsSearching(false);
-    setIsFilterActive(false);
-    setSearchTerm('');
-    if (currentPage !== 1) {
-      handlePageChange(1);
-    } else {
-      setCurrentPage(1);
-      forceScrollToTop('smooth');
-    }
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) searchInput.value = '';
-    setTimeout(() => setIsTransitioning(false), 500);
-  };
-
-  const getDisplayProducts = () => {
-    if (isSearching && searchTerm.trim() !== '' && filteredProducts.length > 0) return filteredProducts;
-    if (isFilterActive && filteredProductsByFilter.length > 0) return filteredProductsByFilter;
-    if (isSearching || isFilterActive) return [];
-    return products;
-  };
-
-  const allDisplayProducts = getDisplayProducts();
-  const indexOfLastProduct = currentPage * itemsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
-  const currentProducts = allDisplayProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-  const totalPages = Math.ceil(allDisplayProducts.length / itemsPerPage);
-  const isAnyFilterActive = (isSearching && searchTerm.trim() !== '') || isFilterActive;
-
   const handleWeightSelect = (productId, weight) => {
     setSelectedWeights(prev => ({ ...prev, [productId]: weight }));
   };
 
+  // Bildiriş mesajı - DİL DƏSTƏKLİ
+  const showNotification = (messageKey, type = 'success', productName = '', quantityText = '', price = '') => {
+    let message;
+    if (messageKey === 'addedToCart') {
+      message = t('products.notifications.addedToCartFormat', { 
+        name: productName, 
+        quantity: quantityText, 
+        price: price 
+      });
+    } else if (messageKey === 'outOfStock') {
+      message = t('products.notifications.outOfStock', { name: productName });
+    } else if (messageKey === 'selectWeight') {
+      message = t('products.notifications.selectWeight', { name: productName });
+    } else {
+      message = t(messageKey);
+    }
+    
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 3000);
+  };
+
   const handleAddToCart = (product) => {
     if (product.inStock === false) {
-      showNotification(`${product.name} hazırda stokda yoxdur! Zəhmət olmasa daha sonra təkrar yoxlayın.`, 'error');
+      showNotification('outOfStock', 'error', product.name);
       return;
     }
     
     const selectedWeight = selectedWeights[product.id];
     if (!selectedWeight) {
-      showNotification(`${product.name} üçün çəki seçin!`);
+      showNotification('selectWeight', 'error', product.name);
       return;
     }
     
     addToCart(product, selectedWeight.grams, selectedWeight.price);
     
     const quantityText = selectedWeight.grams >= 1000 
-      ? `${(selectedWeight.grams / 1000).toFixed(2)} kq` 
-      : `${selectedWeight.grams} qr`;
+      ? `${(selectedWeight.grams / 1000).toFixed(2)} ${t('cart.kg')}` 
+      : `${selectedWeight.grams} ${t('cart.gr')}`;
       
-    showNotification(`${product.name} - ${quantityText} (${selectedWeight.price.toFixed(2)} AZN) səbətə əlavə edildi!`, 'success');
+    showNotification('addedToCart', 'success', product.name, quantityText, selectedWeight.price.toFixed(2));
     
     const button = document.querySelector(`[data-id="${product.id}"]`);
     if (button) {
@@ -191,12 +239,12 @@ const AllProducts = () => {
     }
   };
 
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
-  };
+  const [lightboxImages, setLightboxImages] = useState([]);
+  const [lightboxTitles, setLightboxTitles] = useState([]);
 
   const openLightbox = (index) => {
+    setLightboxImages(products.map(p => p.img));
+    setLightboxTitles(products.map(p => p.name));
     setCurrentImageIndex(index);
     setLightboxOpen(true);
   };
@@ -205,20 +253,9 @@ const AllProducts = () => {
   const goToNext = () => setCurrentImageIndex((prev) => (prev + 1) % products.length);
   const goToPrev = () => setCurrentImageIndex((prev) => (prev - 1 + products.length) % products.length);
 
-  const allImages = products.map(product => product.img);
-  const allImageTitles = products.map(product => product.name);
-
+  // Əgər loading true-dursa, LoadingSpinner göstər
   if (loading) {
-    return (
-      <div className="all-products-page-wrapper">
-        <div className="all-products-container">
-          <div className="loading-spinner-container">
-            <div className="loading-spinner"></div>
-            <p>Məhsullar yüklənir...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner type="skeleton" />;
   }
 
   if (error) {
@@ -233,7 +270,7 @@ const AllProducts = () => {
             </svg>
             <h3>{error}</h3>
             <button onClick={() => window.location.reload()} className="retry-button">
-              Yenilə
+              {t('products.retry')}
             </button>
           </div>
         </div>
@@ -255,23 +292,23 @@ const AllProducts = () => {
       <ImageModal
         isOpen={lightboxOpen}
         onClose={closeLightbox}
-        images={allImages}
+        images={lightboxImages}
         currentIndex={currentImageIndex}
         onNext={goToNext}
         onPrev={goToPrev}
-        titles={allImageTitles}
+        titles={lightboxTitles}
       />
       
       <div className="all-products-page-wrapper">
         <div className="all-products-container" ref={containerRef}>
-          <h2 className="all-products-title">Bütün Məhsullar</h2>
-          <p className="all-products-subtitle">Çərəz & Quru Meyvələr</p>
+          <h2 className="all-products-title">{t('products.allProductsTitle')}</h2>
+          <p className="all-products-subtitle">{t('products.allProductsSubtitle')}</p>
           
           <div className="products-header-controls">
             <SearchBar 
               products={products}
               onSearchResults={handleSearchResults}
-              placeholder="Məhsul adı ilə axtar..."
+              placeholder={t('products.searchPlaceholder')}
             />
             <FilterComponent 
               products={products}
@@ -286,11 +323,15 @@ const AllProducts = () => {
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 <path d="M11 8v3M11 14h.01" strokeWidth="2"/>
               </svg>
-              <h3>Məhsul tapılmadı</h3>
-              <p>{isSearching ? `"${searchTerm}" axtarışına uyğun` : 'Seçilmiş filtrlərə uyğun'} heç bir məhsul tapılmadı.</p>
-              <p className="search-suggestion-text">Fərqli sözlərlə axtarış edin və ya filtrləri dəyişdirin.</p>
+              <h3>{t('products.noResultsTitle')}</h3>
+              <p>
+                {isSearching 
+                  ? t('products.noResultsForSearch', { term: searchTerm }) 
+                  : t('products.noResultsForFilter')}
+              </p>
+              <p className="search-suggestion-text">{t('products.searchSuggestion')}</p>
               <button className="clear-search-button" onClick={handleShowAllProducts}>
-                Bütün məhsulları göstər
+                {t('products.showAll')}
               </button>
             </div>
           )}
@@ -328,7 +369,7 @@ const AllProducts = () => {
                               }} 
                             />
                           ) : (
-                            <div className="all-no-image">Şəkil yoxdur</div>
+                            <div className="all-no-image">{t('products.noImage')}</div>
                           )}
                           <div className="image-zoom-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -339,9 +380,8 @@ const AllProducts = () => {
                             </svg>
                           </div>
                           
-                          {/* ✅ STOKDA OLMAYAN MƏHSUL NİŞANI (TEST ÜÇÜN) */}
                           {product.inStock === false && (
-                            <span className="out-of-stock-badge">Stokda yoxdur</span>
+                            <span className="out-of-stock-badge">{t('products.outOfStockBadge')}</span>
                           )}
                         </div>
                         
@@ -363,13 +403,13 @@ const AllProducts = () => {
                         
                         <div className="all-product-price">
                           {displayPrice?.toFixed(2)} <span className="all-currency">AZN</span>
-                          <span className="all-price-per-unit">/ 1 kq</span>
+                          <span className="all-price-per-unit">{t('products.perKg')}</span>
                         </div>
                         
                         {selectedWeight && (
                           <div className="selected-weight-info">
                             <span className="selected-weight-text">
-                              Seçilmiş: {selectedWeight.label} - {selectedWeight.price.toFixed(2)} AZN
+                              {t('products.selectedWeight')}: {selectedWeight.label} - {selectedWeight.price.toFixed(2)} AZN
                             </span>
                           </div>
                         )}
@@ -379,7 +419,7 @@ const AllProducts = () => {
                           data-id={product.id} 
                           onClick={() => handleAddToCart(product)}
                         >
-                          Səbətə əlavə et
+                          {t('products.addToCart')}
                         </button>
                       </div>
                     );
@@ -388,9 +428,10 @@ const AllProducts = () => {
                 
                 {totalPages > 1 && (
                   <Pagination 
-                    currentPage={currentPage} 
                     totalPages={totalPages} 
-                    onPageChange={handlePageChange} 
+                    onPageChange={handlePageChange}
+                    pageParamName="page"
+                    scrollToTop={true}
                   />
                 )}
               </>

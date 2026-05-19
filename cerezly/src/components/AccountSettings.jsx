@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next"; // Dil dəstəyi üçün
 import { FiUser, FiMail, FiPhone, FiLock, FiX, FiSave, FiUserCheck, FiMapPin, FiCreditCard } from "react-icons/fi";
 import "./AccountSettings.css";
 
 export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuccess, showNotification }) {
+  const { t } = useTranslation(); // Dil hook-u
+  
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -35,7 +38,6 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
 
   useEffect(() => {
     if (userData) {
-      // Telefonu formatla
       const formattedPhone = formatPhoneForDisplay(userData.phone || "");
       
       const userInfo = {
@@ -94,12 +96,9 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     
-    // Telefon nömrəsi üçün xüsusi formatlama
     if (name === 'phone') {
-      // Yalnız rəqəmləri saxla
       const numbersOnly = value.replace(/[^\d]/g, '');
       
-      // Formatla: 050 555 55 55 və ya 50 555 55 55
       let formattedValue = '';
       if (numbersOnly.length <= 3) {
         formattedValue = numbersOnly;
@@ -111,7 +110,6 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
         formattedValue = `${numbersOnly.slice(0, 3)} ${numbersOnly.slice(3, 6)} ${numbersOnly.slice(6, 8)} ${numbersOnly.slice(8, 10)}`;
       }
       
-      // Maksimum 13 simvol (3 + 3 + 2 + 2 + boşluqlar)
       if (formattedValue.length > 13) {
         formattedValue = formattedValue.slice(0, 13);
       }
@@ -151,14 +149,13 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
 
   const getPaymentMethodLabel = () => {
     switch(formData.paymentMethod) {
-      case 'cash': return 'Nağd pul';
-      case 'card': return 'Kart ilə ödəniş';
-      case 'online': return 'Online ödəniş';
-      default: return 'Nağd pul';
+      case 'cash': return t('account.cash');
+      case 'card': return t('account.card');
+      case 'online': return t('account.online');
+      default: return t('account.cash');
     }
   };
 
-  // Profil məlumatlarının dəyişib-dəyişmədiyini yoxla
   const hasProfileChanges = () => {
     return (
       formData.firstName !== originalData.firstName ||
@@ -173,24 +170,24 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
   const validateProfile = () => {
     const newErrors = {};
     if (!formData.firstName) {
-      newErrors.firstName = "Ad tələb olunur";
+      newErrors.firstName = t('login.errors.firstNameRequired');
     }
     if (!formData.lastName) {
-      newErrors.lastName = "Soyad tələb olunur";
+      newErrors.lastName = t('login.errors.lastNameRequired');
     }
     if (!formData.email) {
-      newErrors.email = "E-poçt ünvanı tələb olunur";
+      newErrors.email = t('login.errors.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Düzgün e-poçt ünvanı daxil edin";
+      newErrors.email = t('login.errors.emailInvalid');
     }
     if (!formData.phone) {
-      newErrors.phone = "Telefon nömrəsi tələb olunur";
+      newErrors.phone = t('login.errors.phoneRequired');
     } else {
       const phoneNumbersOnly = formData.phone.replace(/\s/g, '');
       if (phoneNumbersOnly.length < 9 || phoneNumbersOnly.length > 10) {
-        newErrors.phone = "Düzgün telefon nömrəsi daxil edin (məs: 050 555 55 55)";
+        newErrors.phone = t('login.errors.phoneInvalid');
       } else if (!/^[0-9]+$/.test(phoneNumbersOnly)) {
-        newErrors.phone = "Telefon nömrəsi yalnız rəqəmlərdən ibarət olmalıdır";
+        newErrors.phone = t('login.errors.phoneDigits');
       }
     }
     return newErrors;
@@ -199,24 +196,24 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
   const validatePassword = () => {
     const newErrors = {};
     if (!formData.currentPassword) {
-      newErrors.currentPassword = "Cari şifrə tələb olunur";
+      newErrors.currentPassword = t('account.currentPasswordRequired');
     }
     if (!formData.newPassword) {
-      newErrors.newPassword = "Yeni şifrə tələb olunur";
+      newErrors.newPassword = t('account.newPasswordRequired');
     } else if (formData.newPassword.length < 6) {
-      newErrors.newPassword = "Şifrə ən az 6 simvol olmalıdır";
+      newErrors.newPassword = t('login.errors.passwordMin');
     }
     if (!formData.confirmNewPassword) {
-      newErrors.confirmNewPassword = "Şifrə təsdiqi tələb olunur";
+      newErrors.confirmNewPassword = t('account.confirmPasswordRequired');
     } else if (formData.newPassword !== formData.confirmNewPassword) {
-      newErrors.confirmNewPassword = "Şifrələr uyğun gəlmir";
+      newErrors.confirmNewPassword = t('login.errors.confirmPasswordMatch');
     }
     return newErrors;
   };
 
   const handleUpdateProfile = () => {
     if (!hasProfileChanges()) {
-      showNotification("Heç bir dəyişiklik edilmədi!", "info");
+      showNotification(t('account.noChanges'), "info");
       return;
     }
 
@@ -230,7 +227,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
     const cleanPhone = getCleanPhoneNumber(formData.phone);
 
     console.log("Profile update:", { ...formData, phone: cleanPhone });
-    showNotification("Profil məlumatları yeniləndi!", "success");
+    showNotification(t('account.profileUpdated'), "success");
     
     const updatedUser = {
       ...userData,
@@ -263,13 +260,13 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
     }
 
     if (formData.currentPassword === formData.newPassword) {
-      showNotification("Yeni şifrə köhnə şifrə ilə eyni ola bilməz!", "warning");
-      setErrors({ newPassword: "Yeni şifrə köhnə şifrə ilə eyni ola bilməz" });
+      showNotification(t('account.passwordSameError'), "warning");
+      setErrors({ newPassword: t('account.passwordSameError') });
       return;
     }
 
     console.log("Password update:", formData);
-    showNotification("Şifrə uğurla dəyişdirildi!", "success");
+    showNotification(t('account.passwordUpdated'), "success");
     setFormData(prev => ({
       ...prev,
       currentPassword: "",
@@ -301,8 +298,8 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
             <div className="account-modal-icon">
               <FiUserCheck />
             </div>
-            <h2 className="account-modal-title">Hesab parametrləri</h2>
-            <p className="account-modal-subtitle">Hesab məlumatlarınızı idarə edin</p>
+            <h2 className="account-modal-title">{t('account.accountSettings')}</h2> {/* "Hesab parametrləri" */}
+            <p className="account-modal-subtitle">{t('account.manageAccount')}</p> {/* "Hesab məlumatlarınızı idarə edin" */}
           </div>
 
           <div className="account-tabs">
@@ -310,13 +307,13 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
               className={`account-tab ${!isEditing ? 'active' : ''}`}
               onClick={() => switchTab(false)}
             >
-              Profil məlumatları
+              {t('account.profileInfo')} {/* "Profil məlumatları" */}
             </button>
             <button 
               className={`account-tab ${isEditing ? 'active' : ''}`}
               onClick={() => switchTab(true)}
             >
-              Şifrə dəyişdir
+              {t('account.changePassword')} {/* "Şifrə dəyişdir" */}
             </button>
           </div>
 
@@ -324,7 +321,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
             <div className="account-form">
               <div className="account-form-row">
                 <div className="account-form-group half">
-                  <label>Ad</label>
+                  <label>{t('login.firstName')}</label> {/* "Ad" */}
                   <div className="account-input-wrapper">
                     <FiUser className="account-input-icon" />
                     <input
@@ -332,7 +329,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                       name="firstName"
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      placeholder="Adınızı daxil edin"
+                      placeholder={t('login.firstNamePlaceholder')}
                       className={errors.firstName ? "error" : ""}
                     />
                   </div>
@@ -340,7 +337,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                 </div>
 
                 <div className="account-form-group half">
-                  <label>Soyad</label>
+                  <label>{t('login.lastName')}</label> {/* "Soyad" */}
                   <div className="account-input-wrapper">
                     <FiUserCheck className="account-input-icon" />
                     <input
@@ -348,7 +345,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                       name="lastName"
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      placeholder="Soyadınızı daxil edin"
+                      placeholder={t('login.lastNamePlaceholder')}
                       className={errors.lastName ? "error" : ""}
                     />
                   </div>
@@ -357,7 +354,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
               </div>
 
               <div className="account-form-group">
-                <label>E-poçt</label>
+                <label>{t('login.email')}</label> {/* "E-poçt" */}
                 <div className="account-input-wrapper">
                   <FiMail className="account-input-icon" />
                   <input
@@ -365,7 +362,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    placeholder="E-poçt ünvanınızı daxil edin"
+                    placeholder={t('login.emailPlaceholder')}
                     className={errors.email ? "error" : ""}
                   />
                 </div>
@@ -373,7 +370,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
               </div>
 
               <div className="account-form-group">
-                <label>Telefon nömrəsi</label>
+                <label>{t('login.phone')}</label> {/* "Telefon nömrəsi" */}
                 <div className="account-input-wrapper">
                   <FiPhone className="account-input-icon" />
                   <input
@@ -381,7 +378,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    placeholder="050 123 45 67"
+                    placeholder={t('login.phonePlaceholder')}
                     className={errors.phone ? "error" : ""}
                   />
                 </div>
@@ -389,7 +386,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
               </div>
 
               <div className="account-form-group">
-                <label>Çatdırılma ünvanı</label>
+                <label>{t('account.address')}</label> {/* "Çatdırılma ünvanı" */}
                 <div className="account-input-wrapper">
                   <FiMapPin className="account-input-icon" />
                   <input
@@ -397,7 +394,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    placeholder="Çatdırılma ünvanınızı daxil edin"
+                    placeholder={t('account.addressPlaceholder')}
                     className={errors.address ? "error" : ""}
                   />
                 </div>
@@ -406,7 +403,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
 
               {/* Özəl Dropdown - Ödəniş metodu */}
               <div className="account-form-group">
-                <label>Ödəniş metodu</label>
+                <label>{t('account.paymentMethod')}</label> {/* "Ödəniş metodu" */}
                 <div className="account-custom-select" ref={paymentDropdownRef}>
                   <div 
                     className="account-custom-select-trigger"
@@ -425,21 +422,21 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                         className={`custom-select-option ${formData.paymentMethod === 'cash' ? 'selected' : ''}`}
                         onClick={() => handlePaymentMethodChange('cash')}
                       >
-                        <span>Nağd pul</span>
+                        <span>{t('account.cash')}</span>
                         {formData.paymentMethod === 'cash' && <span className="check-icon">✓</span>}
                       </div>
                       <div 
                         className={`custom-select-option ${formData.paymentMethod === 'card' ? 'selected' : ''}`}
                         onClick={() => handlePaymentMethodChange('card')}
                       >
-                        <span>Kart ilə ödəniş</span>
+                        <span>{t('account.card')}</span>
                         {formData.paymentMethod === 'card' && <span className="check-icon">✓</span>}
                       </div>
                       <div 
                         className={`custom-select-option ${formData.paymentMethod === 'online' ? 'selected' : ''}`}
                         onClick={() => handlePaymentMethodChange('online')}
                       >
-                        <span>Online ödəniş</span>
+                        <span>{t('account.online')}</span>
                         {formData.paymentMethod === 'online' && <span className="check-icon">✓</span>}
                       </div>
                     </div>
@@ -450,13 +447,13 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
 
               <button className="account-save-button" onClick={handleUpdateProfile}>
                 <FiSave className="account-save-icon" />
-                Dəyişiklikləri yadda saxla
+                {t('account.saveChanges')} {/* "Dəyişiklikləri yadda saxla" */}
               </button>
             </div>
           ) : (
             <div className="account-form">
               <div className="account-form-group">
-                <label>Cari şifrə</label>
+                <label>{t('account.currentPassword')}</label> {/* "Cari şifrə" */}
                 <div className="account-input-wrapper">
                   <FiLock className="account-input-icon" />
                   <input
@@ -464,7 +461,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                     name="currentPassword"
                     value={formData.currentPassword}
                     onChange={handleInputChange}
-                    placeholder="Cari şifrənizi daxil edin"
+                    placeholder={t('account.currentPasswordPlaceholder')}
                     className={errors.currentPassword ? "error" : ""}
                   />
                 </div>
@@ -472,7 +469,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
               </div>
 
               <div className="account-form-group">
-                <label>Yeni şifrə</label>
+                <label>{t('account.newPassword')}</label> {/* "Yeni şifrə" */}
                 <div className="account-input-wrapper">
                   <FiLock className="account-input-icon" />
                   <input
@@ -480,7 +477,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleInputChange}
-                    placeholder="Yeni şifrənizi daxil edin"
+                    placeholder={t('account.newPasswordPlaceholder')}
                     className={errors.newPassword ? "error" : ""}
                   />
                 </div>
@@ -488,7 +485,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
               </div>
 
               <div className="account-form-group">
-                <label>Yeni şifrəni təsdiqlə</label>
+                <label>{t('account.confirmNewPassword')}</label> {/* "Yeni şifrəni təsdiqlə" */}
                 <div className="account-input-wrapper">
                   <FiLock className="account-input-icon" />
                   <input
@@ -496,7 +493,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
                     name="confirmNewPassword"
                     value={formData.confirmNewPassword}
                     onChange={handleInputChange}
-                    placeholder="Yeni şifrənizi təsdiqləyin"
+                    placeholder={t('account.confirmNewPasswordPlaceholder')}
                     className={errors.confirmNewPassword ? "error" : ""}
                   />
                 </div>
@@ -505,7 +502,7 @@ export default function AccountSettings({ isOpen, onClose, userData, onUpdateSuc
 
               <button className="account-save-button" onClick={handleUpdatePassword}>
                 <FiSave className="account-save-icon" />
-                Şifrəni dəyişdir
+                {t('account.changePasswordBtn')} {/* "Şifrəni dəyişdir" */}
               </button>
             </div>
           )}

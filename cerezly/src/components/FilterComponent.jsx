@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next'; // Dil dəstəyi üçün
 import './FilterComponent.css';
 
 const FilterComponent = ({ products, onFilterChange, hideCategories = false }) => {
+  const { t } = useTranslation(); // Dil hook-u
+  
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
@@ -12,29 +15,30 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
   const [tempPriceRange, setTempPriceRange] = useState({ min: 0, max: 500 });
   const filterRef = useRef(null);
   
+  // Kateqoriyalar - DİL DƏSTƏKLİ
   const categories = [
-    { id: 'driedFruits', name: 'Meyvə quruları' },
-    { id: 'saltyNuts', name: 'Duzlu çərəzlər' },
-    { id: 'chocolateNuts', name: 'Şokoladlı çərəzlər' },
-    { id: 'spices', name: 'Ədviyyatlar' },
-    { id: 'legumesAndGrains', name: 'Paxlalılar və Taxıllar' },
-    { id: 'vegetableOils', name: 'Bitki Yağları' },
-    { id: 'driedHerbsAndTeas', name: 'Qurudulmuş Otlar və Çaylar' },
-    { id: 'giftPackages', name: 'Hədiyyə paketləri' }
+    { id: 'driedFruits', name: t('footer.sections.products.driedFruits') },      // "Meyvə quruları"
+    { id: 'saltyNuts', name: t('footer.sections.products.saltyNuts') },          // "Duzlu çərəzlər"
+    { id: 'chocolateNuts', name: t('footer.sections.products.chocolateNuts') },  // "Şokoladlı çərəzlər"
+    { id: 'spices', name: t('footer.sections.products.spices') },                // "Ədviyyatlar"
+    { id: 'legumesAndGrains', name: t('footer.sections.products.legumesAndGrains') }, // "Paxlalılar və Taxıllar"
+    { id: 'vegetableOils', name: t('footer.sections.products.vegetableOils') },  // "Bitki Yağları"
+    { id: 'driedHerbsAndTeas', name: t('footer.sections.products.driedHerbsAndTeas') }, // "Qurudulmuş Otlar və Çaylar"
+    { id: 'giftPackages', name: t('footer.sections.products.giftPackages') }     // "Hədiyyə paketləri"
   ];
   
+  // Sıralama seçimləri - DİL DƏSTƏKLİ
   const sortOptions = [
-    { id: 'default', name: 'Standart' },
-    { id: 'priceAsc', name: 'Qiymət: Artan' },
-    { id: 'priceDesc', name: 'Qiymət: Azalan' },
-    { id: 'nameAsc', name: 'Ad: A-dan Z-yə' },
-    { id: 'nameDesc', name: 'Ad: Z-dən A-ya' }
+    { id: 'default', name: t('filter.sortDefault') },      // "Standart"
+    { id: 'priceAsc', name: t('filter.sortPriceAsc') },    // "Qiymət: Artan"
+    { id: 'priceDesc', name: t('filter.sortPriceDesc') },  // "Qiymət: Azalan"
+    { id: 'nameAsc', name: t('filter.sortNameAsc') },      // "Ad: A-dan Z-yə"
+    { id: 'nameDesc', name: t('filter.sortNameDesc') }     // "Ad: Z-dən A-ya"
   ];
   
   // Xarici kliklə paneli bağlama
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Əgər panel açıqdırsa və klik panelin xaricindədirsə
       if (isFilterOpen && filterRef.current && !filterRef.current.contains(event.target)) {
         handleClosePanel();
       }
@@ -42,7 +46,7 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
     
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isFilterOpen]); // isFilterOpen asılılıq kimi əlavə edildi
+  }, [isFilterOpen]);
   
   const handleClosePanel = () => {
     if (!isFilterOpen) return;
@@ -157,14 +161,14 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polygon points="22 3 2 3 10 13 10 21 14 18 14 13 22 3"/>
         </svg>
-        Filtrlər
+        {t('filter.filters')} {/* "Filtrlər" */}
         {hasActiveFilters && <span className="filter-badge"></span>}
       </button>
       
       {isFilterOpen && (
         <div className={`filter-panel ${isClosing ? 'filter-panel-closing' : 'filter-panel-opening'}`}>
           <div className="filter-panel-header">
-            <span className="filter-panel-title">Filtrlər</span>
+            <span className="filter-panel-title">{t('filter.filters')}</span> {/* "Filtrlər" */}
             <button className="close-filter" onClick={handleClosePanel}>×</button>
           </div>
           
@@ -175,7 +179,7 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
                   className="filter-group-header"
                   onClick={() => setIsCategoryOpen(!isCategoryOpen)}
                 >
-                  <span>Kateqoriyalar</span>
+                  <span>{t('filter.categories')}</span> {/* "Kateqoriyalar" */}
                   <svg 
                     width="16" 
                     height="16" 
@@ -197,7 +201,7 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
                         onChange={handleSelectAll} 
                       />
                       <span className="checkmark"></span>
-                      <span>Hamısı</span>
+                      <span>{t('filter.selectAll')}</span> {/* "Hamısı" */}
                     </label>
                     {categories.map(cat => (
                       <label key={cat.id} className="filter-checkbox">
@@ -220,7 +224,7 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
                 className="filter-group-header"
                 onClick={() => setIsSortOpen(!isSortOpen)}
               >
-                <span>Sıralama</span>
+                <span>{t('filter.sort')}</span> {/* "Sıralama" */}
                 <svg 
                   width="16" 
                   height="16" 
@@ -253,7 +257,7 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
             
             <div className="filter-group">
               <div className="filter-group-header">
-                <span>Qiymət Aralığı</span>
+                <span>{t('filter.priceRange')}</span> {/* "Qiymət Aralığı" */}
               </div>
               <div className="filter-group-content price-range-content">
                 <div className="price-values">
@@ -299,10 +303,10 @@ const FilterComponent = ({ products, onFilterChange, hideCategories = false }) =
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
-              Filtrləri Təmizlə
+              {t('filter.clearFilters')} {/* "Filtrləri Təmizlə" */}
             </button>
             <button className="apply-filters" onClick={applyFilters}>
-              Tətbiq et
+              {t('filter.apply')} {/* "Tətbiq et" */}
             </button>
           </div>
         </div>

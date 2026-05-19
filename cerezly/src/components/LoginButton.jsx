@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { useTranslation } from "react-i18next"; // Dil dəstəyi üçün
 import { FiLogIn, FiUser, FiLogOut, FiSettings } from "react-icons/fi";
 import LoginModal from "./LoginModal";
 import AccountSettings from "./AccountSettings";
 import "./LoginButton.css";
 
 const LoginButton = forwardRef((props, ref) => {
+  const { t } = useTranslation(); // Dil hook-u
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAccountSettingsOpen, setIsAccountSettingsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,10 +50,9 @@ const LoginButton = forwardRef((props, ref) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ CartModal-dan AccountSettings açmaq üçün event listener
+  // CartModal-dan AccountSettings açmaq üçün event listener
   useEffect(() => {
     const handleOpenAccountSettings = () => {
-      // AccountSettings-i aç
       openAccountSettings();
     };
     
@@ -109,7 +110,7 @@ const LoginButton = forwardRef((props, ref) => {
     setUserFullName("");
     localStorage.removeItem("user");
     setIsDropdownOpen(false);
-    showNotification("Hesabınızdan çıxış edildi", "info");
+    showNotification(t('login.notifications.logout'), "info"); // "Hesabınızdan çıxış edildi"
   };
 
   const showNotification = (message, type = "success") => {
@@ -125,7 +126,7 @@ const LoginButton = forwardRef((props, ref) => {
     setTimeout(() => {
       notification.classList.add("fade-out");
       setTimeout(() => {
-        document.body.removeChild(notification);
+        if (notification && notification.remove) notification.remove();
       }, 300);
     }, 3000);
   };
@@ -149,7 +150,7 @@ const LoginButton = forwardRef((props, ref) => {
       {!isLoggedIn ? (
         <button className="auth-login-btn" onClick={openModal}>
           <FiLogIn className="auth-login-icon" />
-          <span className="auth-login-text">Daxil ol</span>
+          <span className="auth-login-text">{t('login.loginButton')}</span> {/* "Daxil ol" */}
         </button>
       ) : (
         <div className="auth-user-menu" ref={dropdownRef}>
@@ -171,11 +172,11 @@ const LoginButton = forwardRef((props, ref) => {
               <div className="auth-dropdown-divider"></div>
               <button className="auth-dropdown-item" onClick={openAccountSettings}>
                 <FiSettings className="auth-dropdown-icon" />
-                <span>Hesab parametrləri</span>
+                <span>{t('account.accountSettings')}</span> {/* "Hesab parametrləri" */}
               </button>
               <button className="auth-dropdown-item auth-dropdown-logout" onClick={handleLogout}>
                 <FiLogOut className="auth-dropdown-icon" />
-                <span>Çıxış et</span>
+                <span>{t('login.logout')}</span> {/* "Çıxış et" */}
               </button>
             </div>
           )}

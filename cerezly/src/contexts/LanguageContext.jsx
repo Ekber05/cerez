@@ -1,9 +1,11 @@
 // contexts/LanguageContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
+  const { i18n } = useTranslation();
   const [language, setLanguage] = useState(() => {
     const savedLang = localStorage.getItem('preferredLanguage');
     return savedLang || 'az';
@@ -11,9 +13,10 @@ export const LanguageProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem('preferredLanguage', language);
-    // HTML elementinə lang atributu əlavə et
     document.documentElement.lang = language;
-  }, [language]);
+    // i18n dilini də yenilə
+    i18n.changeLanguage(language);
+  }, [language, i18n]);
 
   const changeLanguage = (lang) => {
     setLanguage(lang);

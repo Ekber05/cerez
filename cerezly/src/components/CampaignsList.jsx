@@ -1,20 +1,64 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { campaignsData } from '../data/campaignsData';
-import Pagination from './Pagination'; // Pagination komponentinizin düzgün yolu
+import Pagination from './Pagination';
+import LoadingSpinner from './LoadingSpinner';
 import './CampaignsList.css';
 
 const CampaignsList = () => {
+  const { t } = useTranslation();
   const location = useLocation();
+  
+  // Yüklənmə state-ləri
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   
   // Pagination state-ləri
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Hər səhifədə 10 kampaniya
+  const itemsPerPage = 10;
   
   const badgeRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const cardsRef = useRef([]);
+
+  // Yüklənmə simulyasiyası
+  useEffect(() => {
+    let currentProgress = 0;
+    let isMounted = true;
+    let timeoutId = null;
+    let intervalId = null;
+
+    intervalId = setInterval(() => {
+      if (!isMounted) return;
+      currentProgress += Math.random() * 15;
+      if (currentProgress >= 100) {
+        currentProgress = 100;
+        clearInterval(intervalId);
+        timeoutId = setTimeout(() => {
+          if (isMounted) setIsLoading(false);
+        }, 200);
+      }
+      const safeProgress = isNaN(currentProgress) ? 0 : Math.min(100, Math.floor(currentProgress));
+      setLoadingProgress(safeProgress);
+    }, 120);
+
+    timeoutId = setTimeout(() => {
+      if (!isMounted) return;
+      clearInterval(intervalId);
+      setLoadingProgress(100);
+      setTimeout(() => {
+        if (isMounted) setIsLoading(false);
+      }, 200);
+    }, 800);
+
+    return () => {
+      isMounted = false;
+      if (intervalId) clearInterval(intervalId);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, []);
 
   // Səhifəyə hər gəlişdə scroll mövqeyini sıfırla
   useEffect(() => {
@@ -25,6 +69,8 @@ const CampaignsList = () => {
 
   // Scroll animasiyası üçün observer
   useEffect(() => {
+    if (isLoading) return;
+    
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -55,7 +101,7 @@ const CampaignsList = () => {
     cardsRef.current.forEach(card => card && observer.observe(card));
 
     return () => observer.disconnect();
-  }, [currentPage]);
+  }, [currentPage, isLoading]);
 
   // Pagination üçün cari səhifədə göstəriləcək kampaniyalar
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -69,18 +115,23 @@ const CampaignsList = () => {
     setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
   };
 
+  // Yüklənmə zamanı göstər
+  if (isLoading) {
+    return <LoadingSpinner type="skeleton" progress={loadingProgress} />;
+  }
+
   return (
     <div className="campaigns-list-container">
       <div className="campaigns-list-wrapper">
         <div className="campaigns-list-header">
           <div ref={badgeRef} className="campaigns-list-badge badge-hidden">
-            Xüsusi Təkliflər
+            {t('campaigns.badge')}
           </div>
           <h1 ref={titleRef} className="campaigns-list-title title-hidden">
-            Kampaniya<span>lar</span>
+            {t('campaigns.title')}<span>{t('campaigns.titleSuffix')}</span>
           </h1>
           <p ref={subtitleRef} className="campaigns-list-subtitle subtitle-hidden">
-            Endirim və keşbek imkanlarından yararlanın
+            {t('campaigns.subtitle')}
           </p>
         </div>
 
@@ -100,13 +151,15 @@ const CampaignsList = () => {
               </div>
               <div className="campaign-list-card-content">
                 <h3 className="campaign-list-card-title">{campaign.title}</h3>
-                <span className="campaign-list-card-link">Ətraflı →</span>
+                <span className="campaign-list-card-link">
+                  {t('campaigns.readMore')} →
+                </span>
               </div>
             </Link>
           ))}
         </div>
 
-        {/* Pagination Komponenti - yalnız 1-dən çox səhifə olduqda göstər */}
+        {/* Pagination Komponenti */}
         {totalPages > 1 && (
           <Pagination
             currentPage={currentPage}
