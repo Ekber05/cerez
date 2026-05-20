@@ -1,3 +1,5 @@
+// components/AllProducts.jsx - TAM DÜZƏLDİLMİŞ VERSİYA (YAŞIL BİLDİRİŞ İLƏ)
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -191,7 +193,7 @@ const AllProducts = () => {
     setSelectedWeights(prev => ({ ...prev, [productId]: weight }));
   };
 
-  // Bildiriş mesajı - DİL DƏSTƏKLİ
+  // ✅ DÜZƏLDİLMİŞ: Bildiriş mesajı - SUCCESS tipində YAŞIL fon
   const showNotification = (messageKey, type = 'success', productName = '', quantityText = '', price = '') => {
     let message;
     if (messageKey === 'addedToCart') {
@@ -200,21 +202,20 @@ const AllProducts = () => {
         quantity: quantityText, 
         price: price 
       });
-    } else if (messageKey === 'outOfStock') {
-      message = t('products.notifications.outOfStock', { name: productName });
     } else if (messageKey === 'selectWeight') {
       message = t('products.notifications.selectWeight', { name: productName });
     } else {
       message = t(messageKey);
     }
     
-    setNotification({ message, type });
+    // Success tipi üçün həmişə yaşıl fon istifadə et
+    setNotification({ message, type: 'success' });
     setTimeout(() => setNotification(null), 3000);
   };
 
+  // Səbətə əlavə et
   const handleAddToCart = (product) => {
     if (product.inStock === false) {
-      showNotification('outOfStock', 'error', product.name);
       return;
     }
     
@@ -253,7 +254,6 @@ const AllProducts = () => {
   const goToNext = () => setCurrentImageIndex((prev) => (prev + 1) % products.length);
   const goToPrev = () => setCurrentImageIndex((prev) => (prev - 1 + products.length) % products.length);
 
-  // Əgər loading true-dursa, LoadingSpinner göstər
   if (loading) {
     return <LoadingSpinner type="skeleton" />;
   }
@@ -281,7 +281,7 @@ const AllProducts = () => {
   return (
     <>
       {notification && (
-        <div className={`global-fixed-notification ${notification.type === 'error' ? 'error' : ''}`}>
+        <div className={`global-fixed-notification ${notification.type === 'error' ? 'error' : 'success'}`}>
           <span className="global-fixed-notification-icon">
             {notification.type === 'error' ? '⚠️' : '✓'}
           </span>
@@ -344,6 +344,7 @@ const AllProducts = () => {
                     const originalIndex = products.findIndex(p => p.id === product.id);
                     const selectedWeight = selectedWeights[product.id];
                     const displayPrice = product.pricePerKg;
+                    const isOutOfStock = product.inStock === false;
                     
                     return (
                       <div 
@@ -380,7 +381,7 @@ const AllProducts = () => {
                             </svg>
                           </div>
                           
-                          {product.inStock === false && (
+                          {isOutOfStock && (
                             <span className="out-of-stock-badge">{t('products.outOfStockBadge')}</span>
                           )}
                         </div>
@@ -395,6 +396,7 @@ const AllProducts = () => {
                               key={weightIndex} 
                               className={`all-weight-btn ${selectedWeight && selectedWeight.label === weight.label ? 'all-selected' : ''}`} 
                               onClick={() => handleWeightSelect(product.id, weight)}
+                              disabled={isOutOfStock}
                             >
                               {weight.label}
                             </button>
@@ -406,7 +408,7 @@ const AllProducts = () => {
                           <span className="all-price-per-unit">{t('products.perKg')}</span>
                         </div>
                         
-                        {selectedWeight && (
+                        {selectedWeight && !isOutOfStock && (
                           <div className="selected-weight-info">
                             <span className="selected-weight-text">
                               {t('products.selectedWeight')}: {selectedWeight.label} - {selectedWeight.price.toFixed(2)} AZN
@@ -414,12 +416,21 @@ const AllProducts = () => {
                           </div>
                         )}
                         
+                        {isOutOfStock && (
+                          <div className="selected-weight-info out-of-stock-info">
+                            <span className="selected-weight-text">
+                              {t('products.outOfStock')}
+                            </span>
+                          </div>
+                        )}
+                        
                         <button 
-                          className="all-add-to-cart-btn" 
+                          className={`all-add-to-cart-btn ${isOutOfStock ? 'disabled-btn' : ''}`}
                           data-id={product.id} 
                           onClick={() => handleAddToCart(product)}
+                          disabled={isOutOfStock}
                         >
-                          {t('products.addToCart')}
+                          {isOutOfStock ? t('products.outOfStock') : t('products.addToCart')}
                         </button>
                       </div>
                     );

@@ -87,7 +87,7 @@ const About = ({ isPage }) => {
           </div>
 
           <div className="stat-card animate-about delay-1">
-            <h1>100+</h1>
+            <h1>500+</h1>
             <p>{t("about.products", "Məhsul Növü")}</p>
           </div>
 

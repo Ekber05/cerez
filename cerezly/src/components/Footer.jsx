@@ -238,6 +238,16 @@ export default function Footer() {
         ref={bottomRef}
         className="footer-bottom bottom-hidden"
       >
+        <div className="footer-bottom-links">
+          <a href="/privacy-policy" className="footer-bottom-link">
+            {t('footer.bottom.privacy')}
+          </a>
+          <span className="footer-link-separator">|</span>
+          <a href="/terms-of-service" className="footer-bottom-link">
+            {t('footer.bottom.terms')}
+          </a>
+        </div>
+
         <p className="copyright-hidden">
           {t('footer.bottom.copyright')}
         </p>

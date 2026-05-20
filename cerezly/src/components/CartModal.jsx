@@ -1,4 +1,5 @@
-// components/CartModal.jsx
+// components/CartModal.jsx - TAM DÜZƏLDİLMİŞ VERSİYA
+
 import React, { useEffect, useState } from 'react';
 import { FiX, FiPlus, FiMinus, FiTrash2, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import { useCart } from '../contexts/CartContext';
@@ -8,20 +9,20 @@ import './CartModal.css';
 const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
   const { 
     cart, 
-    incrementQuantity, 
-    decrementQuantity, 
+    incrementWeight, 
+    decrementWeight, 
     removeFromCart, 
     clearCart,
     getTotalPrice,
-    getTotalQuantity,
-    getItemTotalPrice,
-    getItemPricePerKg,
-    getItemWeightInfo
+    getProductCount,
+    getTotalGrams,
+    getItemWeightDisplay,
+    getItemPriceDisplay,
+    getPricePerKg
   } = useCart();
   
   const { t, i18n } = useTranslation();
   
-  // Missing info modal state
   const [showMissingInfoModal, setShowMissingInfoModal] = useState(false);
   const [missingFields, setMissingFields] = useState([]);
 
@@ -30,7 +31,6 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
     return user !== null;
   };
 
-  // Telefon nömrəsini formatlayan funksiya
   const formatPhoneNumber = (phone) => {
     if (!phone) return "";
     const cleanPhone = phone.replace(/\s/g, '');
@@ -48,7 +48,6 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
-        // Telefonu formatla
         if (user.phone && typeof user.phone === 'string') {
           user.phoneFormatted = formatPhoneNumber(user.phone);
         }
@@ -100,26 +99,6 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
     return item.nameSnapshot || item.name || 'Məhsul';
   };
 
-  const getItemPrice = (item) => {
-    const price = getItemTotalPrice(item);
-    if (price && price > 0) {
-      return price.toFixed(2);
-    }
-    return '0.00';
-  };
-
-  const getDisplayPricePerKg = (item) => {
-    const pricePerKg = getItemPricePerKg(item);
-    if (pricePerKg && pricePerKg > 0) {
-      return pricePerKg.toFixed(2);
-    }
-    return '0.00';
-  };
-
-  const getSelectedWeightDisplay = (item) => {
-    return getItemWeightInfo(item);
-  };
-
   const showNotification = (message, type = "success") => {
     const notification = document.createElement("div");
     notification.className = `cerez-cart-notification ${type}`;
@@ -141,13 +120,9 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
   };
 
   const openAccountSettings = () => {
-    // Əvvəlcə missing info modalını bağla
     setShowMissingInfoModal(false);
-    // Səbət modalını bağla
     onClose();
-    // Bir az gözlə və AccountSettings-i aç
     setTimeout(() => {
-      // AccountSettings-i açmaq üçün event dispatch et
       window.dispatchEvent(new CustomEvent('openAccountSettings'));
     }, 100);
   };
@@ -161,7 +136,6 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
       return;
     }
 
-    // Check if user has phone and address
     const missing = checkMissingUserInfo();
     if (missing.length > 0) {
       setMissingFields(missing);
@@ -169,7 +143,6 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
       return;
     }
 
-    // Proceed with order
     placeOrder();
   };
 
@@ -195,20 +168,16 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
       time: formattedTime,
       status: "pending",
       itemsDetails: cart.map(item => ({
-        productId: item.productId || item.id,
+        productId: item.productId,
         name: getProductDisplayName(item),
-        weightGrams: item.selectedWeightGrams,
-        weightFormatted: getSelectedWeightDisplay(item),
-        quantity: item.quantity,
-        totalGrams: item.quantity * item.selectedWeightGrams,
-        totalGramsFormatted: formatWeight(item.quantity * item.selectedWeightGrams),
-        pricePerKg: getDisplayPricePerKg(item),
-        priceAtPurchase: item.priceAtPurchase,
-        totalPrice: getItemPrice(item)
+        totalGrams: item.totalGrams,
+        totalGramsFormatted: formatWeight(item.totalGrams),
+        pricePerKg: getPricePerKg(item),
+        totalPrice: getItemPriceDisplay(item)
       })),
-      totalQuantity: getTotalQuantity(),
-      totalWeight: cart.reduce((sum, item) => sum + (item.selectedWeightGrams * (item.quantity || 1)), 0),
-      totalWeightFormatted: formatWeight(cart.reduce((sum, item) => sum + (item.selectedWeightGrams * (item.quantity || 1)), 0)),
+      totalProductTypes: getProductCount(),
+      totalWeight: getTotalGrams(),
+      totalWeightFormatted: formatWeight(getTotalGrams()),
       totalPrice: getTotalPrice()?.toFixed(2) || '0.00',
       createdAt: now.toISOString()
     };
@@ -241,6 +210,12 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
     }
   };
 
+  // Məhsul sayı üçün düzgün forma (1 ədəd, 2 ədəd)
+  const getProductCountText = () => {
+    const count = getProductCount();
+    return t('cart.productCount', { count, defaultValue: '{{count}} ədəd' });
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -250,7 +225,7 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
           <div className="cart-modal-header">
             <h3>
               <span className="cart-icon-title">🛒</span>
-              {t('cart.title', 'Səbətiniz')} ({cart?.length || 0} {t('cart.items', 'məhsul')})
+              {t('cart.title', 'Səbətim')} ({getProductCountText()})
             </h3>
             <button className="cart-close-btn" onClick={onClose} aria-label={t('cart.close', 'Bağla')}>
               <FiX />
@@ -269,21 +244,17 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
             ) : (
               <>
                 <div className="cart-items-list">
-                  {cart.map((item, index) => {
+                  {cart.map((item) => {
                     const productName = getProductDisplayName(item);
-                    const itemPrice = getItemPrice(item);
-                    const pricePerKg = getDisplayPricePerKg(item);
-                    const selectedWeightText = getSelectedWeightDisplay(item);
-                    const itemQuantity = item.quantity || 1;
-                    const totalGrams = itemQuantity * item.selectedWeightGrams;
-                    
-                    const itemKey = `${item.productId || item.id}_${item.selectedWeightGrams}_${index}`;
+                    const itemPrice = getItemPriceDisplay(item);
+                    const pricePerKg = getPricePerKg(item);
+                    const totalWeight = getItemWeightDisplay(item);
                     
                     return (
-                      <div className="cart-item-card" key={itemKey}>
+                      <div className="cart-item-card" key={item.productId}>
                         <div className="cart-item-image">
                           <img 
-                            src={item.imgSnapshot || item.img || item.image}
+                            src={item.imgSnapshot}
                             alt={productName}
                             onError={(e) => {
                               e.target.src = `https://via.placeholder.com/100x100/F4E7D9/D6800F?text=${encodeURIComponent(productName?.substring(0, 10) || 'Product')}`;
@@ -298,18 +269,12 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
                             {pricePerKg} ₼ / 1{i18n.language === 'ru' ? 'кг' : i18n.language === 'en' ? 'kg' : 'kq'}
                           </p>
                           
-                          {selectedWeightText && (
-                            <p className="cart-item-selected-weight">
-                              {t('cart.selectedWeight', 'Seçilmiş çəki')}: {selectedWeightText}
-                            </p>
-                          )}
-                          
                           <div className="cart-item-controls">
                             <div className="quantity-control-wrapper">
                               <div className="quantity-buttons">
                                 <button 
                                   className="qty-btn minus"
-                                  onClick={() => decrementQuantity(item.productId || item.id, item.selectedWeightGrams)}
+                                  onClick={() => decrementWeight(item.productId)}
                                   title={t('cart.decrease', '100 qr azalt')}
                                   aria-label={t('cart.decrease', '100 qr azalt')}
                                 >
@@ -318,14 +283,14 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
                                 </button>
                                 
                                 <div className="quantity-display">
-                                  <span className="quantity-value">
-                                    {formatWeight(totalGrams)}
-                                  </span>
+                                  <div className="quantity-info">
+                                    <span className="quantity-weight">{totalWeight}</span>
+                                  </div>
                                 </div>
                                 
                                 <button 
                                   className="qty-btn plus"
-                                  onClick={() => incrementQuantity(item.productId || item.id, item.selectedWeightGrams)}
+                                  onClick={() => incrementWeight(item.productId)}
                                   title={t('cart.increase', '100 qr artır')}
                                   aria-label={t('cart.increase', '100 qr artır')}
                                 >
@@ -334,8 +299,10 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
                                 </button>
                               </div>
                               
-                              <div className="item-total-price">
-                                {itemPrice} ₼
+                              <div className="item-total-info">
+                                <div className="item-total-price">
+                                  {itemPrice} ₼
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -343,7 +310,7 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
                         
                         <button 
                           className="remove-item-btn"
-                          onClick={() => removeFromCart(item.productId || item.id, item.selectedWeightGrams)}
+                          onClick={() => removeFromCart(item.productId)}
                           title={t('cart.remove', 'Sil')}
                           aria-label={t('cart.remove', 'Sil')}
                         >
@@ -356,13 +323,13 @@ const CartModal = ({ isOpen, onClose, onOpenLoginModal }) => {
 
                 <div className="cart-summary">
                   <div className="summary-row">
-                    <span>{t('cart.totalItems', 'Ümumi məhsul sayı')}</span>
-                    <span>{getTotalQuantity()} {t('cart.pcs', 'əd.')}</span>
+                    <span>{t('cart.productCountLabel', 'Məhsul sayı')}</span>
+                    <span>{getProductCountText()}</span>
                   </div>
                   
                   <div className="summary-row">
                     <span>{t('cart.totalWeight', 'Ümumi çəki')}</span>
-                    <span>{formatWeight(cart.reduce((sum, item) => sum + (item.selectedWeightGrams * (item.quantity || 1)), 0))}</span>
+                    <span>{formatWeight(getTotalGrams())}</span>
                   </div>
                   
                   <div className="summary-row total-row">

@@ -21,13 +21,13 @@ const Hero = () => {
     let startNatural = 0;
     let startCustomer = 0;
 
-    const endProduct = 50;
+    const endProduct = 500;
     const endNatural = 100;
     const endCustomer = 10000;
 
     const animate = () => {
       if (startProduct < endProduct) {
-        startProduct += 1;
+        startProduct += 5;
         setProductCount(startProduct);
       }
 

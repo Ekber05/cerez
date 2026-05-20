@@ -1,17 +1,15 @@
 import React from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
-import { useTranslation } from 'react-i18next'; // İ18n hook-unu import et
+import { useTranslation } from 'react-i18next';
 import './WhatsAppButton.css';
 
 const WhatsAppButton = () => {
-  const { t } = useTranslation(); // Tərcümə funksiyasını əldə et
+  const { t } = useTranslation();
   
   const phoneNumber = '9940508544914';
   
-  // WhatsApp mesajını tərcümə faylından al
-  const message = t('whatsapp.message', 'Salam! Çərəz məhsulları ilə bağlı kiçik bir sualım var. Kömək edə bilərsiniz?');
-  
-  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+  // ✅ Hazır mesaj silindi - yalnız telefon nömrəsi ilə link
+  const whatsappUrl = `https://wa.me/${phoneNumber}`;
 
   return (
     <a
@@ -19,7 +17,7 @@ const WhatsAppButton = () => {
       className="whatsapp-button"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={t('whatsapp.ariaLabel', 'WhatsApp ilə əlaqə')} // "WhatsApp ilə əlaqə"
+      aria-label={t('whatsapp.ariaLabel', 'WhatsApp ilə əlaqə')}
     >
       <div className="whatsapp-rings">
         <div className="whatsapp-ring whatsapp-ring-1"></div>
@@ -30,7 +28,6 @@ const WhatsAppButton = () => {
       <FaWhatsapp className="whatsapp-icon" />
       
       <div className="whatsapp-text-container">
-        {/* "Bizimlə danışın" */}
         <span className="whatsapp-text">{t('whatsapp.text', 'Bizimlə danışın')}</span>
       </div>
     </a>

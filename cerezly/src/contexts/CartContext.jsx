@@ -1,4 +1,4 @@
-// contexts/CartContext.jsx - DİL DƏSTƏYİ İLƏ TAM VERSİYA
+// contexts/CartContext.js
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,46 +6,37 @@ import { useTranslation } from 'react-i18next';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { t } = useTranslation(); // Dil dəstəyi üçün
+  const { t } = useTranslation();
   
   const [cart, setCart] = useState(() => {
     if (typeof window !== 'undefined') {
       try {
-        // Əvvəlcə sessionStorage-dan oxu (daha yenidir)
         const sessionBackup = sessionStorage.getItem('cerezly_cart_backup');
         if (sessionBackup) {
           const parsed = JSON.parse(sessionBackup);
           if (parsed.length > 0) {
-            console.log('📱 Loading cart from sessionStorage:', parsed.length);
             return parsed;
           }
         }
         
-        // Yoxdursa localStorage-dan oxu
         const savedCart = localStorage.getItem('cerezly_cart');
         if (savedCart) {
-          const parsed = JSON.parse(savedCart);
-          console.log('💾 Loading cart from localStorage:', parsed.length);
-          return parsed;
+          return JSON.parse(savedCart);
         }
-        
         return [];
       } catch (error) {
-        console.error('Error parsing cart from storage:', error);
         return [];
       }
     }
     return [];
   });
 
-  // ✅ Hər dəyişiklikdə hər iki storage-a yaz
   const saveToStorage = (cartData) => {
     if (typeof window !== 'undefined') {
       try {
         const cartJson = JSON.stringify(cartData);
         localStorage.setItem('cerezly_cart', cartJson);
         sessionStorage.setItem('cerezly_cart_backup', cartJson);
-        console.log('💾 Cart saved:', cartData.length, 'items');
       } catch (error) {
         console.error('Save error:', error);
       }
@@ -56,18 +47,15 @@ export const CartProvider = ({ children }) => {
     saveToStorage(cart);
   }, [cart]);
 
-  // ✅ iOS Safari bfcache üçün pageshow event
+  // pageshow və visibilityChange eventləri
   useEffect(() => {
     const handlePageShow = (event) => {
-      // Əgər səhifə bfcache-dan gəlibsə
       if (event.persisted) {
-        console.log('📱 Page restored from bfcache, reloading cart...');
         try {
           const sessionBackup = sessionStorage.getItem('cerezly_cart_backup');
           if (sessionBackup) {
             const restoredCart = JSON.parse(sessionBackup);
             if (restoredCart.length !== cart.length) {
-              console.log('🔄 Restoring cart from backup:', restoredCart.length);
               setCart(restoredCart);
             }
           }
@@ -81,17 +69,14 @@ export const CartProvider = ({ children }) => {
     return () => window.removeEventListener('pageshow', handlePageShow);
   }, [cart]);
 
-  // ✅ pageshow ilə birlikdə visibility change
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
-        console.log('📱 Page became visible, checking cart...');
         try {
           const sessionBackup = sessionStorage.getItem('cerezly_cart_backup');
           if (sessionBackup) {
             const savedCart = JSON.parse(sessionBackup);
             if (JSON.stringify(savedCart) !== JSON.stringify(cart)) {
-              console.log('🔄 Syncing cart from visibility change');
               setCart(savedCart);
             }
           }
@@ -105,7 +90,6 @@ export const CartProvider = ({ children }) => {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [cart]);
 
-  // ✅ Login olduqdan sonra səbəti birləşdirmək üçün funksiya
   const mergeCart = (guestCart) => {
     if (!guestCart || guestCart.length === 0) return;
     
@@ -114,32 +98,27 @@ export const CartProvider = ({ children }) => {
       
       guestCart.forEach(guestItem => {
         const existingIndex = mergedCart.findIndex(
-          item => item.productId === guestItem.productId && 
-                  item.selectedWeightGrams === guestItem.selectedWeightGrams
+          item => item.productId === guestItem.productId
         );
         
         if (existingIndex > -1) {
-          // Mövcud item - miqdarı birləşdir
+          // Eyni məhsul varsa, çəkisini birləşdir
           const existingItem = mergedCart[existingIndex];
-          const newQuantity = existingItem.quantity + guestItem.quantity;
           mergedCart[existingIndex] = {
             ...existingItem,
-            quantity: newQuantity,
-            totalPrice: existingItem.priceAtPurchase * newQuantity
+            totalGrams: existingItem.totalGrams + guestItem.totalGrams,
+            totalPrice: (existingItem.totalGrams + guestItem.totalGrams) * (existingItem.pricePerKgSnapshot / 1000)
           };
         } else {
-          // Yeni item - əlavə et
           mergedCart.push(guestItem);
         }
       });
       
       saveToStorage(mergedCart);
-      console.log('🛒 Cart merged after login:', mergedCart.length, 'items');
       return mergedCart;
     });
   };
 
-  // ✅ Login olduqdan sonra qonaq səbətini təmizləmək
   const clearGuestCart = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('cerezly_cart_guest');
@@ -147,42 +126,43 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // ✅ ƏSAS FUNKSİYA: Məhsulu səbətə əlavə et
   const addToCart = (product, weightGrams, selectedPrice) => {
     const productId = String(product.id);
+    const pricePerKg = product.pricePerKg || product.price || 0;
     
     setCart(prevCart => {
       const existingItemIndex = prevCart.findIndex(
-        item => item.productId === productId && item.selectedWeightGrams === weightGrams
+        item => item.productId === productId
       );
-      
-      const productPricePerKg = product.pricePerKg || product.price || 0;
       
       const snapshotItem = {
         productId: productId,
         nameSnapshot: product.name,
-        pricePerKgSnapshot: productPricePerKg,
+        pricePerKgSnapshot: pricePerKg,
         imgSnapshot: product.img || product.image || null,
         category: product.category,
-        selectedWeightGrams: weightGrams,
-        priceAtPurchase: selectedPrice,
-        quantity: 1,
-        totalPrice: selectedPrice,
-        addedAt: new Date().toISOString() // Əlavə vaxtı
+        totalGrams: weightGrams,  // Ümumi çəki (qramla)
+        totalPrice: selectedPrice,  // Ümumi qiymət
+        addedAt: new Date().toISOString()
       };
       
       let newCart;
       if (existingItemIndex > -1) {
+        // Eyni məhsul varsa, çəkisini artır
         const updatedCart = [...prevCart];
         const existingItem = updatedCart[existingItemIndex];
-        const newQuantity = existingItem.quantity + 1;
+        const newTotalGrams = existingItem.totalGrams + weightGrams;
+        const newTotalPrice = (newTotalGrams * pricePerKg) / 1000;
         
         updatedCart[existingItemIndex] = {
           ...existingItem,
-          quantity: newQuantity,
-          totalPrice: existingItem.priceAtPurchase * newQuantity
+          totalGrams: newTotalGrams,
+          totalPrice: newTotalPrice
         };
         newCart = updatedCart;
       } else {
+        // Yeni məhsuldursa, əlavə et
         newCart = [...prevCart, snapshotItem];
       }
       
@@ -191,27 +171,19 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const removeFromCart = (productId, weightGrams) => {
-    setCart(prevCart => {
-      const newCart = prevCart.filter(item => !(item.productId === productId && item.selectedWeightGrams === weightGrams));
-      saveToStorage(newCart);
-      return newCart;
-    });
-  };
-
-  const updateQuantity = (productId, weightGrams, newQuantity) => {
-    if (newQuantity < 0.01) {
-      removeFromCart(productId, weightGrams);
-      return;
-    }
-    
+  // ✅ ÇƏKİ ARTIR: 100 qr əlavə et
+  const incrementWeight = (productId) => {
     setCart(prevCart => {
       const newCart = prevCart.map(item => {
-        if (item.productId === productId && item.selectedWeightGrams === weightGrams) {
+        if (item.productId === productId) {
+          const pricePerKg = item.pricePerKgSnapshot;
+          const newTotalGrams = item.totalGrams + 100;
+          const newTotalPrice = (newTotalGrams * pricePerKg) / 1000;
+          
           return {
             ...item,
-            quantity: newQuantity,
-            totalPrice: item.priceAtPurchase * newQuantity
+            totalGrams: newTotalGrams,
+            totalPrice: newTotalPrice
           };
         }
         return item;
@@ -221,53 +193,39 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const incrementQuantity = (productId, weightGrams) => {
+  // ✅ ÇƏKİ AZALT: 100 qr çıxart (minimum 100 qr qala bilər)
+  const decrementWeight = (productId) => {
     setCart(prevCart => {
       const newCart = prevCart.map(item => {
-        if (item.productId === productId && item.selectedWeightGrams === weightGrams) {
-          const currentTotalGrams = item.quantity * item.selectedWeightGrams;
-          const newTotalGrams = currentTotalGrams + 100;
-          const newQuantity = newTotalGrams / item.selectedWeightGrams;
+        if (item.productId === productId) {
+          const pricePerKg = item.pricePerKgSnapshot;
+          const newTotalGrams = Math.max(100, item.totalGrams - 100);
+          const newTotalPrice = (newTotalGrams * pricePerKg) / 1000;
           
           return {
             ...item,
-            quantity: newQuantity,
-            totalPrice: item.priceAtPurchase * newQuantity
+            totalGrams: newTotalGrams,
+            totalPrice: newTotalPrice
           };
         }
         return item;
-      });
+      }).filter(item => item.totalGrams >= 100); // 100 qr-dan az olanları sil
+      
       saveToStorage(newCart);
       return newCart;
     });
   };
 
-  const decrementQuantity = (productId, weightGrams) => {
+  // ✅ Məhsulu tamamilə sil
+  const removeFromCart = (productId) => {
     setCart(prevCart => {
-      const newCart = prevCart.map(item => {
-        if (item.productId === productId && item.selectedWeightGrams === weightGrams) {
-          const currentTotalGrams = item.quantity * item.selectedWeightGrams;
-          const newTotalGrams = currentTotalGrams - 100;
-          
-          if (newTotalGrams < 100) {
-            return null;
-          }
-          
-          const newQuantity = newTotalGrams / item.selectedWeightGrams;
-          
-          return {
-            ...item,
-            quantity: newQuantity,
-            totalPrice: item.priceAtPurchase * newQuantity
-          };
-        }
-        return item;
-      }).filter(Boolean);
+      const newCart = prevCart.filter(item => item.productId !== productId);
       saveToStorage(newCart);
       return newCart;
     });
   };
 
+  // ✅ Bütün səbəti təmizlə
   const clearCart = () => {
     setCart([]);
     if (typeof window !== 'undefined') {
@@ -277,24 +235,40 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // ✅ Ümumi məhsul sayı (neçə fərqli məhsul növü)
   const getTotalItems = () => cart.length;
-  const getTotalQuantity = () => cart.reduce((total, item) => total + item.quantity, 0);
+  
+  // ✅ Fərqli məhsul növlərinin sayı (ədəd sayı)
+  const getProductCount = () => cart.length;
+  
+  // ✅ Ümumi çəki (qram)
+  const getTotalGrams = () => cart.reduce((total, item) => total + item.totalGrams, 0);
+  
+  // ✅ Ümumi qiymət
   const getTotalPrice = () => cart.reduce((total, item) => total + item.totalPrice, 0);
-  const getTotalQuantityInGrams = () => cart.reduce((total, item) => total + (item.selectedWeightGrams * item.quantity), 0);
-  const getItemTotalPrice = (item) => item.totalPrice;
-  const getItemPricePerKg = (item) => item.pricePerKgSnapshot;
-  const getItemWeightInfo = (item) => {
-    const grams = item.selectedWeightGrams;
-    if (grams >= 1000) return `${grams / 1000} ${t('cart.kg') || 'kq'}`;
+  
+  // ✅ Məhsulun ümumi çəkisini formatla
+  const getItemWeightDisplay = (item) => {
+    const grams = item.totalGrams;
+    if (grams >= 1000) {
+      return `${(grams / 1000).toFixed(2)} ${t('cart.kg') || 'kq'}`;
+    }
     return `${grams} ${t('cart.gr') || 'qr'}`;
   };
-
-  // Səbətdəki məhsul sayını almaq (badge üçün)
-  const getCartItemCount = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+  
+  // ✅ Məhsulun qiymətini formatla
+  const getItemPriceDisplay = (item) => {
+    return item.totalPrice.toFixed(2);
+  };
+  
+  // ✅ 1 kq qiyməti
+  const getPricePerKg = (item) => {
+    return item.pricePerKgSnapshot.toFixed(2);
   };
 
-  // Səbətin boş olub olmadığını yoxlamaq
+  // Səbətdəki məhsul sayını almaq (badge üçün - fərqli məhsul növlərinin sayı)
+  const getCartItemCount = () => cart.length;
+
   const isCartEmpty = () => cart.length === 0;
 
   return (
@@ -302,17 +276,16 @@ export const CartProvider = ({ children }) => {
       cart,
       addToCart,
       removeFromCart,
-      updateQuantity,
-      incrementQuantity,
-      decrementQuantity,
+      incrementWeight,
+      decrementWeight,
       clearCart,
       getTotalItems,
-      getTotalQuantity,
+      getProductCount,
+      getTotalGrams,
       getTotalPrice,
-      getTotalQuantityInGrams,
-      getItemTotalPrice,
-      getItemPricePerKg,
-      getItemWeightInfo,
+      getItemWeightDisplay,
+      getItemPriceDisplay,
+      getPricePerKg,
       getCartItemCount,
       isCartEmpty,
       mergeCart,

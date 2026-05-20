@@ -37,6 +37,7 @@
     "showAll": "Bütün məhsulları göstər",
     "noImage": "Şəkil yoxdur",
     "outOfStockBadge": "Stokda yoxdur",
+    "outOfStock": "Stokda yoxdur",
     "perKg": "/ 1 kq",
     "selectedWeight": "Seçilmiş",
     "addToCart": "Səbətə əlavə et",
@@ -87,7 +88,7 @@
       "minQuantity": "Minimum miqdar 100 qramdır!",
       "options": [
         { "label": "250 qr", "value": 250 },
-        { "label": "500 qr (standart)", "value": 500 },
+        { "label": "500 qr", "value": 500 },
         { "label": "750 qr", "value": 750 },
         { "label": "1 kq", "value": 1000 },
         { "label": "2 kq", "value": 2000 },
@@ -96,7 +97,10 @@
     },
     "buttons": {
       "addToCart": "Səbətə əlavə et",
-      "allProducts": "Bütün Məhsullar"
+      "allProducts": "Bütün Məhsullar",
+      "outOfStock": "Stokda yoxdur",
+      "outOfStockBadge": "Stokda yoxdur"
+      
     },
     "notifications": {
       "addedToCartFormat": "{{name}} - {{quantity}} ({{price}} AZN) səbətə əlavə edildi!",
@@ -109,6 +113,15 @@
     "kg": "kq",
     "gr": "qr",
     "title": "Səbətiniz",
+    "productCount": "{{count}} ədəd",
+    "productCount_0": "0 ədəd",
+    "productCount_1": "1 ədəd",
+    "productCount_2": "2 ədəd",
+    "productCount_3": "3 ədəd",
+    "productCount_4": "4 ədəd",
+    "productCount_5": "5 ədəd",
+    "productCount_plural": "{{count}} ədəd",
+    "productCountLabel": "Məhsul sayı",
     "items": "məhsul",
     "empty": "Səbətiniz boşdur",
     "continueShopping": "Alış-verişə davam et",
@@ -261,11 +274,12 @@
     },
     "bottom": {
       "copyright": "© 2025 Çərəz. Bütün hüquqlar qorunur.",
-      "madeWithLove": "Sevgi ilə hazırlandı"
+      "madeWithLove": "Sevgi ilə hazırlandı",
+      "privacy": "Məxfilik Siyasəti",
+      "terms": "İstifadəçi Şərtləri"
     }
   },
   "whatsapp": {
-    "message": "Salam! Çərəz məhsulları ilə bağlı kiçik bir sualım var. Kömək edə bilərsiniz?",
     "text": "Bizimlə danışın",
     "ariaLabel": "WhatsApp ilə əlaqə"
   },

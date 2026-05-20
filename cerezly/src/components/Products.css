@@ -1,8 +1,10 @@
 /* ================================
-   PRODUCTS SECTION
+   CEREZ PRODUCTS SECTION - TAM CSS
+   Standart çəki 1 kq ilə - 3/2 SÜTUN RESPONSIVE
+   Şəkil hündürlüyü artırıldı (150px → 200px)
 ================================ */
 
-.products {
+.cerez-products-section {
   padding: 40px 5%;
   text-align: center;
   background: #fef6eb;
@@ -10,7 +12,7 @@
   box-sizing: border-box;
 }
 
-.section-tag {
+.cerez-section-tag {
   background: #f6eadf;
   color: #b56b20;
   padding: 8px 20px;
@@ -21,7 +23,7 @@
   font-size: 14px;
 }
 
-.section-title {
+.cerez-section-title {
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 8px;
@@ -30,11 +32,11 @@
   line-height: 1.3;
 }
 
-.section-title span {
+.cerez-section-title .cerez-highlight {
   color: #d6800f;
 }
 
-.section-subtitle {
+.cerez-section-subtitle {
   color: #666;
   margin-bottom: 40px;
   font-size: 16px;
@@ -45,10 +47,13 @@
 }
 
 /* ===========================================
-   GRID LAYOUT - 6 MƏHSUL ÜÇÜN OPTİMAL
+   GRID LAYOUT - RESPONSIVE
+   Böyük ekran: 3 sütun
+   Orta ekran: 2 sütun
+   Kiçik ekran: 1 sütun
 =========================================== */
 
-.product-grid {
+.cerez-products-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
@@ -59,157 +64,148 @@
 }
 
 /* ===========================================
-   MEDIA QUERIES - RESPONSIVE DİZAYN
+   RESPONSIVE BREAKPOINTS
 =========================================== */
 
-/* Tablet (768px - 1024px) */
+/* 1024px - 3 sütundan 2 sütuna */
 @media (max-width: 1024px) {
-  .products {
+  .cerez-products-section {
     padding: 35px 4%;
   }
   
-  .product-grid {
+  .cerez-products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     max-width: 700px;
   }
   
-  .section-title {
+  .cerez-section-title {
     font-size: 28px;
   }
 }
 
-/* Mobil (767px və aşağı) */
-@media (max-width: 767px) {
-  .products {
+/* 768px - 2 sütun davam edir, yalnız padding dəyişir */
+@media (max-width: 768px) {
+  .cerez-products-section {
     padding: 30px 20px;
   }
   
-  .product-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .cerez-products-grid {
+    gap: 18px;
     max-width: 100%;
   }
   
-  .section-title {
+  .cerez-section-title {
     font-size: 26px;
   }
   
-  .section-subtitle {
+  .cerez-section-subtitle {
     font-size: 15px;
     margin-bottom: 30px;
   }
 }
 
-/* Kiçik mobil (480px - 599px) */
-@media (max-width: 599px) {
-  .products {
-    padding: 25px 18px;
+/* 600px - 2 sütun, gap kiçilir */
+@media (max-width: 600px) {
+  .cerez-products-section {
+    padding: 25px 15px;
   }
   
-  .product-grid {
-    gap: 18px;
-  }
-  
-  .section-title {
-    font-size: 24px;
-  }
-}
-
-/* Çox kiçik mobil (360px - 479px) */
-@media (max-width: 479px) {
-  .products {
-    padding: 22px 15px;
-  }
-  
-  .section-tag {
-    font-size: 13px;
-    padding: 6px 15px;
-  }
-  
-  .section-title {
-    font-size: 22px;
-  }
-  
-  .section-subtitle {
-    font-size: 14px;
-    margin-bottom: 25px;
-  }
-  
-  .product-grid {
+  .cerez-products-grid {
     gap: 15px;
   }
 }
 
-/* Çox kiçik mobil (320px - 359px) */
-@media (max-width: 359px) {
-  .products {
+/* 500px - 2 sütun, kartlar və butonlar kiçilir */
+@media (max-width: 500px) {
+  .cerez-products-section {
     padding: 22px 12px;
   }
   
-  .section-title {
-    font-size: 20px;
+  .cerez-products-grid {
+    gap: 12px;
   }
   
-  .product-grid {
-    gap: 12px;
+  .cerez-section-title {
+    font-size: 24px;
+  }
+}
+
+/* 450px - 2 sütun, daha kiçik elementlər */
+@media (max-width: 450px) {
+  .cerez-products-section {
+    padding: 20px 10px;
+  }
+  
+  .cerez-products-grid {
+    gap: 10px;
+  }
+  
+  .cerez-section-title {
+    font-size: 22px;
+  }
+}
+
+/* 380px - 2 sütun, minimal */
+@media (max-width: 380px) {
+  .cerez-products-grid {
+    gap: 8px;
   }
 }
 
 /* ===========================================
-   PRODUCT CARD STYLES - DESKTOP
+   PRODUCT CARD
 =========================================== */
 
-.product-card {
+.cerez-product-card {
   background: #fff;
-  padding: 20px;
+  padding: 15px;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
   transition: all 0.4s ease;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   border: 1.5px solid transparent;
   width: 100%;
-  max-width: 320px;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 480px;
+  height: auto;
   box-sizing: border-box;
 }
 
-/* Desktop hover effektləri */
 @media (hover: hover) {
-  .product-card:hover {
+  .cerez-product-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 16px 32px rgba(214, 128, 15, 0.15);
     border-color: rgba(214, 128, 15, 0.2);
   }
   
-  .product-card:hover .product-img {
+  .cerez-product-card:hover .cerez-product-img {
     transform: scale(1.1);
   }
   
-  .product-card:hover .card-badge {
+  .cerez-product-card:hover .cerez-card-badge {
     background: #d6800f;
     color: white;
     transform: translateY(-2px);
   }
   
-  .product-card:hover .product-name {
+  .cerez-product-card:hover .cerez-product-name {
     color: #d6800f;
   }
   
-  .product-card:hover .price {
+  .cerez-product-card:hover .cerez-price {
     transform: scale(1.05);
   }
   
-  .product-card:hover .cart-icon {
+  .cerez-product-card:hover .cerez-cart-icon {
     transform: translateY(-2px) scale(1.1);
   }
 }
 
-/* Kart arxaplan effekti */
-.product-card::before {
+.cerez-product-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -223,26 +219,26 @@
   z-index: -1;
 }
 
-.product-card:hover::before {
+.cerez-product-card:hover::before {
   opacity: 1;
 }
 
 /* ===========================================
-   CARD İÇİ ELEMENTLƏR - DESKTOP
+   CARD İÇİ ELEMENTLƏR
+   ŞƏKİL HÜNDÜRLÜYÜ ARTIRILDI
 =========================================== */
 
-/* Şəkil wrapper - Desktop */
-.image-wrapper {
+.cerez-image-wrapper {
   position: relative;
   overflow: hidden;
   border-radius: 12px;
-  height: 180px;
-  margin-bottom: 15px;
+  height: 200px; /* ✅ 150px-dən 200px-ə artırıldı */
+  margin-bottom: 10px;
   flex-shrink: 0;
   width: 100%;
 }
 
-.product-img {
+.cerez-product-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -251,24 +247,14 @@
   display: block;
 }
 
-/* Şəkil yoxdursa */
-.product-img[src=""],
-.product-img:not([src]) {
-  background: linear-gradient(45deg, #f5f5f5, #e0e0e0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Badge */
-.card-badge {
+.cerez-card-badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px;
+  left: 8px;
   background: #fbd8a6;
   color: #a9651c;
-  font-size: 12px;
-  padding: 5px 12px;
+  font-size: 11px;
+  padding: 4px 10px;
   border-radius: 20px;
   font-weight: 600;
   z-index: 2;
@@ -277,11 +263,10 @@
   white-space: nowrap;
 }
 
-/* Stokda olmayan məhsul nişanı (TEST ÜÇÜN) */
-.out-of-stock-badge {
+.cerez-out-of-stock-badge {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 8px;
+  right: 8px;
   background-color: #dc3545;
   color: white;
   font-size: 10px;
@@ -289,161 +274,210 @@
   border-radius: 20px;
   font-weight: 600;
   z-index: 10;
-  animation: pulse 1s infinite;
+  animation: cerezPulse 1s infinite;
 }
 
-@keyframes pulse {
+@keyframes cerezPulse {
   0% { opacity: 0.7; }
   50% { opacity: 1; transform: scale(1.05); }
   100% { opacity: 0.7; }
 }
 
-/* Kart məzmunu - Desktop */
-.card-body {
+.cerez-card-body {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 0;
-  min-height: 0;
+  overflow: visible;
 }
 
-.product-name {
-  font-size: 18px;
+.cerez-product-name {
+  font-size: 17px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   transition: color 0.3s ease;
   color: #222;
   line-height: 1.3;
   text-align: center;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
-/* Təsvir - desktop üçün */
-.product-desc {
+.cerez-product-desc {
   color: #666;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 15px;
-  flex: 1;
+  font-size: 12px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  flex-shrink: 0;
   overflow: hidden;
   text-align: center;
-  display: block;
-  max-height: 58.5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   position: relative;
-}
-
-/* Çox sətirli mətn üçün ellipsis effekti */
-.product-desc::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 30px;
-  height: 1.5em;
-  background: linear-gradient(to right, transparent, #fff 50%);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* ===========================================
    MİQDAR SEÇİM HİSSƏSİ
 =========================================== */
 
-.quantity-selection {
-  margin: 15px 0;
+.cerez-quantity-selection {
+  margin: 10px 0;
   padding: 12px;
   background: rgba(214, 128, 15, 0.03);
   border-radius: 12px;
   border: 1px solid rgba(214, 128, 15, 0.1);
+  flex-shrink: 0;
+  overflow: visible;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.quantity-options {
+.cerez-quantity-options {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
+  justify-content: center;
 }
 
-.quantity-option {
-  padding: 8px 14px;
+/* ✅ ÇƏKİ BUTONLARI */
+.cerez-quantity-option {
+  padding: 8px 12px;
   border: 2px solid #e0e0e0;
-  border-radius: 25px;
+  border-radius: 30px;
   background: white;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   color: #555;
-  flex: 1;
-  min-width: 80px;
+  flex: 0 1 auto;
+  min-width: 70px;
   text-align: center;
+  position: relative;
 }
 
-.quantity-option:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+.cerez-quantity-option:hover {
+  border-color: #d6800f;
+  color: #d6800f;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(214, 128, 15, 0.1);
 }
 
-.quantity-option.selected {
-  background: var(--accent);
+.cerez-quantity-option.cerez-selected {
+  background: #d6800f;
   color: white;
-  border-color: var(--accent);
+  border-color: #d6800f;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(214, 128, 15, 0.2);
 }
 
-.custom-quantity {
+/* ✅ DEFAULT SEÇİLMİŞ BUTON (1 KQ) */
+.cerez-quantity-option.cerez-default {
+  border-color: #d6800f;
+  background: rgba(214, 128, 15, 0.1);
+  color: #d6800f;
+}
+
+.cerez-quantity-option.cerez-default::after {
+  content: '✓';
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #27ae60;
+  color: white;
+  font-size: 9px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.cerez-quantity-option.cerez-default:hover {
+  background: #d6800f;
+  color: white;
+  border-color: #d6800f;
+}
+
+.cerez-quantity-option.cerez-default:hover::after {
+  background: white;
+  color: #27ae60;
+}
+
+.cerez-quantity-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cerez-custom-quantity {
   display: block;
   margin-top: 10px;
   width: 100%;
 }
 
-.custom-quantity-input {
+.cerez-custom-quantity-input {
   width: 100%;
   padding: 10px 15px;
   border: 2px solid #ddd;
-  border-radius: 10px;
+  border-radius: 30px;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.3s ease;
   background: white;
   box-sizing: border-box;
+  text-align: center;
 }
 
-.custom-quantity-input:focus {
+.cerez-custom-quantity-input:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: #d6800f;
   box-shadow: 0 0 0 3px rgba(214, 128, 15, 0.1);
 }
 
-.custom-quantity-input::placeholder {
+.cerez-custom-quantity-input::placeholder {
   color: #999;
   opacity: 0.7;
+  font-size: 13px;
 }
 
-.selected-quantity-info {
+.cerez-custom-quantity-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cerez-selected-quantity-info {
   margin-top: 10px;
   padding: 8px 12px;
   background: rgba(39, 174, 96, 0.1);
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid rgba(39, 174, 96, 0.2);
-  animation: fadeIn 0.3s ease;
+  animation: cerezFadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
+@keyframes cerezFadeIn {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.selected-quantity-text {
+.cerez-selected-quantity-text {
   font-size: 13px;
   font-weight: 600;
   color: #27ae60;
   display: flex;
   align-items: center;
   gap: 5px;
+  justify-content: center;
 }
 
-.selected-quantity-text::before {
+.cerez-selected-quantity-text::before {
   content: '✓';
   font-size: 14px;
 }
@@ -452,19 +486,19 @@
    CARD FOOTER
 =========================================== */
 
-.card-footer {
+.cerez-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
-  padding-top: 15px;
+  padding-top: 12px;
   border-top: 1px solid #f0f0f0;
   gap: 10px;
-  min-height: 60px;
   flex-wrap: wrap;
+  flex-shrink: 0;
 }
 
-.price {
+.cerez-price {
   font-weight: bold;
   color: #d6800f;
   font-size: 18px;
@@ -472,10 +506,9 @@
   display: flex;
   align-items: baseline;
   flex-shrink: 0;
-  min-width: 100px;
 }
 
-.price .unit {
+.cerez-price .cerez-unit {
   font-weight: normal;
   color: #777;
   font-size: 12px;
@@ -483,10 +516,10 @@
 }
 
 /* ===========================================
-   CART ICON STYLES
+   SƏBƏT BUTONU
 =========================================== */
 
-.cart-icon {
+.cerez-cart-icon {
   display: inline-block;
   vertical-align: middle;
   transition: transform 0.3s ease;
@@ -498,20 +531,16 @@
   margin: 0;
 }
 
-/* ===========================================
-   SƏBƏTƏ AT BUTONU
-=========================================== */
-
-.add-btn {
+.cerez-products-add-btn {
   background: #f4e7d9;
   color: #d6800f;
   border: none;
-  padding: 10px 16px;
-  border-radius: 25px;
+  padding: 8px 14px;
+  border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
   flex-shrink: 0;
   position: relative;
@@ -521,246 +550,135 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 110px;
-  max-width: 160px;
-  height: 40px;
+  min-width: 100px;
+  height: 38px;
   box-sizing: border-box;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* Buton hover effekti */
+.cerez-products-add-btn.cerez-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.cerez-products-add-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 @media (hover: hover) {
-  .add-btn:hover {
+  .cerez-products-add-btn:hover:not(:disabled):not(.cerez-disabled) {
     background: #d6800f;
     color: #fff;
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(214, 128, 15, 0.35);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(214, 128, 15, 0.35);
   }
   
-  .add-btn:hover .cart-icon {
+  .cerez-products-add-btn:hover:not(:disabled):not(.cerez-disabled) .cerez-cart-icon {
     transform: translateY(-2px) scale(1.1);
   }
-  
-  .add-btn::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.8);
-    opacity: 0;
-    border-radius: 100%;
-    transform: translate(-50%, -50%) scale(1);
-    z-index: -1;
-  }
-  
-  .add-btn:hover::after {
-    animation: buttonWave 0.8s ease-out;
-  }
-  
-  .add-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.4),
-      transparent
-    );
-    transition: left 0.7s ease;
-    z-index: -1;
-  }
-  
-  .add-btn:hover::before {
-    left: 100%;
-  }
 }
 
-@keyframes buttonWave {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(35);
-    opacity: 0;
-  }
-}
-
-.add-btn:active {
+.cerez-products-add-btn:active {
   transform: scale(0.95);
   transition: transform 0.1s;
 }
 
-/* Rus dili üçün xüsusi buton tənzimləmələri */
-[lang="ru"] .add-btn {
+/* Dil tənzimləmələri */
+[lang="ru"] .cerez-products-add-btn {
   font-size: 11px;
-  padding: 10px 14px;
-  min-width: 140px;
-  max-width: 160px;
-  gap: 6px;
-  letter-spacing: -0.2px;
+  padding: 8px 12px;
+  min-width: 100px;
+  gap: 5px;
 }
 
-/* İngilis dili üçün */
-[lang="en"] .add-btn {
+[lang="en"] .cerez-products-add-btn {
+  font-size: 11px;
+  min-width: 95px;
+  gap: 5px;
+}
+
+[lang="az"] .cerez-products-add-btn {
   font-size: 12px;
-  min-width: 120px;
-  max-width: 150px;
-  gap: 7px;
-}
-
-/* Azərbaycan dili üçün */
-[lang="az"] .add-btn {
-  font-size: 13px;
-  min-width: 110px;
-  max-width: 140px;
-  gap: 8px;
-}
-
-/* Rus dili üçün ikon */
-[lang="ru"] .cart-icon {
-  width: 14px;
-  height: 14px;
-  min-width: 14px;
-  min-height: 14px;
-}
-
-/* Mobil üçün active state */
-@media (max-width: 767px) {
-  .add-btn:active {
-    background: #d6800f;
-    color: #fff;
-    transform: scale(0.95);
-  }
+  min-width: 100px;
+  gap: 6px;
 }
 
 /* ===========================================
-   SƏBƏT ANİMASİYASI VƏ ƏLAVƏ STİLLƏR
+   BİLDİRİŞ
 =========================================== */
 
-/* Səbətə əlavə animasiyası */
-@keyframes cartBounce {
-  0%, 100% { 
-    transform: scale(1); 
-  }
-  50% { 
-    transform: scale(1); 
-    background-color: #27ae60 !important; 
-    color: white !important;
-    box-shadow: 0 6px 25px rgba(39, 174, 96, 0.4) !important;
-  }
-}
-
-.added-to-cart {
-  animation: cartBounce 0.5s ease !important;
-}
-
-/* Səbət ikonu animasiyası */
-@keyframes cartIconBounce {
-  0%, 100% { 
-    transform: translateY(0) scale(1); 
-  }
-  50% { 
-    transform: translateY(-3px) scale(1.2); 
-    fill: white;
-  }
-}
-
-.added-to-cart .cart-icon {
-  animation: cartIconBounce 0.5s ease !important;
-}
-
-/* ===========================================
-   BİLDİRİŞ - AllProducts ilə eyni dizayn
-=========================================== */
-
-.global-fixed-notification {
+.cerez-products-notification {
   position: fixed;
   top: 120px;
   right: 20px;
-  background-color: #8B4513;
+  background-color: #27ae60;
   color: white;
-  padding: 15px 20px;
+  padding: 12px 18px;
   border-radius: 10px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   z-index: 999999;
-  max-width: 350px;
+  max-width: 320px;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-left: 5px solid #4CAF50;
-  animation: notificationSlideIn 0.3s ease forwards, notificationFadeOut 0.3s ease 2.7s forwards;
+  gap: 10px;
+  border-left: 5px solid #2ecc71;
+  animation: cerezNotificationSlideIn 0.3s ease forwards, cerezNotificationFadeOut 0.3s ease 2.7s forwards;
 }
 
-.global-fixed-notification.error {
+.cerez-products-notification.cerez-error {
   background-color: #dc3545 !important;
   border-left: 5px solid #ffc107 !important;
 }
 
-.global-fixed-notification.error .global-fixed-notification-icon {
+.cerez-products-notification.cerez-error .cerez-products-notification-icon {
   background-color: #ffc107 !important;
   color: #dc3545 !important;
 }
 
-.global-fixed-notification-icon {
-  background-color: #4CAF50;
-  width: 24px;
-  height: 24px;
+.cerez-products-notification-icon {
+  background-color: rgba(255, 255, 255, 0.25);
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
-.global-fixed-notification-text {
+.cerez-products-notification-text {
   flex: 1;
-  font-size: 15px;
+  font-size: 13px;
   line-height: 1.4;
 }
 
-@keyframes notificationSlideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes cerezNotificationSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-@keyframes notificationFadeOut {
-  from {
-    opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(100%);
-  }
+@keyframes cerezNotificationFadeOut {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(100%); }
 }
 
 /* ===========================================
    BÜTÜN MƏHSULLAR BUTONU
 =========================================== */
 
-.view-all {
-  margin-top: 40px;
+.cerez-view-all {
+  margin-top: 35px;
   background: #d6800f;
   color: #fff;
   padding: 12px 30px;
   border: none;
-  border-radius: 25px;
+  border-radius: 30px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -771,16 +689,15 @@
   text-decoration: none;
 }
 
-/* Buton hover effekti */
 @media (hover: hover) {
-  .view-all:hover {
+  .cerez-view-all:hover {
     background: #e68a1a;
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(214, 128, 15, 0.3);
     text-decoration: none;
   }
   
-  .view-all::after {
+  .cerez-view-all::after {
     content: ' →';
     opacity: 0;
     transform: translateX(-5px);
@@ -788,32 +705,30 @@
     display: inline-block;
   }
   
-  .view-all:hover::after {
+  .cerez-view-all:hover::after {
     opacity: 1;
     transform: translateX(3px);
   }
 }
 
-/* Buton aktiv state */
-.view-all:active {
+.cerez-view-all:active {
   transform: scale(0.98);
   text-decoration: none;
 }
 
-/* Mobil versiya */
-@media (max-width: 767px) {
-  .view-all {
+@media (max-width: 768px) {
+  .cerez-view-all {
     padding: 10px 25px;
     font-size: 14px;
-    margin-top: 35px;
+    margin-top: 30px;
   }
 }
 
-@media (max-width: 479px) {
-  .view-all {
+@media (max-width: 500px) {
+  .cerez-view-all {
     padding: 9px 22px;
     font-size: 13px;
-    margin-top: 30px;
+    margin-top: 25px;
   }
 }
 
@@ -821,612 +736,245 @@
    SCROLL ANİMASİYASI
 =========================================== */
 
-.animate-card {
+.cerez-animate-card {
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s ease;
 }
 
-.animate-card.show {
+.cerez-animate-card.cerez-show {
   opacity: 1;
   transform: translateY(0);
 }
 
-.delay-0 { transition-delay: 0s; }
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-.delay-4 { transition-delay: 0.4s; }
-.delay-5 { transition-delay: 0.5s; }
-.delay-6 { transition-delay: 0.6s; }
-.delay-7 { transition-delay: 0.7s; }
-.delay-8 { transition-delay: 0.8s; }
-.delay-9 { transition-delay: 0.9s; }
-.delay-10 { transition-delay: 1.0s; }
+.cerez-animate-card.delay-0 { transition-delay: 0s; }
+.cerez-animate-card.delay-1 { transition-delay: 0.1s; }
+.cerez-animate-card.delay-2 { transition-delay: 0.2s; }
+.cerez-animate-card.delay-3 { transition-delay: 0.3s; }
+.cerez-animate-card.delay-4 { transition-delay: 0.4s; }
+.cerez-animate-card.delay-5 { transition-delay: 0.5s; }
+.cerez-animate-card.delay-6 { transition-delay: 0.6s; }
+.cerez-animate-card.delay-7 { transition-delay: 0.7s; }
+.cerez-animate-card.delay-8 { transition-delay: 0.8s; }
+.cerez-animate-card.delay-9 { transition-delay: 0.9s; }
+.cerez-animate-card.delay-10 { transition-delay: 1.0s; }
 
 /* ===========================================
-   MOBİL VERSİYA - SIMMETRİK YANAŞI LAYOUT
+   MOBİL GÖRÜNÜŞ - ŞƏKİL HÜNDÜRLÜYÜ MOBİL ÜÇÜN
 =========================================== */
 
-/* Mobil (767px və aşağı) */
-@media (max-width: 767px) {
-  .product-card {
-    flex-direction: row;
-    align-items: stretch;
-    min-height: auto;
-    height: auto;
-    padding: 15px;
-    max-width: 100%;
-    gap: 20px;
-    width: 100%;
+/* 768px - mobil üçün şəkil hündürlüyü */
+@media (max-width: 768px) {
+  .cerez-image-wrapper {
+    height: 180px; /* ✅ Mobil üçün 180px */
   }
-  
-  .image-wrapper {
-    width: 140px;
-    height: 140px;
-    margin-bottom: 0;
-    flex-shrink: 0;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  
-  .product-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-    display: block;
-    min-height: 140px;
-    min-width: 140px;
-  }
-  
-  .product-img[src=""],
-  .product-img:not([src]) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(45deg, #f5f5f5, #e0e0e0);
-  }
-  
-  .card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    justify-content: space-between;
-    min-height: 140px;
-    height: auto;
-    overflow: visible;
-  }
-  
-  .product-name {
-    font-size: 18px;
-    margin-bottom: 8px;
-    text-align: left;
-    font-weight: 600;
-    line-height: 1.3;
-    min-height: 24px;
-  }
-  
-  .product-desc {
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 12px;
-    text-align: left;
-    color: #555;
-    flex: 1;
-    overflow: hidden;
-    display: block;
-    max-height: 63px;
-    min-height: 42px;
-  }
-  
-  .product-desc::after {
-    background: linear-gradient(to right, transparent, #fff 50%);
-  }
-  
-  .quantity-selection {
-    padding: 10px;
-    margin: 12px 0;
-  }
-  
-  .quantity-options {
-    gap: 6px;
-    margin-bottom: 10px;
-  }
-  
-  .quantity-option {
+}
+
+/* 600px */
+@media (max-width: 600px) {
+  .cerez-quantity-option {
     padding: 6px 10px;
     font-size: 11px;
-    min-width: 65px;
-    border-width: 1.5px;
+    min-width: 55px;
   }
   
-  .custom-quantity-input {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-  
-  .selected-quantity-info {
-    padding: 6px 10px;
-  }
-  
-  .selected-quantity-text {
-    font-size: 12px;
-  }
-  
-  .card-footer {
-    margin-top: auto;
-    padding-top: 10px;
-    border-top: 1px solid #f0f0f0;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    min-height: 40px;
-    display: flex;
-    flex-wrap: nowrap;
-  }
-  
-  .price {
-    font-size: 18px;
-    font-weight: 700;
-    color: #d6800f;
-    line-height: 1;
-    white-space: nowrap;
-    min-width: 90px;
-  }
-  
-  .add-btn {
-    padding: 10px 14px;
-    font-size: 13px;
-    min-width: 120px;
-    max-width: 150px;
-    font-weight: 600;
-    background: #f4e7d9;
-    border-radius: 25px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
+  .cerez-quantity-options {
     gap: 6px;
-    overflow: hidden;
   }
   
-  [lang="ru"] .add-btn {
-    font-size: 11px;
-    padding: 10px 12px;
-    min-width: 135px;
-    max-width: 150px;
-    gap: 5px;
-  }
-  
-  [lang="ru"] .cart-icon {
+  .cerez-quantity-option.cerez-default::after {
     width: 13px;
     height: 13px;
-    min-width: 13px;
-    min-height: 13px;
+    font-size: 8px;
+    top: -5px;
+    right: -5px;
   }
   
-  .card-badge {
-    font-size: 12px;
-    padding: 5px 12px;
-    top: 10px;
-    left: 10px;
-    background: #fbd8a6;
-    color: #a9651c;
+  .cerez-products-add-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    min-width: 85px;
+    height: 34px;
+    gap: 4px;
   }
   
-  .price .unit {
-    font-size: 13px;
-    color: #777;
-  }
-  
-  .cart-icon {
+  .cerez-cart-icon {
     width: 14px;
     height: 14px;
     min-width: 14px;
     min-height: 14px;
   }
   
-  /* Bildiriş responsive */
-  .global-fixed-notification {
-    top: 100px;
-    right: 10px;
-    max-width: calc(100% - 20px);
-    padding: 10px 14px;
-    font-size: 14px;
-  }
-}
-
-/* Kiçik mobil (480px - 599px) */
-@media (max-width: 599px) {
-  .product-card {
-    padding: 14px;
-    gap: 18px;
+  .cerez-price {
+    font-size: 16px;
   }
   
-  .image-wrapper {
-    width: 130px;
-    height: 130px;
-    min-width: 130px;
-    min-height: 130px;
-  }
-  
-  .product-img {
-    min-height: 130px;
-    min-width: 130px;
-  }
-  
-  .card-body {
-    min-height: 130px;
-    height: auto;
-  }
-  
-  .product-name {
-    font-size: 17px;
-    min-height: 23px;
-  }
-  
-  .product-desc {
-    font-size: 13px;
-    max-height: 58.5px;
-    min-height: 39px;
-  }
-  
-  .card-footer {
-    min-height: 38px;
-  }
-  
-  .price {
-    font-size: 17px;
-    min-width: 85px;
-  }
-  
-  .add-btn {
-    padding: 9px 12px;
-    font-size: 12px;
-    min-width: 115px;
-    max-width: 140px;
-    height: 38px;
-    gap: 5px;
-  }
-  
-  [lang="ru"] .add-btn {
+  .cerez-price .cerez-unit {
     font-size: 10px;
-    padding: 9px 11px;
-    min-width: 125px;
-    max-width: 140px;
-    gap: 4px;
-    letter-spacing: -0.1px;
   }
   
-  [lang="ru"] .cart-icon {
-    width: 12px;
-    height: 12px;
-    min-width: 12px;
-    min-height: 12px;
+  .cerez-product-name {
+    font-size: 15px;
   }
   
-  .cart-icon {
-    width: 13px;
-    height: 13px;
-    min-width: 13px;
-    min-height: 13px;
+  .cerez-product-desc {
+    font-size: 11px;
   }
   
-  .global-fixed-notification {
-    top: 90px;
-    padding: 10px 14px;
-    font-size: 13px;
+  .cerez-image-wrapper {
+    height: 160px; /* ✅ 600px üçün 160px */
   }
 }
 
-/* Çox kiçik mobil (360px - 479px) */
-@media (max-width: 479px) {
-  .product-card {
-    padding: 12px;
-    gap: 15px;
-    align-items: center;
-  }
-  
-  .image-wrapper {
-    width: 120px;
-    height: 120px;
-    min-width: 120px;
-    min-height: 120px;
-  }
-  
-  .product-img {
-    min-height: 120px;
-    min-width: 120px;
-  }
-  
-  .card-body {
-    min-height: 120px;
-    height: auto;
-  }
-  
-  .product-name {
-    font-size: 16px;
-    margin-bottom: 6px;
-    min-height: 22px;
-  }
-  
-  .product-desc {
-    font-size: 12px;
-    line-height: 1.4;
-    margin-bottom: 10px;
-    max-height: 50.4px;
-    min-height: 34px;
-  }
-  
-  .card-footer {
-    gap: 8px;
-    padding-top: 8px;
-    min-height: 38px;
-    flex-wrap: nowrap;
-  }
-  
-  .price {
-    font-size: 16px;
-    min-width: 80px;
-  }
-  
-  .price .unit {
-    font-size: 12px;
-  }
-  
-  .quantity-option {
-    min-width: 60px;
+/* 450px */
+@media (max-width: 450px) {
+  .cerez-quantity-option {
     padding: 5px 8px;
     font-size: 10px;
+    min-width: 50px;
   }
   
-  .custom-quantity-input {
-    padding: 7px 10px;
+  .cerez-products-add-btn {
+    padding: 5px 8px;
+    font-size: 10px;
+    min-width: 75px;
+    height: 32px;
+  }
+  
+  .cerez-product-card {
+    padding: 10px;
+  }
+  
+  .cerez-quantity-selection {
+    padding: 8px;
+  }
+  
+  .cerez-custom-quantity-input {
+    padding: 8px 10px;
     font-size: 12px;
   }
   
-  .add-btn {
-    padding: 8px 10px;
-    font-size: 11px;
-    min-width: 105px;
-    max-width: 130px;
-    height: 36px;
-    gap: 4px;
+  .cerez-card-footer {
+    gap: 8px;
   }
   
-  [lang="ru"] .add-btn {
+  .cerez-image-wrapper {
+    height: 140px; /* ✅ 450px üçün 140px */
+  }
+}
+
+/* 380px */
+@media (max-width: 380px) {
+  .cerez-quantity-option {
+    padding: 4px 6px;
     font-size: 9px;
-    padding: 8px 10px;
-    min-width: 115px;
-    max-width: 130px;
+    min-width: 45px;
+  }
+  
+  .cerez-products-add-btn {
+    padding: 4px 6px;
+    font-size: 9px;
+    min-width: 65px;
+    height: 28px;
     gap: 3px;
-    letter-spacing: 0;
   }
   
-  [lang="ru"] .cart-icon {
-    width: 11px;
-    height: 11px;
-    min-width: 11px;
-    min-height: 11px;
-  }
-  
-  .card-badge {
-    font-size: 11px;
-    padding: 4px 10px;
-    top: 8px;
-    left: 8px;
-  }
-  
-  .cart-icon {
+  .cerez-cart-icon {
     width: 12px;
     height: 12px;
     min-width: 12px;
     min-height: 12px;
   }
   
-  .global-fixed-notification {
-    top: 85px;
-    right: 10px;
-    padding: 8px 12px;
-    font-size: 12px;
+  .cerez-price {
+    font-size: 14px;
   }
   
-  .global-fixed-notification-icon {
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-  }
-}
-
-/* Çox kiçik ekranlar (320px - 359px) */
-@media (max-width: 359px) {
-  .product-card {
-    padding: 10px;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  
-  .image-wrapper {
-    width: 100%;
-    height: 150px;
-    min-width: 100%;
-    min-height: 150px;
-    order: 1;
-  }
-  
-  .product-img {
-    min-height: 150px;
-    min-width: 100%;
-  }
-  
-  .card-body {
-    min-height: auto;
-    height: auto;
-    width: 100%;
-    order: 2;
-  }
-  
-  .product-name {
-    font-size: 16px;
-    min-height: auto;
-    text-align: center;
-  }
-  
-  .product-desc {
-    font-size: 12px;
-    max-height: none;
-    min-height: auto;
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  
-  .product-desc::after {
-    display: none;
-  }
-  
-  .quantity-selection {
-    order: 3;
-    width: 100%;
-  }
-  
-  .quantity-options {
-    justify-content: center;
-  }
-  
-  .card-footer {
-    flex-direction: column;
-    gap: 12px;
-    padding-top: 12px;
-    min-height: auto;
-    align-items: stretch;
-    order: 4;
-  }
-  
-  .price {
-    font-size: 18px;
-    text-align: center;
-    justify-content: center;
-    min-width: auto;
-    width: 100%;
-  }
-  
-  .add-btn {
-    width: 100%;
-    min-width: auto;
-    max-width: 100%;
-    padding: 10px;
+  .cerez-product-name {
     font-size: 13px;
-    height: 40px;
-    justify-content: center;
-    gap: 6px;
   }
   
-  [lang="ru"] .add-btn {
-    font-size: 11px;
-    padding: 10px;
-    width: 100%;
-    gap: 5px;
-  }
-  
-  .cart-icon {
-    width: 14px;
-    height: 14px;
-    min-width: 14px;
-    min-height: 14px;
-  }
-  
-  .global-fixed-notification {
-    top: 80px;
-    right: 10px;
-    left: 10px;
-    padding: 8px 12px;
-    font-size: 11px;
-    max-width: calc(100% - 20px);
-  }
-  
-  .global-fixed-notification-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
+  .cerez-image-wrapper {
+    height: 120px; /* ✅ 380px üçün 120px */
   }
 }
 
-/* Touch cihazlar üçün */
+/* ===========================================
+   DİL TƏNZİMLƏMƏLƏRİ (MOBİL)
+=========================================== */
+
+@media (max-width: 500px) {
+  [lang="ru"] .cerez-products-add-btn,
+  [lang="en"] .cerez-products-add-btn,
+  [lang="az"] .cerez-products-add-btn {
+    font-size: 10px;
+    min-width: 70px;
+    padding: 5px 8px;
+  }
+}
+
+/* ===========================================
+   Touch cihazlar üçün
+=========================================== */
+
 @media (hover: none) and (pointer: coarse) {
-  .product-card:hover {
+  .cerez-product-card:hover {
     transform: none;
   }
   
-  .product-card:hover .product-img {
-    transform: none;
-  }
-  
-  .image-zoom-icon {
-    opacity: 1;
-    background-color: rgba(0, 0, 0, 0.6);
-  }
-  
-  .add-btn:hover {
+  .cerez-products-add-btn:hover:not(:disabled):not(.cerez-disabled) {
     background-color: #8B4513;
   }
-  
-  .quantity-option:hover {
-    background-color: transparent;
-  }
-  
-  .clear-search-button:active {
-    transform: scale(0.97);
-  }
 }
 
-/* Animasiyaları azaldılmasını istəyənlər üçün */
+/* ===========================================
+   Animasiyaları azaltmaq istəyənlər üçün
+=========================================== */
+
 @media (prefers-reduced-motion: reduce) {
-  .product-card,
-  .product-img,
-  .card-badge,
-  .price,
-  .cart-icon,
-  .add-btn,
-  .view-all,
-  .animate-card,
-  .global-fixed-notification {
+  .cerez-product-card,
+  .cerez-product-img,
+  .cerez-card-badge,
+  .cerez-price,
+  .cerez-cart-icon,
+  .cerez-products-add-btn,
+  .cerez-view-all,
+  .cerez-animate-card,
+  .cerez-products-notification {
     animation: none;
     transition: none;
   }
   
-  .animate-card {
+  .cerez-animate-card {
     opacity: 1;
     transform: none;
   }
   
-  .out-of-stock-badge {
+  .cerez-out-of-stock-badge {
     animation: none;
   }
 }
 
+/* ===========================================
+   Çap üçün
+=========================================== */
+
 @media print {
-  .products {
+  .cerez-products-section {
     background-color: white;
     padding: 20px;
   }
   
-  .add-btn,
-  .cart-icon,
-  .quantity-selection,
-  .view-all,
-  .global-fixed-notification,
-  .out-of-stock-badge {
+  .cerez-products-add-btn,
+  .cerez-cart-icon,
+  .cerez-quantity-selection,
+  .cerez-view-all,
+  .cerez-products-notification,
+  .cerez-out-of-stock-badge {
     display: none;
   }
   
-  .product-card {
+  .cerez-product-card {
     break-inside: avoid;
     page-break-inside: avoid;
     box-shadow: none;

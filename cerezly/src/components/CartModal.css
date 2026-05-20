@@ -1,4 +1,4 @@
-/* components/CartModal.css */
+/* CartModal.css - TAM VERSİYA (YAŞIL BİLDİRİŞ İLƏ) */
 
 /* Overlay */
 .cart-modal-overlay {
@@ -146,14 +146,15 @@
 /* Item Card */
 .cart-item-card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 15px;
   border-radius: 16px;
   background: white;
   margin-bottom: 15px;
   border: 1px solid rgba(214, 128, 15, 0.1);
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  position: relative;
 }
 
 .cart-item-card:hover {
@@ -170,6 +171,7 @@
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(214, 128, 15, 0.1);
+  background: #f5f5f5;
 }
 
 .cart-item-image img {
@@ -185,6 +187,7 @@
 
 .cart-item-details {
   flex: 1;
+  min-width: 0;
 }
 
 .cart-item-title {
@@ -192,27 +195,14 @@
   color: #2c1810;
   font-size: 1rem;
   font-weight: 700;
+  line-height: 1.3;
 }
 
 .cart-item-price {
   color: #d6800f;
   font-weight: 700;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-
-/* Seçilmiş Çəki */
-.cart-item-selected-weight {
-  display: inline-block;
-  font-size: 0.7rem;
-  color: #d6800f;
-  margin: 5px 0 8px 0;
-  background: rgba(214, 128, 15, 0.12);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-  border-left: 2px solid #d6800f;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
 }
 
 .cart-item-controls {
@@ -228,7 +218,7 @@
 .quantity-buttons {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 10px;
 }
 
@@ -237,14 +227,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 12px;
-  border: 2px solid #ddd;
+  width: 65px;
+  height: 65px;
+  border-radius: 14px;
+  border: 2px solid #e0e0e0;
   background: white;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 5px;
+  padding: 8px;
+  gap: 4px;
 }
 
 .qty-btn.minus {
@@ -259,96 +250,132 @@
 
 .qty-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .qty-btn.minus:hover {
-  background: rgba(231, 76, 60, 0.1);
+  background: rgba(231, 76, 60, 0.08);
+  border-color: #e74c3c;
 }
 
 .qty-btn.plus:hover {
-  background: rgba(39, 174, 96, 0.1);
+  background: rgba(39, 174, 96, 0.08);
+  border-color: #27ae60;
+}
+
+.qty-btn:active {
+  transform: translateY(0);
+}
+
+.qty-btn svg {
+  font-size: 1.3rem;
 }
 
 .qty-amount {
   font-size: 10px;
-  margin-top: 2px;
   font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .quantity-display {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
   min-width: 100px;
-  padding: 10px;
+  padding: 12px 10px;
   border: 2px solid #d6800f;
-  border-radius: 10px;
+  border-radius: 14px;
   background: rgba(214, 128, 15, 0.05);
-  font-weight: 600;
 }
 
-.quantity-value {
-  margin-right: 5px;
+.quantity-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.quantity-weight {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c1810;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.item-total-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(214, 128, 15, 0.15);
 }
 
 .item-total-price {
-  font-weight: 700;
-  color: #2c1810;
-  font-size: 1.1rem;
-  white-space: nowrap;
-  text-align: right;
+  font-weight: 800;
+  color: #d6800f;
+  font-size: 1.15rem;
+  letter-spacing: 0.5px;
 }
 
 .remove-item-btn {
   background: none;
   border: none;
-  color: #5a4a42;
+  color: #bdc3c7;
   cursor: pointer;
-  padding: 8px;
-  margin-left: 10px;
+  padding: 10px;
+  margin-left: 8px;
   font-size: 1.2rem;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  opacity: 0.6;
-  border-radius: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .remove-item-btn:hover {
-  color: #c0392b;
+  color: #e74c3c;
   background: rgba(231, 76, 60, 0.1);
-  opacity: 1;
   transform: scale(1.1);
 }
 
 /* Summary */
 .cart-summary {
   background: white;
-  border-radius: 16px;
+  border-radius: 20px;
   padding: 20px;
   border: 1px solid rgba(214, 128, 15, 0.1);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 10px;
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: #5a4a42;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  padding: 4px 0;
 }
 
 .total-row {
-  border-top: 2px solid rgba(214, 128, 15, 0.1);
+  border-top: 2px solid rgba(214, 128, 15, 0.15);
   padding-top: 15px;
-  margin-top: 15px;
+  margin-top: 10px;
   font-size: 1.2rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #2c1810;
 }
 
 .total-amount {
   color: #d6800f;
   font-size: 1.5rem;
+  font-weight: 800;
 }
 
 /* Order Button */
@@ -358,14 +385,14 @@
   color: white;
   border: none;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: 14px;
   font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   margin: 20px 0 15px;
   box-shadow: 0 4px 20px rgba(214, 128, 15, 0.3);
@@ -377,20 +404,23 @@
   background: linear-gradient(135deg, #f4a742, #d6800f);
 }
 
+.order-button:active {
+  transform: translateY(0);
+}
+
 .order-icon {
   font-size: 1.3rem;
 }
 
 .order-note {
-  font-size: 0.85rem;
-  color: #5a4a42;
+  font-size: 0.8rem;
+  color: #95a5a6;
   text-align: center;
   line-height: 1.4;
   margin: 0;
-  opacity: 0.8;
 }
 
-/* ========== SİFARİŞ BİLDİRİŞİ ========== */
+/* ========== SİFARİŞ BİLDİRİŞİ - YAŞIL FON ========== */
 .cerez-cart-notification {
   position: fixed;
   top: 90px;
@@ -405,31 +435,30 @@
 }
 
 .cerez-cart-notification-content {
-  background: #2c1810;
+  background: #27ae60;
   border-radius: 50px;
-  padding: 10px 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px 24px;
+  box-shadow: 0 8px 24px rgba(39, 174, 96, 0.35);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: auto;
-  max-width: 320px;
+  max-width: 350px;
 }
 
 .cerez-cart-notification.success .cerez-cart-notification-content {
-  background: #2c1810;
+  background: #27ae60;
 }
 
 .cerez-cart-notification-message {
-  font-size: 13px;
+  font-size: 14px;
   color: #ffffff;
   font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin: 0;
   line-height: 1.4;
-  white-space: nowrap;
 }
 
 .cerez-cart-notification-message::before {
@@ -437,12 +466,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  background: #27ae60;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.25);
   color: white;
   border-radius: 50%;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: bold;
   flex-shrink: 0;
 }
@@ -476,8 +505,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
   z-index: 100000;
   display: flex;
   align-items: center;
@@ -496,17 +525,18 @@
 
 .missing-info-modal {
   background: white;
-  border-radius: 24px;
+  border-radius: 28px;
   width: 90%;
-  max-width: 380px;
+  max-width: 400px;
   overflow: hidden;
   animation: missingInfoSlideUp 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes missingInfoSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -515,12 +545,12 @@
 }
 
 .missing-info-modal-header {
-  padding: 20px 24px;
+  padding: 22px 24px;
   background: linear-gradient(135deg, #fff5e8, #ffffff);
-  border-bottom: 1px solid rgba(214, 128, 15, 0.2);
+  border-bottom: 1px solid rgba(214, 128, 15, 0.15);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   position: relative;
 }
 
@@ -532,7 +562,7 @@
 .missing-info-modal-header h3 {
   margin: 0;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   color: #2c1810;
   flex: 1;
 }
@@ -546,13 +576,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #5a4a42;
+  color: #95a5a6;
   transition: all 0.2s ease;
 }
 
 .missing-info-close:hover {
   background: rgba(0, 0, 0, 0.05);
   color: #e74c3c;
+  transform: rotate(90deg);
 }
 
 .missing-info-modal-body {
@@ -560,7 +591,7 @@
 }
 
 .missing-info-modal-body p {
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
   color: #5a4a42;
   font-size: 14px;
   line-height: 1.5;
@@ -568,45 +599,51 @@
 
 .missing-fields-list {
   list-style: none;
-  margin: 0 0 24px 0;
+  margin: 0 0 28px 0;
   padding: 0;
   background: #fff8f0;
-  border-radius: 16px;
-  padding: 12px 16px;
+  border-radius: 20px;
+  padding: 16px 20px;
 }
 
 .missing-field-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(214, 128, 15, 0.1);
 }
 
 .missing-field-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
+}
+
+.missing-field-item:first-child {
+  padding-top: 0;
 }
 
 .missing-field-bullet {
   color: #e74c3c;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
 }
 
 .missing-field-name {
   flex: 1;
-  font-weight: 500;
+  font-weight: 600;
   color: #2c1810;
   font-size: 14px;
 }
 
 .missing-field-warning {
-  font-size: 12px;
+  font-size: 11px;
   color: #e74c3c;
   background: rgba(231, 76, 60, 0.1);
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 20px;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 .missing-info-button {
@@ -614,90 +651,126 @@
   background: linear-gradient(135deg, #d6800f, #f4a742);
   color: white;
   border: none;
-  padding: 14px;
-  border-radius: 40px;
+  padding: 15px;
+  border-radius: 50px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .missing-info-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(214, 128, 15, 0.3);
+  box-shadow: 0 8px 25px rgba(214, 128, 15, 0.35);
+  background: linear-gradient(135deg, #f4a742, #d6800f);
 }
 
-/* Responsive */
+/* ========== RESPONSIVE - BÜTÜN CİHAZLAR ========== */
+
+/* Tablet */
 @media (max-width: 768px) {
   .cart-modal-content {
     max-width: 100%;
   }
   
   .cart-item-card {
-    flex-wrap: wrap;
+    padding: 12px;
   }
   
   .cart-item-image {
-    width: 60px;
-    height: 60px;
+    width: 65px;
+    height: 65px;
+    margin-right: 12px;
   }
   
   .cart-item-title {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   
-  .cart-item-controls {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    margin-top: 10px;
-    width: 100%;
+  .cart-item-price {
+    font-size: 0.8rem;
   }
   
   .qty-btn {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
+  }
+  
+  .qty-btn svg {
+    font-size: 1.1rem;
+  }
+  
+  .qty-amount {
+    font-size: 9px;
   }
   
   .quantity-display {
-    min-width: 80px;
-    padding: 8px;
+    min-width: 85px;
+    padding: 10px 8px;
+  }
+  
+  .quantity-weight {
+    font-size: 0.85rem;
+    white-space: normal;
+    word-break: break-word;
+    text-align: center;
   }
   
   .item-total-price {
-    align-self: flex-end;
+    font-size: 1rem;
   }
   
+  .remove-item-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  .cart-summary {
+    padding: 16px;
+  }
+  
+  .total-amount {
+    font-size: 1.3rem;
+  }
+  
+  /* Bildiriş - Tablet */
   .cerez-cart-notification {
     top: 80px;
     right: 20px;
   }
   
   .cerez-cart-notification-content {
-    padding: 8px 16px;
+    background: #27ae60;
+    padding: 10px 20px;
   }
   
   .cerez-cart-notification-message {
-    font-size: 12px;
-    white-space: nowrap;
+    font-size: 13px;
   }
   
-  .cart-item-selected-weight {
-    font-size: 0.65rem !important;
-    padding: 3px 8px !important;
+  .cerez-cart-notification-message::before {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
   }
   
   .missing-info-modal {
     width: 92%;
-    max-width: 340px;
+    max-width: 360px;
   }
 }
 
+/* Mobil */
 @media (max-width: 480px) {
+  .cart-modal-header {
+    padding: 15px;
+  }
+  
   .cart-modal-header h3 {
     font-size: 1.1rem;
   }
@@ -707,67 +780,94 @@
   }
   
   .cart-close-btn {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     font-size: 1.2rem;
   }
   
   .cart-items-container {
-    padding: 15px;
-  }
-  
-  .cart-item-card {
     padding: 12px;
   }
   
+  .cart-item-card {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  
   .cart-item-image {
-    width: 50px;
-    height: 50px;
-    margin-right: 12px;
+    width: 55px;
+    height: 55px;
+    margin-right: 10px;
   }
   
   .cart-item-title {
     font-size: 0.85rem;
+    margin-bottom: 3px;
   }
   
   .cart-item-price {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+  
+  .quantity-buttons {
+    gap: 8px;
+    margin-bottom: 8px;
   }
   
   .qty-btn {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
+    padding: 6px;
+  }
+  
+  .qty-btn svg {
+    font-size: 1rem;
   }
   
   .qty-amount {
-    font-size: 9px;
+    font-size: 8px;
   }
   
   .quantity-display {
     min-width: 70px;
-    padding: 6px;
-    font-size: 0.85rem;
+    padding: 8px 6px;
+    border-radius: 12px;
+  }
+  
+  .quantity-weight {
+    font-size: 0.75rem;
+  }
+  
+  .item-total-info {
+    margin-top: 6px;
+    padding-top: 6px;
   }
   
   .item-total-price {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
   
   .remove-item-btn {
-    font-size: 1rem;
-    padding: 6px;
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+    margin-left: 5px;
   }
   
   .cart-summary {
-    padding: 15px;
+    padding: 14px;
   }
   
   .summary-row {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
   }
   
   .total-row {
     font-size: 1rem;
+    padding-top: 12px;
+    margin-top: 8px;
   }
   
   .total-amount {
@@ -777,24 +877,33 @@
   .order-button {
     padding: 12px;
     font-size: 1rem;
+    margin: 15px 0 12px;
+  }
+  
+  .order-icon {
+    font-size: 1.1rem;
   }
   
   .order-note {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
   
+  /* Bildiriş - Mobil */
   .cerez-cart-notification {
     top: 70px;
     right: 15px;
+    left: auto;
   }
   
   .cerez-cart-notification-content {
-    padding: 6px 14px;
+    background: #27ae60;
+    padding: 8px 16px;
+    border-radius: 40px;
   }
   
   .cerez-cart-notification-message {
-    font-size: 11px;
-    white-space: nowrap;
+    font-size: 12px;
+    gap: 8px;
   }
   
   .cerez-cart-notification-message::before {
@@ -803,13 +912,8 @@
     font-size: 10px;
   }
   
-  .cart-item-selected-weight {
-    font-size: 0.6rem !important;
-    padding: 2px 6px !important;
-  }
-  
   .missing-info-modal-header {
-    padding: 16px 20px;
+    padding: 18px 20px;
   }
   
   .missing-info-modal-header h3 {
@@ -824,8 +928,19 @@
     padding: 20px;
   }
   
+  .missing-info-modal-body p {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  
+  .missing-fields-list {
+    padding: 12px 16px;
+    margin-bottom: 20px;
+  }
+  
   .missing-field-item {
-    padding: 8px 0;
+    padding: 10px 0;
+    gap: 10px;
   }
   
   .missing-field-name {
@@ -833,12 +948,123 @@
   }
   
   .missing-field-warning {
-    font-size: 11px;
-    padding: 3px 6px;
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+  
+  .missing-field-bullet {
+    font-size: 16px;
   }
   
   .missing-info-button {
     padding: 12px;
     font-size: 14px;
   }
+}
+
+/* Çox kiçik cihazlar */
+@media (max-width: 380px) {
+  .quantity-buttons {
+    gap: 6px;
+  }
+  
+  .qty-btn {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .quantity-display {
+    min-width: 60px;
+  }
+  
+  .quantity-weight {
+    font-size: 0.7rem;
+  }
+  
+  .item-total-price {
+    font-size: 0.85rem;
+  }
+  
+  .cart-item-title {
+    font-size: 0.8rem;
+  }
+  
+  /* Bildiriş - Çox kiçik cihazlar */
+  .cerez-cart-notification {
+    top: 65px;
+    right: 10px;
+    left: 10px;
+  }
+  
+  .cerez-cart-notification-content {
+    background: #27ae60;
+    padding: 8px 14px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .cerez-cart-notification-message {
+    font-size: 11px;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* iPhone SE və kiçik telefonlar */
+@media (max-width: 375px) {
+  /* Bildiriş - iPhone SE */
+  .cerez-cart-notification {
+    top: 60px;
+    right: 10px;
+    left: 10px;
+  }
+  
+  .cerez-cart-notification-content {
+    background: #27ae60;
+    padding: 8px 12px;
+    border-radius: 30px;
+  }
+  
+  .cerez-cart-notification-message {
+    font-size: 11px;
+  }
+}
+
+/* Scrollbar Styling */
+.cart-items-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cart-items-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb {
+  background: #d6800f;
+  border-radius: 10px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb:hover {
+  background: #f4a742;
+}
+
+/* Loading State */
+.cart-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+}
+
+.cart-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(214, 128, 15, 0.2);
+  border-top-color: #d6800f;
+  border-radius: 50%;
+  animation: cartSpin 0.8s linear infinite;
+}
+
+@keyframes cartSpin {
+  to { transform: rotate(360deg); }
 }

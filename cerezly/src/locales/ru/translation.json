@@ -37,6 +37,7 @@
     "showAll": "Показать все товары",
     "noImage": "Нет изображения",
     "outOfStockBadge": "Нет в наличии",
+    "outOfStock": "Нет в наличии",
     "perKg": "/ 1 кг",
     "selectedWeight": "Выбрано",
     "addToCart": "В корзину",
@@ -87,7 +88,7 @@
       "minQuantity": "Минимальное количество 100 грамм!",
       "options": [
         { "label": "250 гр", "value": 250 },
-        { "label": "500 гр (стандарт)", "value": 500 },
+        { "label": "500 гр", "value": 500 },
         { "label": "750 гр", "value": 750 },
         { "label": "1 кг", "value": 1000 },
         { "label": "2 кг", "value": 2000 },
@@ -96,7 +97,9 @@
     },
     "buttons": {
       "addToCart": "В корзину",
-      "allProducts": "Все продукты"
+      "allProducts": "Все продукты",
+      "outOfStock": "Нет в наличии",
+      "outOfStockBadge": "Нет в наличии"
     },
     "notifications": {
       "addedToCartFormat": "{{name}} - {{quantity}} ({{price}} AZN) добавлено в корзину!",
@@ -120,6 +123,15 @@
     "totalItems": "Всего товаров",
     "totalWeight": "Общий вес:",
     "totalAmount": "Общая сумма:",
+    "productCount": "{{count}} шт",
+    "productCount_0": "0 шт",
+    "productCount_1": "1 шт",
+    "productCount_2": "2 шт",
+    "productCount_3": "3 шт",
+    "productCount_4": "4 шт",
+    "productCount_5": "5 шт",
+    "productCount_plural": "{{count}} шт",
+    "productCountLabel": "Количество товаров",
     "orderNow": "Заказать",
     "orderNote": "Мы свяжемся с вами, как только получим ваш заказ"
   },
@@ -261,11 +273,12 @@
     },
     "bottom": {
       "copyright": "© 2025 Çərəz. Все права защищены.",
-      "madeWithLove": "Сделано с любовью"
+      "madeWithLove": "Сделано с любовью",
+      "privacy": "Политика конфиденциальности",
+      "terms": "Условия использования"
     }
   },
   "whatsapp": {
-    "message": "Привет! У меня небольшой вопрос по продукции Çərəz. Можете помочь?",
     "text": "Поговорите с нами",
     "ariaLabel": "Связаться через WhatsApp"
   },

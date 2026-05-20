@@ -1,4 +1,3 @@
-// App.jsx - TAM KOD
 import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
@@ -29,6 +28,10 @@ import CampaignDetail from "./components/CampaignDetail";
 // BLOG KOMPONENTLƏRİ
 import BlogList from "./components/BlogList";
 import BlogDetail from "./components/BlogDetail";
+
+// MƏXFİLİK SİYASƏTİ VƏ İSTİFADƏÇİ ŞƏRTLƏRİ
+import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsOfService from "./components/TermsOfService";
 
 // RedirectWithLanguage komponenti (Navigate əvəzinə)
 const RedirectWithLanguage = ({ to }) => {
@@ -92,6 +95,10 @@ const LanguageAwareRoutes = () => {
       {/* KAMPANİYA ROUTELARI - SKELETON ANİMASİYA + FOOTER */}
       <Route path="/kampaniyalar" element={<CampaignsListPage />} />
       <Route path="/kampaniya/:id" element={<CampaignDetailPage />} />
+
+      {/* MƏXFİLİK SİYASƏTİ VƏ İSTİFADƏÇİ ŞƏRTLƏRİ */}
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+      <Route path="/terms-of-service" element={<TermsOfService />} />
     </Routes>
   );
 };
