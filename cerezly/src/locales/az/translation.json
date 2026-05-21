@@ -100,7 +100,6 @@
       "allProducts": "Bütün Məhsullar",
       "outOfStock": "Stokda yoxdur",
       "outOfStockBadge": "Stokda yoxdur"
-      
     },
     "notifications": {
       "addedToCartFormat": "{{name}} - {{quantity}} ({{price}} AZN) səbətə əlavə edildi!",
@@ -308,6 +307,13 @@
     "register": "Qeydiyyat",
     "login": "Daxil ol",
     "logout": "Çıxış et",
+    "terms": {
+      "agree": "Mən",
+      "link": "İstifadəçi Şərtləri",
+      "and": "və",
+      "privacy": "Məxfilik Siyasəti",
+      "accept": "ilə razıyam"
+    },
     "errors": {
       "firstNameRequired": "Ad tələb olunur",
       "lastNameRequired": "Soyad tələb olunur",
@@ -319,7 +325,8 @@
       "confirmPasswordMatch": "Şifrələr uyğun gəlmir",
       "phoneRequired": "Telefon nömrəsi tələb olunur",
       "phoneInvalid": "Düzgün telefon nömrəsi daxil edin (məs: 050 555 55 55)",
-      "phoneDigits": "Telefon nömrəsi yalnız rəqəmlərdən ibarət olmalıdır"
+      "phoneDigits": "Telefon nömrəsi yalnız rəqəmlərdən ibarət olmalıdır",
+      "termsRequired": "Zəhmət olmasa, İstifadəçi Şərtləri və Məxfilik Siyasəti ilə razı olduğunuzu təsdiqləyin"
     },
     "notifications": {
       "loginSuccess": "Uğurla hesabınıza daxil oldunuz!",
@@ -477,5 +484,155 @@
     "confirmPasswordRequired": "Şifrə təsdiqi tələb olunur",
     "passwordSameError": "Yeni şifrə köhnə şifrə ilə eyni ola bilməz!",
     "passwordUpdated": "Şifrə uğurla dəyişdirildi!"
+  },
+  "privacy": {
+    "title": "Məxfilik Siyasəti",
+    "lastUpdated": "Son yenilənmə: 15 Yanvar 2025",
+    "intro": "Bu Məxfilik Siyasəti Cherez.az tərəfindən təqdim olunan xidmətlərdən istifadə edən şəxslərin şəxsi məlumatlarının toplanması, işlənməsi və qorunması qaydalarını müəyyən edir.",
+    "sections": {
+      "general": {
+        "title": "1. Ümumi müddəalar",
+        "clause1": "1.1. Saytdan istifadə etməklə istifadəçi bu Məxfilik Siyasətinin şərtlərini qəbul etmiş hesab olunur.",
+        "clause2": "1.2. İstifadəçi təqdim etdiyi məlumatların düzgün və aktual olmasına görə məsuliyyət daşıyır."
+      },
+      "collectedData": {
+        "title": "2. Toplanan məlumatlar",
+        "clause1": "2.1. İstifadəçi tərəfindən könüllü şəkildə təqdim edilən aşağıdakı məlumatlar toplanıla bilər:",
+        "list": {
+          "name": "Ad, soyad",
+          "phone": "Əlaqə nömrəsi",
+          "address": "Çatdırılma ünvanı",
+          "email": "Elektron poçt ünvanı (əgər təqdim olunubsa)",
+          "orderInfo": "Sifariş məlumatları"
+        }
+      },
+      "purposes": {
+        "title": "3. Məlumatların emal məqsədləri",
+        "clause1": "3.1. Toplanan məlumatlar aşağıdakı məqsədlərlə istifadə olunur:",
+        "list": {
+          "orderProcessing": "Sifarişlərin qəbul edilməsi və icrası",
+          "delivery": "Çatdırılmanın təmin edilməsi",
+          "contact": "İstifadəçi ilə əlaqə saxlanılması",
+          "quality": "Xidmət keyfiyyətinin artırılması",
+          "marketing": "Marketinq və məlumatlandırma (istifadəçinin razılığı əsasında)"
+        }
+      },
+      "protection": {
+        "title": "4. Məlumatların qorunması və saxlanması",
+        "clause1": "4.1. Şirkət istifadəçi məlumatlarının qorunması üçün müvafiq texniki və təşkilati tədbirlər həyata keçirir.",
+        "clause2": "4.2. Şəxsi məlumatlar qanunvericiliyin tələblərinə uyğun şəkildə saxlanılır və qorunur."
+      },
+      "thirdParty": {
+        "title": "5. Üçüncü tərəflərə ötürülmə",
+        "clause1": "5.1. İstifadəçi məlumatları aşağıdakı hallarda üçüncü tərəflərə ötürülə bilər:",
+        "clause2": "5.2. Digər hallarda məlumatlar istifadəçinin razılığı olmadan paylaşılmır.",
+        "list": {
+          "deliveryService": "Çatdırılma xidmətinin həyata keçirilməsi üçün",
+          "legalRequirement": "Qanunvericiliklə tələb olunduqda"
+        }
+      },
+      "security": {
+        "title": "6. Məlumatların Təhlükəsizliyi",
+        "clause1": "6.1. Məlumatlarınızın təhlükəsizliyini təmin etmək üçün müasir şifrələmə texnologiyalarından (SSL) istifadə edirik.",
+        "clause2": "6.2. Şəxsi məlumatlarınız qorunan serverlərdə saxlanılır və yalnız icazəli personal tərəfindən əldə edilə bilər."
+      },
+      "cookies": {
+        "title": "7. Kukilər (Cookies)",
+        "clause1": "7.1. Sayt istifadəçi təcrübəsini yaxşılaşdırmaq məqsədilə kukilərdən istifadə edə bilər."
+      },
+      "userRights": {
+        "title": "8. İstifadəçi hüquqları",
+        "clause1": "8.1. İstifadəçi aşağıdakı hüquqlara malikdir:",
+        "list": {
+          "access": "Öz məlumatlarına çıxış əldə etmək",
+          "correction": "Məlumatların düzəldilməsini və ya silinməsini tələb etmək",
+          "objection": "Məlumatların emalına etiraz etmək"
+        }
+      },
+      "changes": {
+        "title": "9. Dəyişikliklər",
+        "clause1": "9.1. Bu Məxfilik Siyasətində vaxtaşırı dəyişikliklər edilə bilər.",
+        "clause2": "9.2. Dəyişikliklər saytda yerləşdirildiyi andan etibarən qüvvəyə minir."
+      }
+    },
+    "contact": {
+      "title": "Əlaqə",
+      "description": "Məxfilik Siyasətimiz haqqında hər hansı sualınız olarsa, bizimlə əlaqə saxlayın:",
+      "emailLabel": "Email",
+      "phoneLabel": "Telefon",
+      "addressLabel": "Ünvan",
+      "address": "Bakı, Azərbaycan"
+    }
+  },
+  "terms": {
+    "title": "İstifadəçi Şərtləri",
+    "lastUpdated": "Son yenilənmə: 15 Yanvar 2025",
+    "intro": "Cherez.az veb saytından istifadə etməklə, siz aşağıdakı istifadəçi şərtlərini qəbul etmiş olursunuz. Bu şərtlərlə razı deyilsinizsə, saytımızdan istifadə etməməyiniz xahiş olunur.",
+    "sections": {
+      "general": {
+        "title": "1. Ümumi müddəalar",
+        "clause1": "1.1. Saytdan istifadə edən hər bir şəxs bu şərtlərlə razılaşmış hesab olunur.",
+        "clause2": "1.2. Mağaza bu şərtləri əvvəlcədən xəbərdarlıq etmədən dəyişdirmək hüququnu özündə saxlayır."
+      },
+      "registration": {
+        "title": "2. Qeydiyyat və istifadəçi hesabı",
+        "clause1": "2.1. Sifariş vermək üçün istifadəçi qeydiyyatdan keçməlidir.",
+        "clause2": "2.2. İstifadəçi təqdim etdiyi məlumatların düzgünlüyünə görə məsuliyyət daşıyır.",
+        "clause3": "2.3. İstifadəçi öz hesab məlumatlarının məxfiliyini qorumağa borcludur."
+      },
+      "orderPayment": {
+        "title": "3. Sifariş və ödəniş şərtləri",
+        "clause1": "3.1. Bütün qiymətlər AZN (Azərbaycan Manatı) ilə göstərilir.",
+        "clause2": "3.2. Qiymətlər əvvəlcədən xəbərdarlıq edilmədən dəyişdirilə bilər.",
+        "clause3": "3.3. Sifarişlər sayt vasitəsilə səbət sistemi üzərindən həyata keçirilir.",
+        "clause4": "3.4. Ödəniş yalnız sifarişin çatdırılması zamanı qəbul edilir.",
+        "clause5": "3.5. Saytda onlayn ödəniş sistemi mövcud deyil."
+      },
+      "delivery": {
+        "title": "4. Çatdırılma qaydaları",
+        "clause1": "4.1. Çatdırılma müddəti sifarişin təsdiqindən sonra istifadəçiyə bildirilir və bu müddət təxmini xarakter daşıyır.",
+        "clause2": "4.2. İstifadəçi tərəfindən qeyd edilən ünvanın düzgün olmaması halında yaranan gecikmələrə görə şirkət məsuliyyət daşımır.",
+        "clause3": "4.3. Çatdırılma zamanı məhsul istifadəçiyə təqdim edilərkən yoxlanılmalı və hər hansı uyğunsuzluq aşkar edildikdə dərhal bildirilməlidir."
+      },
+      "products": {
+        "title": "5. Məhsullar və məsuliyyət",
+        "clause1": "5.1. Saytın texniki problemlər səbəbindən müvəqqəti olaraq dayandırılması halında məsuliyyət daşımırıq.",
+        "clause2": "5.2. Saytda yerləşdirilən məhsul şəkilləri məlumat xarakterlidir.",
+        "clause3": "5.3. Mövcudluq və qiymətlər əvvəlcədən xəbərdarlıq edilmədən dəyişdirilə bilər."
+      },
+      "liability": {
+        "title": "6. Məsuliyyətin məhdudlaşdırılması",
+        "clause1": "6.1. Mağaza istifadəçinin səhv və ya natamam məlumat təqdim etməsi nəticəsində yaranan problemlərə görə məsuliyyət daşımır.",
+        "clause2": "6.2. Mağaza texniki nasazlıqlar nəticəsində xidmətin müvəqqəti dayandırılmasına görə məsuliyyət daşımır."
+      },
+      "return": {
+        "title": "7. Geri qaytarma və dəyişdirmə şərtləri",
+        "clause1": "7.1. Qida təhlükəsizliyi səbəbindən açılmış məhsulların qaytarılması mümkün deyil.",
+        "clause2": "7.2. Yalnız aşağıdakı hallarda istisna tətbiq oluna bilər:",
+        "clause3": "7.3. Belə hallarda istifadəçi məhsulu qəbul etdiyi anda və ya ən gec 24 saat ərzində mağaza ilə əlaqə saxlamalıdır.",
+        "clause4": "7.4. Mağaza müraciəti araşdırdıqdan sonra məhsulun dəyişdirilməsi və ya geri götürülməsi barədə qərar verir.",
+        "list": {
+          "damaged": "Məhsul xarab, keyfiyyətsiz və ya zədələnmiş olduqda",
+          "wrongProduct": "Sifariş veriləndən fərqli məhsul təqdim edildikdə"
+        }
+      },
+      "cancellation": {
+        "title": "8. Ləğv etmə",
+        "clause1": "8.1. İstifadəçi sifarişi yalnız çatdırılma həyata keçirilməmişdən əvvəl ləğv edə bilər.",
+        "clause2": "8.2. Çatdırılma prosesinə başlanıldıqdan sonra sifarişin ləğvi mümkün olmaya bilər."
+      },
+      "changes": {
+        "title": "9. Şərtlərin Dəyişdirilməsi",
+        "clause1": "9.1. Mağaza bu İstifadəçi Şərtlərini istənilən vaxt dəyişdirmək hüququnu özündə saxlayır. Dəyişikliklər saytda yerləşdirildiyi andan etibarən qüvvəyə minir."
+      }
+    },
+    "contact": {
+      "title": "Əlaqə",
+      "description": "İstifadəçi Şərtlərimiz haqqında hər hansı sualınız olarsa, bizimlə əlaqə saxlayın:",
+      "emailLabel": "Email",
+      "phoneLabel": "Telefon",
+      "addressLabel": "Ünvan",
+      "address": "Bakı, Azərbaycan"
+    }
   }
 }

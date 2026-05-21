@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useTranslation } from "react-i18next"; // Dil dəstəyi üçün
-import { FiUser, FiX, FiMail, FiLock, FiPhone, FiUserCheck } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
+import { FiUser, FiX, FiMail, FiLock, FiPhone, FiUserCheck, FiCheckSquare, FiSquare } from "react-icons/fi";
 import ForgotPassword from "./ForgotPassword";
 import "./LoginModal.css";
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotification }) {
-  const { t } = useTranslation(); // Dil hook-u
+  const { t } = useTranslation();
   
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
@@ -20,8 +20,8 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
   const [errors, setErrors] = useState({});
   const [isClosing, setIsClosing] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
-  // Telefonu təmizləyib yadda saxla
   const getCleanPhoneNumber = (phone) => {
     return phone.replace(/\s/g, '');
   };
@@ -42,6 +42,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
         password: "",
         confirmPassword: ""
       });
+      setTermsAccepted(false);
     }, 300);
   };
 
@@ -50,7 +51,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
     
     if (name === 'phone') {
       const numbersOnly = value.replace(/[^\d]/g, '');
-      
       let formattedValue = '';
       if (numbersOnly.length <= 3) {
         formattedValue = numbersOnly;
@@ -61,27 +61,16 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
       } else {
         formattedValue = `${numbersOnly.slice(0, 3)} ${numbersOnly.slice(3, 6)} ${numbersOnly.slice(6, 8)} ${numbersOnly.slice(8, 10)}`;
       }
-      
       if (formattedValue.length > 13) {
         formattedValue = formattedValue.slice(0, 13);
       }
-      
-      setFormData(prev => ({
-        ...prev,
-        [name]: formattedValue
-      }));
+      setFormData(prev => ({ ...prev, [name]: formattedValue }));
     } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
     
     if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ""
-      }));
+      setErrors(prev => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -90,7 +79,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
     setIsForgotPasswordOpen(true);
   };
 
-  // Login validasiyası
   const validateLogin = () => {
     const newErrors = {};
     if (!formData.email) {
@@ -104,15 +92,10 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
     return newErrors;
   };
 
-  // Register validasiyası
   const validateRegister = () => {
     const newErrors = {};
-    if (!formData.firstName) {
-      newErrors.firstName = t("login.errors.firstNameRequired");
-    }
-    if (!formData.lastName) {
-      newErrors.lastName = t("login.errors.lastNameRequired");
-    }
+    if (!formData.firstName) newErrors.firstName = t("login.errors.firstNameRequired");
+    if (!formData.lastName) newErrors.lastName = t("login.errors.lastNameRequired");
     if (!formData.phone) {
       newErrors.phone = t("login.errors.phoneRequired");
     } else {
@@ -138,13 +121,16 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = t("login.errors.confirmPasswordMatch");
     }
+    
+    if (!termsAccepted) {
+      newErrors.terms = t("login.errors.termsRequired");
+    }
+    
     return newErrors;
   };
 
   const handleLogin = () => {
-    console.log("Login attempt:", { email: formData.email, password: formData.password });
     showNotification(t("login.notifications.loginSuccess"), "success");
-    
     const userData = {
       firstName: formData.email.split("@")[0],
       lastName: "",
@@ -157,21 +143,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
 
   const handleRegister = () => {
     const cleanPhone = getCleanPhoneNumber(formData.phone);
-    
-    console.log("Register attempt:", { 
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      phone: cleanPhone,
-      email: formData.email, 
-      password: formData.password 
-    });
     showNotification(t("login.notifications.registerSuccess"), "success");
-    
     const userData = {
       firstName: formData.firstName,
       lastName: formData.lastName,
       phone: cleanPhone,
       email: formData.email,
+      termsAccepted: termsAccepted,
       registerTime: new Date().toISOString()
     };
     onLoginSuccess(userData);
@@ -180,14 +158,11 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const validationErrors = isLogin ? validateLogin() : validateRegister();
-    
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
-
     if (isLogin) {
       handleLogin();
     } else {
@@ -208,40 +183,49 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
         password: "",
         confirmPassword: ""
       });
+      setTermsAccepted(false);
       setIsSwitching(false);
     }, 200);
   };
 
+  const toggleTermsAccepted = () => {
+    setTermsAccepted(!termsAccepted);
+    if (errors.terms) {
+      setErrors(prev => ({ ...prev, terms: "" }));
+    }
+  };
+
+  const isRegisterButtonDisabled = !isLogin && !termsAccepted;
+
   return (
     <>
-      {/* Login Modal */}
-      <div className={`login-modal-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
-        <div className={`login-modal ${isClosing ? 'closing' : ''} ${isSwitching ? 'switching' : ''}`} onClick={(e) => e.stopPropagation()}>
-          <button className="modal-close" onClick={handleClose}>
+      <div className={`cerez-login-overlay ${isClosing ? 'closing' : ''}`} onClick={handleClose}>
+        <div className={`cerez-login-modal ${isClosing ? 'closing' : ''} ${isSwitching ? 'switching' : ''}`} onClick={(e) => e.stopPropagation()}>
+          <button className="cerez-login-modal-close" onClick={handleClose}>
             <FiX />
           </button>
 
-          <div className={`modal-content ${isSwitching ? 'fade-out' : 'fade-in'}`}>
-            <div className="modal-header">
-              <div className="modal-icon">
+          <div className={`cerez-login-modal-content ${isSwitching ? 'fade-out' : 'fade-in'}`}>
+            <div className="cerez-login-modal-header">
+              <div className="cerez-login-modal-icon">
                 <FiUser />
               </div>
-              <h2 className="modal-title">
+              <h2 className="cerez-login-modal-title">
                 {isLogin ? t("login.welcome") : t("login.createAccount")}
               </h2>
-              <p className="modal-subtitle">
+              <p className="cerez-login-modal-subtitle">
                 {isLogin ? t("login.loginToAccount") : t("login.createNewAccount")}
               </p>
             </div>
 
-            <form className="login-form" onSubmit={handleSubmit} autoComplete="off">
+            <form className="cerez-login-form" onSubmit={handleSubmit} autoComplete="off">
               {!isLogin && (
                 <>
-                  <div className="form-row">
-                    <div className="form-group half">
+                  <div className="cerez-login-form-row">
+                    <div className="cerez-login-form-group half">
                       <label>{t("login.firstName")}</label>
-                      <div className="input-wrapper">
-                        <FiUserCheck className="input-icon" />
+                      <div className="cerez-login-input-wrapper">
+                        <FiUserCheck className="cerez-login-input-icon" />
                         <input
                           type="text"
                           name="firstName"
@@ -252,13 +236,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
                           autoComplete="off"
                         />
                       </div>
-                      {errors.firstName && <span className="error-message">{errors.firstName}</span>}
+                      {errors.firstName && <span className="cerez-login-error-message">{errors.firstName}</span>}
                     </div>
 
-                    <div className="form-group half">
+                    <div className="cerez-login-form-group half">
                       <label>{t("login.lastName")}</label>
-                      <div className="input-wrapper">
-                        <FiUser className="input-icon" />
+                      <div className="cerez-login-input-wrapper">
+                        <FiUser className="cerez-login-input-icon" />
                         <input
                           type="text"
                           name="lastName"
@@ -269,14 +253,14 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
                           autoComplete="off"
                         />
                       </div>
-                      {errors.lastName && <span className="error-message">{errors.lastName}</span>}
+                      {errors.lastName && <span className="cerez-login-error-message">{errors.lastName}</span>}
                     </div>
                   </div>
 
-                  <div className="form-group">
+                  <div className="cerez-login-form-group">
                     <label>{t("login.phone")}</label>
-                    <div className="input-wrapper">
-                      <FiPhone className="input-icon" />
+                    <div className="cerez-login-input-wrapper">
+                      <FiPhone className="cerez-login-input-icon" />
                       <input
                         type="tel"
                         name="phone"
@@ -287,15 +271,15 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
                         autoComplete="off"
                       />
                     </div>
-                    {errors.phone && <span className="error-message">{errors.phone}</span>}
+                    {errors.phone && <span className="cerez-login-error-message">{errors.phone}</span>}
                   </div>
                 </>
               )}
 
-              <div className="form-group">
+              <div className="cerez-login-form-group">
                 <label>{t("login.email")}</label>
-                <div className="input-wrapper">
-                  <FiMail className="input-icon" />
+                <div className="cerez-login-input-wrapper">
+                  <FiMail className="cerez-login-input-icon" />
                   <input
                     type="email"
                     name="email"
@@ -306,13 +290,13 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
                     autoComplete="off"
                   />
                 </div>
-                {errors.email && <span className="error-message">{errors.email}</span>}
+                {errors.email && <span className="cerez-login-error-message">{errors.email}</span>}
               </div>
 
-              <div className="form-group">
+              <div className="cerez-login-form-group">
                 <label>{t("login.password")}</label>
-                <div className="input-wrapper">
-                  <FiLock className="input-icon" />
+                <div className="cerez-login-input-wrapper">
+                  <FiLock className="cerez-login-input-icon" />
                   <input
                     type="password"
                     name="password"
@@ -323,43 +307,88 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
                     autoComplete="new-password"
                   />
                 </div>
-                {errors.password && <span className="error-message">{errors.password}</span>}
+                {errors.password && <span className="cerez-login-error-message">{errors.password}</span>}
               </div>
 
               {!isLogin && (
-                <div className="form-group">
-                  <label>{t("login.confirmPassword")}</label>
-                  <div className="input-wrapper">
-                    <FiLock className="input-icon" />
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      value={formData.confirmPassword}
-                      onChange={handleInputChange}
-                      placeholder={t("login.confirmPasswordPlaceholder")}
-                      className={errors.confirmPassword ? "error" : ""}
-                      autoComplete="off"
-                    />
+                <>
+                  <div className="cerez-login-form-group">
+                    <label>{t("login.confirmPassword")}</label>
+                    <div className="cerez-login-input-wrapper">
+                      <FiLock className="cerez-login-input-icon" />
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleInputChange}
+                        placeholder={t("login.confirmPasswordPlaceholder")}
+                        className={errors.confirmPassword ? "error" : ""}
+                        autoComplete="off"
+                      />
+                    </div>
+                    {errors.confirmPassword && <span className="cerez-login-error-message">{errors.confirmPassword}</span>}
                   </div>
-                  {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
-                </div>
+
+                  <div className="cerez-login-form-group cerez-login-terms-group">
+                    <div 
+                      className={`cerez-login-terms-checkbox-wrapper ${errors.terms ? 'error' : ''}`}
+                      onClick={toggleTermsAccepted}
+                    >
+                      <div className="cerez-login-terms-checkbox">
+                        {termsAccepted ? (
+                          <FiCheckSquare className="cerez-login-checkbox-icon checked" />
+                        ) : (
+                          <FiSquare className="cerez-login-checkbox-icon unchecked" />
+                        )}
+                      </div>
+                      <span className="cerez-login-terms-text">
+                        {t("login.terms.agree", "Mən")}{" "}
+                        <a 
+                          href="/terms-of-service" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="cerez-login-terms-link"
+                        >
+                          {t("login.terms.link", "İstifadəçi Şərtləri")}
+                        </a>
+                        {" "}{t("login.terms.and", "və")}{" "}
+                        <a 
+                          href="/privacy-policy" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="cerez-login-terms-link"
+                        >
+                          {t("login.terms.privacy", "Məxfilik Siyasəti")}
+                        </a>
+                        {" "}{t("login.terms.accept", "ilə razıyam")}
+                      </span>
+                    </div>
+                    {errors.terms && <span className="cerez-login-error-message">{errors.terms}</span>}
+                  </div>
+                </>
               )}
 
               {isLogin && (
-                <div className="forgot-password">
+                <div className="cerez-login-forgot-password">
                   <a href="#" onClick={handleForgotPassword}>{t("login.forgotPassword")}</a>
                 </div>
               )}
 
-              <button type="submit" className="submit-button">
+              <button 
+                type="submit" 
+                className={`cerez-login-submit-button ${isRegisterButtonDisabled ? 'disabled' : ''}`}
+                disabled={isRegisterButtonDisabled}
+              >
                 {isLogin ? t("login.loginButton") : t("login.registerButton")}
               </button>
             </form>
 
-            <div className="modal-footer">
+            <div className="cerez-login-modal-footer">
               <p>
                 {isLogin ? t("login.noAccount") : t("login.haveAccount")}
-                <button className="switch-mode" onClick={switchMode}>
+                <button className="cerez-login-switch-mode" onClick={switchMode}>
                   {isLogin ? t("login.register") : t("login.login")}
                 </button>
               </p>
@@ -368,7 +397,6 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess, showNotifi
         </div>
       </div>
 
-      {/* Forgot Password Modal */}
       <ForgotPassword
         isOpen={isForgotPasswordOpen}
         onClose={() => setIsForgotPasswordOpen(false)}

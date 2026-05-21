@@ -112,6 +112,15 @@
     "kg": "kg",
     "gr": "gr",
     "title": "Your Cart",
+    "productCount": "{{count}} pc",
+    "productCount_0": "0 pcs",
+    "productCount_1": "1 pc",
+    "productCount_2": "2 pcs",
+    "productCount_3": "3 pcs",
+    "productCount_4": "4 pcs",
+    "productCount_5": "5 pcs",
+    "productCount_plural": "{{count}} pcs",
+    "productCountLabel": "Product count",
     "items": "items",
     "empty": "Your cart is empty",
     "continueShopping": "Continue Shopping",
@@ -123,15 +132,6 @@
     "totalItems": "Total items",
     "totalWeight": "Total weight:",
     "totalAmount": "Total amount:",
-    "productCount": "{{count}} pc",
-    "productCount_0": "0 pcs",
-    "productCount_1": "1 pc",
-    "productCount_2": "2 pcs",
-    "productCount_3": "3 pcs",
-    "productCount_4": "4 pcs",
-    "productCount_5": "5 pcs",
-    "productCount_plural": "{{count}} pcs",
-    "productCountLabel": "Product count",
     "orderNow": "Place Order",
     "orderNote": "We will contact you once your order has been received"
   },
@@ -307,6 +307,13 @@
     "register": "Register",
     "login": "Login",
     "logout": "Logout",
+    "terms": {
+      "agree": "I agree to the",
+      "link": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy",
+      "accept": ""
+    },
     "errors": {
       "firstNameRequired": "First name is required",
       "lastNameRequired": "Last name is required",
@@ -318,7 +325,8 @@
       "confirmPasswordMatch": "Passwords do not match",
       "phoneRequired": "Phone number is required",
       "phoneInvalid": "Please enter a valid phone number (e.g., 050 555 55 55)",
-      "phoneDigits": "Phone number must contain only digits"
+      "phoneDigits": "Phone number must contain only digits",
+      "termsRequired": "Please confirm that you agree to the Terms of Service and Privacy Policy"
     },
     "notifications": {
       "loginSuccess": "Successfully logged in!",
@@ -476,5 +484,155 @@
     "confirmPasswordRequired": "Password confirmation is required",
     "passwordSameError": "New password cannot be the same as the old password!",
     "passwordUpdated": "Password changed successfully!"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: January 15, 2025",
+    "intro": "This Privacy Policy defines the rules for collecting, processing and protecting personal data of individuals using the services provided by Cherez.az.",
+    "sections": {
+      "general": {
+        "title": "1. General Provisions",
+        "clause1": "1.1. By using the site, the user is deemed to have accepted the terms of this Privacy Policy.",
+        "clause2": "1.2. The user is responsible for the accuracy and currency of the information provided."
+      },
+      "collectedData": {
+        "title": "2. Collected Information",
+        "clause1": "2.1. The following information voluntarily provided by the user may be collected:",
+        "list": {
+          "name": "First name, last name",
+          "phone": "Contact number",
+          "address": "Delivery address",
+          "email": "Email address (if provided)",
+          "orderInfo": "Order information"
+        }
+      },
+      "purposes": {
+        "title": "3. Purposes of Data Processing",
+        "clause1": "3.1. The collected information is used for the following purposes:",
+        "list": {
+          "orderProcessing": "Order acceptance and fulfillment",
+          "delivery": "Ensuring delivery",
+          "contact": "Communicating with the user",
+          "quality": "Improving service quality",
+          "marketing": "Marketing and information (based on user consent)"
+        }
+      },
+      "protection": {
+        "title": "4. Data Protection and Storage",
+        "clause1": "4.1. The company implements appropriate technical and organizational measures to protect user data.",
+        "clause2": "4.2. Personal data is stored and protected in accordance with legal requirements."
+      },
+      "thirdParty": {
+        "title": "5. Transfer to Third Parties",
+        "clause1": "5.1. User data may be transferred to third parties in the following cases:",
+        "clause2": "5.2. In other cases, data is not shared without the user's consent.",
+        "list": {
+          "deliveryService": "For delivery service",
+          "legalRequirement": "When required by law"
+        }
+      },
+      "security": {
+        "title": "6. Data Security",
+        "clause1": "6.1. We use modern encryption technologies (SSL) to ensure the security of your data.",
+        "clause2": "6.2. Your personal data is stored on protected servers and can only be accessed by authorized personnel."
+      },
+      "cookies": {
+        "title": "7. Cookies",
+        "clause1": "7.1. The site may use cookies to improve user experience."
+      },
+      "userRights": {
+        "title": "8. User Rights",
+        "clause1": "8.1. The user has the following rights:",
+        "list": {
+          "access": "Access their data",
+          "correction": "Request correction or deletion of data",
+          "objection": "Object to data processing"
+        }
+      },
+      "changes": {
+        "title": "9. Changes",
+        "clause1": "9.1. This Privacy Policy may be amended from time to time.",
+        "clause2": "9.2. Changes take effect as soon as they are posted on the site."
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "If you have any questions about our Privacy Policy, please contact us:",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "addressLabel": "Address",
+      "address": "Baku, Azerbaijan"
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: January 15, 2025",
+    "intro": "By using the Cherez.az website, you agree to the following Terms of Service. If you do not agree to these terms, please do not use our site.",
+    "sections": {
+      "general": {
+        "title": "1. General Provisions",
+        "clause1": "1.1. Any person using the site is deemed to have agreed to these terms.",
+        "clause2": "1.2. The store reserves the right to change these terms without prior notice."
+      },
+      "registration": {
+        "title": "2. Registration and User Account",
+        "clause1": "2.1. Users must register to place an order.",
+        "clause2": "2.2. The user is responsible for the accuracy of the information provided.",
+        "clause3": "2.3. The user is obliged to protect the confidentiality of their account information."
+      },
+      "orderPayment": {
+        "title": "3. Order and Payment Terms",
+        "clause1": "3.1. All prices are shown in AZN (Azerbaijani Manat).",
+        "clause2": "3.2. Prices may be changed without prior notice.",
+        "clause3": "3.3. Orders are placed through the site via the cart system.",
+        "clause4": "3.4. Payment is only accepted upon delivery of the order.",
+        "clause5": "3.5. There is no online payment system on the site."
+      },
+      "delivery": {
+        "title": "4. Delivery Rules",
+        "clause1": "4.1. The delivery time is communicated to the user after order confirmation and is approximate.",
+        "clause2": "4.2. The company is not responsible for delays caused by an incorrect address provided by the user.",
+        "clause3": "4.3. Upon delivery, the product should be inspected and any discrepancy reported immediately."
+      },
+      "products": {
+        "title": "5. Products and Liability",
+        "clause1": "5.1. We are not liable if the site is temporarily down due to technical issues.",
+        "clause2": "5.2. Product images on the site are for informational purposes.",
+        "clause3": "5.3. Availability and prices may change without prior notice."
+      },
+      "liability": {
+        "title": "6. Limitation of Liability",
+        "clause1": "6.1. The store is not responsible for problems arising from incorrect or incomplete information provided by the user.",
+        "clause2": "6.2. The store is not liable for temporary suspension of service due to technical failures."
+      },
+      "return": {
+        "title": "7. Return and Exchange Conditions",
+        "clause1": "7.1. Due to food safety, opened products cannot be returned.",
+        "clause2": "7.2. Exceptions may apply only in the following cases:",
+        "clause3": "7.3. In such cases, the user must contact the store upon receipt of the product or within 24 hours at the latest.",
+        "clause4": "7.4. After reviewing the request, the store decides on replacement or return of the product.",
+        "list": {
+          "damaged": "If the product is spoiled, of poor quality, or damaged",
+          "wrongProduct": "If a different product is delivered than ordered"
+        }
+      },
+      "cancellation": {
+        "title": "8. Cancellation",
+        "clause1": "8.1. The user can cancel the order only before delivery has been carried out.",
+        "clause2": "8.2. Once the delivery process has begun, cancellation may not be possible."
+      },
+      "changes": {
+        "title": "9. Changes to Terms",
+        "clause1": "9.1. The store reserves the right to change these Terms of Service at any time. Changes take effect as soon as they are posted on the site."
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "If you have any questions about our Terms of Service, please contact us:",
+      "emailLabel": "Email",
+      "phoneLabel": "Phone",
+      "addressLabel": "Address",
+      "address": "Baku, Azerbaijan"
+    }
   }
 }
